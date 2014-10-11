@@ -12,7 +12,7 @@
 <!--
     need to add java code to support gridview population
     which makes ListView easier to use.
-     
+
     android:entries="@array/list_entries"
 -->
 
