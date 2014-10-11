@@ -2,7 +2,21 @@
 <resources>
 
     <string name="app_name">My Application</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="symbolHeader1_text">Symbol</string>
+    <string name="descriptionHeader1_text">Description</string>
+
+    <string name="stockSymbol1_text">MSFT</string>
+    <string name="stockDescription1_text">Microsoft, Inc</string>
+
+    <string name="stockSymbol2_text">GOOG</string>
+    <string name="stockDescription2_text">Google, Inc</string>
+
+    <string name="stockSymbol3_text">SBUX</string>
+    <string name="stockDescription3_text">Starbucks, Inc</string>
+
+    <string name="copyright1_text"></string>
+    <string name="copyright2_text">copyright @ nyu-scps-android-programming-intensive</string>
 
 </resources>
