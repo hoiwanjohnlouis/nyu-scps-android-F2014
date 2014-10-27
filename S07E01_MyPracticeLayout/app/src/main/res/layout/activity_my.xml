@@ -9,51 +9,75 @@
     tools:context="com.example.hoiwanlouis.s07e01_mypracticelayout..MyActivity"
     >
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:src="@drawable/bug"
-        />
+    <LinearLayout
+        android:id="@+id/linearLayoutForStaticData"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:orientation="vertical"
+        >
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_alignParentEnd="false"
-        android:layout_below="@+id/imageView"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:text="@string/loremIpsum"
-        />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:src="@drawable/bug"
+            />
 
-    <Button
-        android:id="@+id/prevButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/imageView"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:padding="@dimen/button_padding"
-        android:text="@string/prevButton"
-        />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="fill_horizontal"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:text="@string/loremIpsum"
+            />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/nextButton"
-        android:layout_alignEnd="@+id/imageView"
-        android:layout_alignParentBottom="true"
+
+    <LinearLayout
+        android:id="@+id/linearLayoutForButtons"
+        android:layout_gravity="fill_horizontal"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:padding="@dimen/button_padding"
-        android:text="@string/nextButton"
-        android:layout_alignParentStart="false" />
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        >
+
+        <Button
+            android:id="@+id/prevButton"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/button_padding"
+            android:layout_marginRight="@dimen/button_padding"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:background="@android:color/holo_orange_light"
+            android:gravity="center"
+            android:text="@string/prevButton"
+            android:padding="@dimen/button_padding" />
+
+        <Button
+            android:id="@+id/nextButton"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:background="@android:color/holo_orange_light"
+            android:gravity="center"
+            android:text="@string/nextButton"
+            android:layout_marginLeft="@dimen/button_padding"
+            android:layout_marginRight="@dimen/button_padding"
+            android:padding="@dimen/button_padding" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>
