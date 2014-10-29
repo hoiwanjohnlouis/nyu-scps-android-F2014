@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 
 public class MyActivity extends Activity {
@@ -22,47 +23,133 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
-        String filename = "myfile";
-        String string = "I'm trapped in a file!";
-        FileOutputStream outputStream;
 
+//        File myFile = new File("hoiBufferIO.txt");
+//        PrintWriter pwriter = new PrintWriter(new BufferedWriter(new FileWriter(myFile)));
+//        System.out.println(myFile.getAbsoluteFile());
+//        pwriter.println("Here's the value of pi:");  // no need for "\n", bufferedWrite auto includes
+//        pwriter.println(3.14159);
+//        pwriter.println("We are done!");
+//        pwriter.close();
+//
+//        BufferedReader preader = null;
+//        try {
+//            preader = new BufferedReader(new FileReader(myFile));
+//            System.out.println(myFile.getAbsoluteFile());
+//            System.out.println(preader.readLine());
+//            String piString = preader.readLine();
+//            double piValue = Double.parseDouble(piString);
+//            System.out.println(piValue);
+//            System.out.println(preader.readLine());
+//        } catch (NumberFormatException ex1) {
+//            System.out.println(ex1);
+//        } catch (NullPointerException ex2) {
+//            System.out.println(ex2);
+//        } catch (FileNotFoundException ex3) {
+//            System.out.println(ex3);
+//        } finally {
+//            if (preader != null) {
+//                preader.close();
+//            }
+//        }
+// change code to use bufferedio, streams are deprecated
+
+        // create the Internal Storage File
+        String fileName = "myInternalStorage.txt";
         Context context = this;
-        //File file = new File(context.getFilesDir(), filename);
-        File file = null;
+
+        // create a regular file
+        File myFile;
+        myFile = new File(context.getFilesDir(), fileName);
+        System.out.println(myFile.getAbsoluteFile());
+        // open a regular file
+        PrintWriter pwMyFile = null;
         try {
-            file = File.createTempFile(filename, null, context.getCacheDir());
+            pwMyFile = new PrintWriter(new BufferedWriter(new FileWriter(myFile)));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println(pwMyFile);
 
+        // or create a tmp file?
+        File tmpFile = null;
         try {
-            FileOutputStream f = new FileOutputStream(file);
-            f.write(string.getBytes());
-            f.close();
-        } catch (Exception e) {
+            tmpFile = File.createTempFile(fileName, null, context.getCacheDir());
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-        StringBuilder text = new StringBuilder();
-
+        System.out.println(tmpFile.getAbsoluteFile());
+        // open the tmp file?
+        PrintWriter pwTmpFile = null;
         try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
+            pwTmpFile = new PrintWriter(new BufferedWriter(new FileWriter(tmpFile)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(pwTmpFile);
 
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-                text.append('\n');
+        String text = "I'm trapped in an internal storage file!";
+
+        // write to internal file
+        pwMyFile.println("my:" + text);
+        pwMyFile.close();
+
+        // write to tmp file
+        pwTmpFile.println("tmp:" + text);
+        pwTmpFile.close();
+
+        StringBuilder sbText = new StringBuilder();
+
+        // read the internal file and append to sbText
+        BufferedReader brMyFile = null;
+        try {
+            brMyFile = new BufferedReader(new FileReader(myFile));
+            String myLine;
+            while ((myLine = brMyFile.readLine()) != null) {
+                sbText.append(myLine);
+                sbText.append('\n');
             }
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+        finally {
+            if (brMyFile != null) {
+                try {
+                    brMyFile.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
+        // read the internal file and append to sbText
+        BufferedReader brTmpFile = null;
+        try {
+            brTmpFile = new BufferedReader(new FileReader(tmpFile));
+            String tmpLine;
+            while ((tmpLine = brTmpFile.readLine()) != null) {
+                sbText.append(tmpLine);
+                sbText.append('\n');
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (brTmpFile != null) {
+                try {
+                    brTmpFile.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
+        // show our data on mobile device
         TextView tv = (TextView)findViewById(R.id.text_view);
-        tv.setText(text);
+        tv.setText(sbText);
 
-        file.delete();
     }
 
 
