@@ -24,7 +24,7 @@ public class MyFrameActivity extends Activity {
         setContentView(R.layout.activity_my_frame);
 
         // there isn't a Next screen to access, disable the button
-        nextButton = (Button) findViewById(R.id.prevButton);
+        nextButton = (Button) findViewById(R.id.nextButton);
         nextButton.setVisibility(View.INVISIBLE);
 
         // set up listeners for the buttons
