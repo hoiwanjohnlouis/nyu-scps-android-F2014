@@ -38,15 +38,6 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
 
     public void onFragmentInteraction(Uri uri) {}
 
-    private String internalFileName = "myInternalFileName";
-    private FileOutputStream internalOutputStream;
-    private File internalFile = null;
-
-    private String externalFileName = "myExternalFileName";
-    private FileOutputStream externalOutputStream;
-    private File externalFile = null;
-
-
 
     public boolean isValidWord(String checkWord) {
         // Checks if checkWord is in myDict
@@ -253,46 +244,6 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
         setContentView(R.layout.activity_board);
         setupBoard();
 
-        // 20141025 open the internal file, create if needed
-        openInternalFile();
-
-        // 20141025 open the external file, create if needed
-        openExternalFile();
-
-        // 20141025 open the sqlite db, create if needed
-        openSQLiteDB();
-
-    }
-
-    private void openInternalFile() {
-
-        String string = "I'm trapped in a file!";
-
-        Context context = this;
-        //File internalFile = new File(context.getFilesDir(), internalFileName);
-        try {
-            internalFile = File.createTempFile(internalFileName, null, context.getCacheDir());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            internalOutputStream = new FileOutputStream(internalFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return;
-    }
-
-    private void openExternalFile() {
-
-        return;
-    }
-
-    private void openSQLiteDB() {
-
-        return;
     }
 
     @Override
