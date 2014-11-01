@@ -9,23 +9,23 @@
 
     <fragment
         android:id="@+id/toolbar_fragment"
-        android:name="com.example.hoiwanlouis.s06e01_mikeboggle.BoardFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:name="com.example.hoiwanlouis.s06e21_myboggle.BoardFragment"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
         android:layout_weight="1.5"
+        android:layout_width="match_parent"
         tools:layout="@layout/fragment_board"
         />
 
     <fragment
         android:id="@+id/text_fragment"
-        android:name="com.example.hoiwanlouis.s06e01_mikeboggle.HighScoreFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:name="com.example.hoiwanlouis.s06e21_myboggle.HighScoreFragment"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:layout_height="wrap_content"
         android:layout_weight=".5"
+        android:layout_width="match_parent"
         tools:layout="@layout/fragment_high_score"
         />
 

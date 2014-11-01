@@ -2,49 +2,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.hoiwanlouis.s06e01_mikeboggle.HighScoreFragment"
+    tools:context="com.example.hoiwanlouis.s06e21_myboggle.HighScoreFragment"
     >
 
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="High Score"
         android:id="@+id/high_score"
-        android:onClick="checkSequence"
         android:layout_below="@+id/score"
         android:layout_centerHorizontal="true"
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:onClick="checkSequence"
+        android:text="High Score"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit"
         android:id="@+id/button"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:onClick="checkSequence"/>
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:onClick="checkSequence"
+        android:text="Submit"
+        />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Output"
         android:id="@+id/output"
         android:layout_below="@+id/button"
         android:layout_centerHorizontal="true"
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:text="Output"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/score"
+        android:layout_below="@+id/output"
+        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Score"
-        android:id="@+id/score"
-        android:gravity="center"
-        android:layout_below="@+id/output"
-        android:layout_centerHorizontal="true" />
+        />
 </RelativeLayout>
 
 

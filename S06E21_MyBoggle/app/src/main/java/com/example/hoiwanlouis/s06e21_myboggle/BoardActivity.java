@@ -1,42 +1,27 @@
 package com.example.hoiwanlouis.s06e21_myboggle;
 
-/**
- * Created by hoiwanlouis on 11/1/14.
- */
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-
-// import java.io.*;
-
 public class BoardActivity extends Activity implements BoardFragment.OnFragmentInteractionListener, HighScoreFragment.OnFragmentInteractionListener{
 
-    public static final String TAG = BoardActivity.getClass().getSimpleName();
-
     // Key used to persistently store the value of high score
-    public static final String highScore_key = "com.example.hoiwanlouis.s06e21_myboggle.highscore";
+    public static final String highScore_key = "com.example.hoiwanlouis.mikeboggle.highscore";
 
     // The letters that make up the board
     public ArrayList<String> board = new ArrayList<String>();
@@ -53,47 +38,13 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
 
     public void onFragmentInteraction(Uri uri) {}
 
-    private Context context = this;
+    private String internalFileName = "myInternalFileName";
+    private FileOutputStream internalOutputStream;
+    private File internalFile = null;
 
-    // create the Internal Storage File
-    private String myInternalName = "myInternalBoggle.txt";
-
-    // create a regular file
-    File myInternalFile = new File(context.getFilesDir(), myInternalName);
-    System.out.println(myInternalFile.getAbsoluteFile());
-    // open a regular file
-    PrintWriter pwMyInternalFile;
-    try {
-        pwMyInternalFile = new PrintWriter(new BufferedWriter(new FileWriter(myInternalFile)));
-    } catch (IOException e_Int1) {
-        e_Int1.printStackTrace();
-    }
-    System.out.println(pwMyInternalFile);
-    pwMyInternalFile.println("I'm trapped in an internal file!);
-    pwMyInternalFile.close();
-
-    // create the External Storage File
-    private String myExternalName = "myExternalBoggle.txt";
-    private File myExternalFile;
-    File dir;
-    dir = new File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_NOTIFICATIONS),
-    "my_own_directory"
-            );
-    if (!isExternalStorageWritable() || !dir.mkdirs()) {
-        Log.e("tag", "Directory not created");
-    }
-    myExternalFile = new File(dir, myExternalName);
-    System.out.println(myExternalFile.getAbsoluteFile());
-
-    PrintWriter pwriter = null;
-    try {
-        pwriter = new PrintWriter(new BufferedWriter(new FileWriter(myExternalFile)));
-    } catch (IOException eExt1) {
-        eExt1.printStackTrace();
-    }
-    pwriter.println("I'm trapped in an external file!");
-    pwriter.close();
+    private String externalFileName = "myExternalFileName";
+    private FileOutputStream externalOutputStream;
+    private File externalFile = null;
 
 
 
@@ -314,22 +265,6 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
     }
 
     private void openInternalFile() {
-
-        String string = "I'm trapped in a file!";
-
-        Context context = this;
-        //File internalFile = new File(context.getFilesDir(), internalFileName);
-        try {
-            internalFile = File.createTempFile(internalFileName, null, context.getCacheDir());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            internalOutputStream = new FileOutputStream(internalFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         return;
     }

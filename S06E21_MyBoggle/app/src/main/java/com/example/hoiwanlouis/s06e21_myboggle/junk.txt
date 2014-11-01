@@ -53,22 +53,21 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
     private String myInternalName = "myInternalBoggle.txt";
 
     // create a regular file
-    private File myInternalFile;
-    myInternalFile = new File(context.getFilesDir(), myInternalName);
+    File myInternalFile = new File(context.getFilesDir(), myInternalName);
     System.out.println(myInternalFile.getAbsoluteFile());
     // open a regular file
-    PrintWriter pwMyInternalFile = null;
+    PrintWriter pwMyInternalFile;
     try {
         pwMyInternalFile = new PrintWriter(new BufferedWriter(new FileWriter(myInternalFile)));
     } catch (IOException e_Int1) {
         e_Int1.printStackTrace();
     }
     System.out.println(pwMyInternalFile);
-
+    pwMyInternalFile.println("I'm trapped in an internal file!);
+    pwMyInternalFile.close();
 
     // create the External Storage File
     private String myExternalName = "myExternalBoggle.txt";
-    private File myExternalFile;
     File dir;
     dir = new File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_NOTIFICATIONS),
@@ -77,7 +76,7 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
     if (!isExternalStorageWritable() || !dir.mkdirs()) {
         Log.e("tag", "Directory not created");
     }
-    myExternalFile = new File(dir, myExternalName);
+    private File myExternalFile = new File(dir, myExternalName);
     System.out.println(myExternalFile.getAbsoluteFile());
 
     PrintWriter pwriter = null;
