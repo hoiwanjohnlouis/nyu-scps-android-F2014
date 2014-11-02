@@ -51,10 +51,50 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
 
 
 
-    public boolean isValidWord(String checkWord) {
-        Log.v(DEBUG_TAG,"isValidWord");
-        // Checks if checkWord is in myDict
-        return myDict.containsKey(checkWord);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_board);
+
+        DEBUG_TAG = "BoardActivity";
+//        DEBUG_TAG = String.valueOf(R.string.title_activity_board);
+//        Context context = new Context(this);
+//        DEBUG_TAG = context.getResources().getString(R.string.title_activity_board);
+        Log.v(DEBUG_TAG,"onCreate");
+
+        myDict = BoggleDriver.loadDictionary(this);
+        setupBoard();
+
+        // 20141025 open the internal file, create if needed
+        openInternalFile();
+
+        // 20141025 open the external file, create if needed
+        openExternalFile();
+
+        // 20141025 open the sqlite db, create if needed
+        openSQLiteDB();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.v(DEBUG_TAG,"onCreateOptionsMenu");
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.board, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.v(DEBUG_TAG,"onOptionsItemSelected");
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void setupBoard() {
@@ -194,6 +234,12 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
         highScoreText.setText(highScore.toString());
     }
 
+    public boolean isValidWord(String checkWord) {
+        Log.v(DEBUG_TAG,"isValidWord");
+        // Checks if checkWord is in myDict
+        return myDict.containsKey(checkWord);
+    }
+
     public void clearWord() {
         Log.v(DEBUG_TAG,"clearWord");
         // Reset board after word has been submitted
@@ -250,49 +296,6 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
         letter.getBackground().setColorFilter(0xff888888, PorterDuff.Mode.MULTIPLY);
 
         word.setLength(0);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_board);
-
-        DEBUG_TAG = String.valueOf(R.string.title_activity_board);
-        Log.v(DEBUG_TAG,"onCreate");
-
-        myDict = BoggleDriver.loadDictionary(this);
-        setupBoard();
-
-        // 20141025 open the internal file, create if needed
-        openInternalFile();
-
-        // 20141025 open the external file, create if needed
-        openExternalFile();
-
-        // 20141025 open the sqlite db, create if needed
-        openSQLiteDB();
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        Log.v(DEBUG_TAG,"onCreateOptionsMenu");
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.board, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.v(DEBUG_TAG,"onOptionsItemSelected");
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void chooseLetter(View v) {
