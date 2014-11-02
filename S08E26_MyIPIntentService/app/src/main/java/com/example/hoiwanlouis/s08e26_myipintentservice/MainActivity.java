@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 
-
 public class MainActivity extends Activity {
 
     //    private BoundService boundService;
@@ -25,14 +24,14 @@ public class MainActivity extends Activity {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Toast.makeText(MyActivity.this, "Service is disconnected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this,"Service is disconnected", Toast.LENGTH_SHORT).show();
             startBoundServiceButton.setText("Bind to BoundService");
             boundService = null;
         }
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Toast.makeText(MyActivity.this,"BoundService is connected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this,"BoundService is connected", Toast.LENGTH_SHORT).show();
             startBoundServiceButton.setText("Disconnect from BoundService");
 
             LocalBinder localBinder = (LocalBinder) service;
@@ -43,7 +42,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my);
+        setContentView(R.layout.activity_main);
 
         Button startIntentServiceButton = (Button) findViewById(R.id.button);
         startIntentServiceButton.setOnClickListener(
@@ -69,7 +68,7 @@ public class MainActivity extends Activity {
         startBoundServiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MyActivity.this, BoundService.class);
+                Intent intent = new Intent(MainActivity.this, BoundService.class);
                 if (boundService == null) {
                     boundService(intent, se)
                 }
@@ -81,7 +80,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.my, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
