@@ -26,10 +26,7 @@ public class GPXService extends Service {
     private static final int GPS_NOTIFY = 0x2001;
     private static final String DEBUG_TAG = "GPXService";
     public static final String EXTRA_UPDATE_RATE = "update-rate";
-//    public static final String GPX_SERVICE = "com.advancedandroidbook.GPXService.SERVICE";
-    public static final String GPX_SERVICE =
-            "com.example.hoiwanlouis.GPXService.SERVICE";
-
+    public static final String GPX_SERVICE = "com.example.hoiwanlouis.GPXService.SERVICE";
 
     private LocationManager location = null;
     private NotificationManager notifier = null;
@@ -38,34 +35,70 @@ public class GPXService extends Service {
 
     @Override
     public void onCreate() {
+        Log.v(DEBUG_TAG, "onCreate() called");
         super.onCreate();
 
         location = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        notifier = (NotificationManager)
-                getSystemService(Context.NOTIFICATION_SERVICE);
-
-    }
-    @Override
-    public void onStart(Intent intent, int startId) {
-        super.onStart(intent, startId);
-        Log.v(DEBUG_TAG, "onStart() called, must be on L3 or L4");
-        doServiceStart(intent,startId);
+        notifier = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.v(DEBUG_TAG, "onStartCommand() called, must be on L5 or later");
-
+        Log.v(DEBUG_TAG, "onStartCommand() called, running L5 or later");
         if (flags != 0) {
             Log.w(DEBUG_TAG, "Redelivered or retrying service start: " + flags);
         }
-
         doServiceStart(intent, startId);
         return Service.START_REDELIVER_INTENT;
     }
 
     @Override
+    public void onStart(Intent intent, int startId) {
+        Log.v(DEBUG_TAG, "onStart() called, running on L3 or L4");
+        super.onStart(intent, startId);
+        doServiceStart(intent,startId);
+    }
+
+    public void doServiceStart(Intent intent, int startId) {
+        Log.v(DEBUG_TAG, "doServiceStart() called");
+
+        updateRate = intent.getIntExtra(EXTRA_UPDATE_RATE, -1);
+        if (updateRate == -1) {
+            updateRate = 60000;
+        }
+
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.NO_REQUIREMENT);
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+
+        location = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        String best = location.getBestProvider(criteria, true);
+        location.requestLocationUpdates(best, updateRate, 0, trackListener);
+
+        Intent toLaunch = new Intent(getApplicationContext(),
+                ServiceControlActivity.class);
+        PendingIntent intentBack = PendingIntent.getActivity(
+                getApplicationContext(), 0, toLaunch, 0);
+
+        Notification.Builder builder = new Notification.Builder(
+                getApplicationContext());
+        builder.setTicker("Builder GPS Tracking");
+        builder.setSmallIcon(android.R.drawable.stat_notify_more);
+        builder.setWhen(System.currentTimeMillis());
+        builder.setContentTitle("Builder GPS Tracking");
+        builder.setContentText("Tracking start at " + updateRate
+                + "ms intervals with [" + best + "] as the provider.");
+        builder.setContentIntent(intentBack);
+        builder.setAutoCancel(true);
+        Notification notify = builder.build();
+
+        notifier.notify(GPS_NOTIFY, notify);
+    }
+
+    @Override
     public void onDestroy() {
+        Log.v(DEBUG_TAG, "onDestroy() called");
+
         if (location != null) {
             location.removeUpdates(trackListener);
             location = null;
@@ -92,44 +125,9 @@ public class GPXService extends Service {
         super.onDestroy();
     }
 
-    public void doServiceStart(Intent intent, int startId) {
-        updateRate = intent.getIntExtra(EXTRA_UPDATE_RATE, -1);
-        if (updateRate == -1) {
-            updateRate = 60000;
-        }
-
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.NO_REQUIREMENT);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-
-        location = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        String best = location.getBestProvider(criteria, true);
-
-        location.requestLocationUpdates(best, updateRate, 0, trackListener);
-
-        Intent toLaunch = new Intent(getApplicationContext(),
-                ServiceControlActivity.class);
-        PendingIntent intentBack = PendingIntent.getActivity(
-                getApplicationContext(), 0, toLaunch, 0);
-
-        Notification.Builder builder = new Notification.Builder(
-                getApplicationContext());
-        builder.setTicker("Builder GPS Tracking");
-        builder.setSmallIcon(android.R.drawable.stat_notify_more);
-        builder.setWhen(System.currentTimeMillis());
-        builder.setContentTitle("Builder GPS Tracking");
-        builder.setContentText("Tracking start at " + updateRate
-                + "ms intervals with [" + best + "] as the provider.");
-        builder.setContentIntent(intentBack);
-        builder.setAutoCancel(true);
-        Notification notify = builder.build();
-
-        notifier.notify(GPS_NOTIFY, notify);
-    }
-
     @Override
     public IBinder onBind(Intent intent) {
+        Log.v(DEBUG_TAG, "onBind() called");
         // we only have one, so no need to check the intent
         return mRemoteInterfaceBinder;
     }
@@ -142,6 +140,7 @@ public class GPXService extends Service {
         }
 
         public GPXPoint getGPXPoint() {
+            Log.v(DEBUG_TAG, "getGPXPoint() called");
             if (lastLocation == null) {
                 return null;
             } else {
@@ -164,6 +163,7 @@ public class GPXService extends Service {
     private LocationListener trackListener = new LocationListener() {
 
         public void onLocationChanged(Location location) {
+            Log.v(DEBUG_TAG, "onLocationChanged() called");
             long thisTime = System.currentTimeMillis();
             long diffTime = thisTime - lastTime;
             Log.v(DEBUG_TAG, "diffTime == " + diffTime + ", updateRate = "
@@ -216,8 +216,9 @@ public class GPXService extends Service {
             Log.v(DEBUG_TAG, "Provider enabled " + provider);
         }
 
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            Log.v(DEBUG_TAG, "onStatusChanged() called");
+        }
     };
-
 
 }

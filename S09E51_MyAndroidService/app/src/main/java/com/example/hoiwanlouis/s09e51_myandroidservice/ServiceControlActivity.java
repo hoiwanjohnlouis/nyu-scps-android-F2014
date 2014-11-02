@@ -18,10 +18,12 @@ import android.widget.TextView;
 
 public class ServiceControlActivity extends Activity implements
 		ServiceConnection {
+    private static final String DEBUG_TAG = "SimpleControlActivity";
 	IRemoteInterface mRemoteInterface = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+        Log.v(DEBUG_TAG, "onCreate() called");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.control);
 
@@ -68,32 +70,36 @@ public class ServiceControlActivity extends Activity implements
 					}
 					status.setText(info);
 				} catch (RemoteException e) {
-					Log.e("ServiceControl", "Call to remote interface failed.",	e);
+					Log.e(DEBUG_TAG, "Call to remote interface failed.",	e);
 				}
 			}
 		});
 	}
 
 	public void onServiceConnected(ComponentName name, IBinder service) {
+        Log.v(DEBUG_TAG, "onServiceConnected() called");
 		mRemoteInterface = IRemoteInterface.Stub.asInterface(service);
-		Log.v("ServiceControl", "Interface bound.");
+		Log.v(DEBUG_TAG, "Interface bound.");
 		Button getLastLoc = (Button) findViewById(R.id.get_last);
 		getLastLoc.setVisibility(View.VISIBLE);
 	}
 
 	public void onServiceDisconnected(ComponentName name) {
+        Log.v(DEBUG_TAG, "onServiceDisconnected() called");
 		mRemoteInterface = null;
 		Button getLastLoc = (Button) findViewById(R.id.get_last);
 		getLastLoc.setVisibility(View.GONE);
-		Log.v("ServiceControl", "Remote interface no longer bound");
+		Log.v(DEBUG_TAG, "Remote interface no longer bound");
 	}
 
 	public void releaseBind() {
-	    unbindService(this);
+        Log.v(DEBUG_TAG, "releaseBindClick() called");
+        unbindService(this);
 	}
 	
 	@Override
 	protected void onResume() {
+        Log.v(DEBUG_TAG, "onResume() called");
 		super.onResume();
 		// get a link to our remote service
 		bindService(new Intent(IRemoteInterface.class.getName()), this,
@@ -102,6 +108,7 @@ public class ServiceControlActivity extends Activity implements
 
 	@Override
 	protected void onPause() {
+        Log.v(DEBUG_TAG, "onPaused() called");
 		// remove the link to the remote service
 //		releaseBind();
 		super.onPause();
