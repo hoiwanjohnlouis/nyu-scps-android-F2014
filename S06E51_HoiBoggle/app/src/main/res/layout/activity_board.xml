@@ -8,6 +8,7 @@
     tools:context=".BoardActivity"
     >
 
+
     <fragment
         android:id="@+id/toolbar_fragment"
         android:name="com.example.hoiwanlouis.s06e51_hoiboggle.BoardFragment"

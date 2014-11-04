@@ -2,29 +2,42 @@ package com.example.hoiwanlouis.s06e51_hoiboggle;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.StringBuilderPrinter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class BoardActivity extends Activity implements BoardFragment.OnFragmentInteractionListener, HighScoreFragment.OnFragmentInteractionListener{
 
     private String DEBUG_TAG;
 
+    // Keys for reading grid data from SharedPreferences
+    private String BOGGLE_GRID_SHARED_PREFERENCES;
+    private String DEFAULT_GRID_SIZE;
+    private SharedPreferences saveGridSize;
+    private String boggleGridSize;
+
     // Key used to persistently store the value of high score
-    public static final String highScore_key = "com.example.hoiwanlouis.s06e51_hoiboggle.highscore";
+    private String BOGGLE_HIGH_SCORE_SHARED_PREFERENCES;
+    private SharedPreferences saveHighScore;
+    private Integer boggleHighScore;
 
     // The letters that make up the board
     public ArrayList<String> board = new ArrayList<String>();
@@ -41,13 +54,13 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
 
     public void onFragmentInteraction(Uri uri) {}
 
-    private String internalFileName = "myInternalFileName";
+    private String internalFileName;
     private FileOutputStream internalOutputStream;
-    private File internalFile = null;
+    private File internalFile;
 
-    private String externalFileName = "myExternalFileName";
+    private String externalFileName;
     private FileOutputStream externalOutputStream;
-    private File externalFile = null;
+    private File externalFile;
 
 
 
@@ -56,29 +69,38 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
 
-        DEBUG_TAG = "BoardActivity";
-//        DEBUG_TAG = String.valueOf(R.string.title_activity_board);
-//        Context context = new Context(this);
-//        DEBUG_TAG = context.getResources().getString(R.string.title_activity_board);
-        Log.v(DEBUG_TAG,"onCreate");
+        DEBUG_TAG = getString(R.string.title_activity_board);
+        Log.v(DEBUG_TAG,"onCreate()");
 
-        myDict = BoggleDriver.loadDictionary(this);
-        setupBoard();
+        // 20141025 initialized variables from resource file strings.xml
+        initializeResources();
+
+        // 20141025 initialized variables from resource file strings.xml
+        connectSharedPreferences();
 
         // 20141025 open the internal file, create if needed
-        openInternalFile();
+        internalFile = openInternalFile();
 
         // 20141025 open the external file, create if needed
-        openExternalFile();
+        externalFile = openExternalFile();
 
         // 20141025 open the sqlite db, create if needed
         openSQLiteDB();
 
+        // 20141104 get the boggle data shared preferences
+        boggleGridSize = getBoggleGridSize();
+        boggleHighScore = getBoggleHighScore();
+
+        //
+        myDict = BoggleDriver.loadDictionary(this);
+        setupBoard();
+
+        return;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.v(DEBUG_TAG,"onCreateOptionsMenu");
+        Log.v(DEBUG_TAG,"onCreateOptionsMenu()");
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.board, menu);
         return true;
@@ -86,19 +108,25 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.v(DEBUG_TAG,"onOptionsItemSelected");
+        Log.v(DEBUG_TAG, "in onOptionsItemSelected()");
+        boolean isItemSelected = false;
+
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            isItemSelected = true;
         }
-        return super.onOptionsItemSelected(item);
+        else {
+            isItemSelected = super.onOptionsItemSelected(item);
+        }
+
+        return isItemSelected;
     }
 
     public void setupBoard() {
-        Log.v(DEBUG_TAG,"setupBoard");
+        Log.v(DEBUG_TAG,"setupBoard()");
 
         // Assign random letters to all slots
         // Initialize high score text with the high score
@@ -227,21 +255,18 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
         board.add(randomChar);
         letter.setText(randomChar.toUpperCase());
 
-        SharedPreferences saveHighScore = getSharedPreferences(highScore_key, 0);
-        Integer highScore = saveHighScore.getInt(highScore_key, 0);
-
         TextView highScoreText = (TextView) findViewById(R.id.high_score);
-        highScoreText.setText(highScore.toString());
+        highScoreText.setText(boggleHighScore.toString());
     }
 
     public boolean isValidWord(String checkWord) {
-        Log.v(DEBUG_TAG,"isValidWord");
+        Log.v(DEBUG_TAG,"isValidWord()");
         // Checks if checkWord is in myDict
         return myDict.containsKey(checkWord);
     }
 
     public void clearWord() {
-        Log.v(DEBUG_TAG,"clearWord");
+        Log.v(DEBUG_TAG,"clearWord()");
         // Reset board after word has been submitted
         // Change all colors back and clear word
         Button letter = (Button) findViewById(R.id.letter1);
@@ -299,7 +324,7 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
     }
 
     public void chooseLetter(View v) {
-        Log.v(DEBUG_TAG,"chooseLetter");
+        Log.v(DEBUG_TAG,"chooseLetter()");
         // Change color of button to indicate selection
         // Add index to sequence to later check for valid sequence (this check could be done on every letter click)
         // Add letter to word to later check for valid word
@@ -434,14 +459,12 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
     }
 
     public void checkSequence(View v) {
-        Log.v(DEBUG_TAG,"checkSequence");
+        Log.v(DEBUG_TAG,"checkSequence()");
         // Submit word
         // Take appropriate action and clear sequence and word
         TextView output = (TextView) findViewById(R.id.output);
         TextView scoreText = (TextView) findViewById(R.id.score);
         TextView highScoreText = (TextView) findViewById(R.id.high_score);
-        SharedPreferences saveHighScore = getSharedPreferences(highScore_key, 0);
-        Integer highScore = saveHighScore.getInt(highScore_key, 0);
 
         if (!BoggleDriver.isValidSequence(sequence)) {
             // Output "Not a valid sequence"
@@ -473,10 +496,9 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
             score++;
             scoreText.setText(score.toString());
 
-            if (score > highScore) {
-                SharedPreferences.Editor highScoreEditor = saveHighScore.edit();
-                highScoreEditor.putInt(highScore_key, score);
-                highScoreEditor.commit();
+            // check if this is a new high score?
+            if (score > getBoggleHighScore()) {
+                setBoggleHighScore(score);
                 highScoreText.setText(score.toString());
 
                 // 20141025 Add the code to add a sqlite db record for new high score
@@ -495,22 +517,84 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
         }
     }
 
-    private void openInternalFile() {
-        Log.v(DEBUG_TAG,"openInternalFile");
+    // load data from resource file strings.xml
+    private void initializeResources() {
+        Log.v(DEBUG_TAG,"initializeResources()");
+
+        BOGGLE_GRID_SHARED_PREFERENCES = getString(R.string.boggle_grid_shared_preferences);
+        DEFAULT_GRID_SIZE = getString(R.string.default_number_of_boggle_dice);
+        Log.i(DEBUG_TAG,"BOGGLE_GRID_SHARED_PREFERENCES:" + BOGGLE_GRID_SHARED_PREFERENCES);
+        Log.i(DEBUG_TAG,"DEFAULT_GRID_SIZE:" + DEFAULT_GRID_SIZE);
+
+        BOGGLE_HIGH_SCORE_SHARED_PREFERENCES = getString(R.string.boggle_high_score_shared_preferences);
+        Log.i(DEBUG_TAG,"BOGGLE_HIGH_SCORE_SHARED_PREFERENCES:" + BOGGLE_HIGH_SCORE_SHARED_PREFERENCES);
+
+        internalFileName = getString(R.string.internalFileName);
+        externalFileName = getString(R.string.externalFileName);
+        Log.i(DEBUG_TAG,"internalFileName:" + internalFileName);
+        Log.i(DEBUG_TAG,"externalFileName:" + externalFileName);
 
         return;
     }
 
-    private void openExternalFile() {
-        Log.v(DEBUG_TAG,"openExternalFile");
+    private File openInternalFile() {
+        Log.v(DEBUG_TAG,"openInternalFile()");
+        File intFile = null;
 
-        return;
+        return intFile;
+    }
+
+    private File openExternalFile() {
+        Log.v(DEBUG_TAG,"openExternalFile()");
+        File extFile = null;
+
+        return extFile;
     }
 
     private void openSQLiteDB() {
-        Log.v(DEBUG_TAG,"openSQLiteDB");
+        Log.v(DEBUG_TAG,"openSQLiteDB()");
 
         return;
     }
+
+    //
+    private void connectSharedPreferences() {
+        Log.v(DEBUG_TAG,"connectSharedPreferences()");
+        // handles to shared preferences
+        saveGridSize = getSharedPreferences(BOGGLE_GRID_SHARED_PREFERENCES, 0);
+        saveHighScore = getSharedPreferences(BOGGLE_HIGH_SCORE_SHARED_PREFERENCES, 0);
+
+        // for debugging purposes
+        SharedPreferences.Editor newEdit = saveHighScore.edit();
+        newEdit.clear();
+        newEdit.commit();
+
+    }
+
+    // retrieve the grid size from shared preferences
+    private String getBoggleGridSize() {
+        Log.v(DEBUG_TAG,"getBoggleGridSize()");
+        boggleGridSize = saveGridSize.getString(BOGGLE_GRID_SHARED_PREFERENCES, DEFAULT_GRID_SIZE);
+        Log.i(DEBUG_TAG,"Using grid size of:" + boggleGridSize);
+        return boggleGridSize;
+    }
+
+    // retrieve the high score from shared preferences
+    private Integer getBoggleHighScore() {
+        Log.v(DEBUG_TAG,"getBoggleHIghScore()");
+        boggleHighScore = saveHighScore.getInt(BOGGLE_HIGH_SCORE_SHARED_PREFERENCES, 0);
+        Log.i(DEBUG_TAG,"Current high score is:" + boggleHighScore.toString());
+        return boggleHighScore;
+    }
+
+    // we have a new high score
+    public void setBoggleHighScore(Integer newHighScore) {
+        Log.v(DEBUG_TAG,"getBoggleHIghScore()");
+        SharedPreferences.Editor highScoreEditor = saveHighScore.edit();
+        highScoreEditor.putInt(BOGGLE_HIGH_SCORE_SHARED_PREFERENCES, newHighScore);
+        highScoreEditor.commit();
+        Log.i(DEBUG_TAG,"New high score is:" + newHighScore.toString());
+    }
+
 
 }
