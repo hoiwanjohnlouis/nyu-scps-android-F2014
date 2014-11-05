@@ -88,7 +88,7 @@ public class MainActivity extends Activity {
             t4v.setGravity(Gravity.CENTER);
             tbrow.addView(t4v);
             TextView t5v = new TextView(this);
-            t5v.setText("" + i / 10);
+            t5v.setText("Comments.and.Things." + i);
             t5v.setTextColor(Color.WHITE);
             t5v.setGravity(Gravity.CENTER);
             tbrow.addView(t5v);
