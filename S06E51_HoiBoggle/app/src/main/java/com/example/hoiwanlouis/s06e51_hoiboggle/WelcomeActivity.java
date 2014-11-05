@@ -28,12 +28,16 @@ public class WelcomeActivity extends Activity {
     private String boggleGridSize;
 
     // trigger switch to denote a grid change
-    protected boolean preferencesChanged = true;
+    private boolean preferencesChanged = true;
+
+    private StringBuilder sbToastMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.v(DEBUG_TAG,"in onCreate()");
         super.onCreate(savedInstanceState);
+
+        sbToastMessage = new StringBuilder();
 
         // init vars from strings.xml resources
         initStringResources();
@@ -148,15 +152,15 @@ public class WelcomeActivity extends Activity {
                         setBoggleGridSize(choices);
                     }
 
-                    //
-                    StringBuilder sbTemp = new StringBuilder();
-                    sbTemp = sbTemp.append(R.string.reconfiguring_boggle);
-                    sbTemp = sbTemp.append(":");
-                    sbTemp = sbTemp.append(choices);
-                    sbTemp = sbTemp.append("x");
-                    sbTemp = sbTemp.append(choices);
-                    sbTemp = sbTemp.append(" grid");
-                    Toast.makeText(WelcomeActivity.this, sbTemp.toString(), Toast.LENGTH_LONG).show();
+                    // clean out the toast message before reusing
+                    sbToastMessage.delete(0,sbToastMessage.length());
+                    sbToastMessage = sbToastMessage.append(R.string.reconfiguring_boggle);
+                    sbToastMessage = sbToastMessage.append(":");
+                    sbToastMessage = sbToastMessage.append(choices);
+                    sbToastMessage = sbToastMessage.append("x");
+                    sbToastMessage = sbToastMessage.append(choices);
+                    sbToastMessage = sbToastMessage.append(" grid");
+                    Toast.makeText(WelcomeActivity.this, sbToastMessage.toString(), Toast.LENGTH_LONG).show();
 
                     return;
                 }   // end of onSharedPreferenceChanged
