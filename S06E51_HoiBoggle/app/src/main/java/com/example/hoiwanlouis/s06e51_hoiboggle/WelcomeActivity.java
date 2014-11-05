@@ -154,7 +154,7 @@ public class WelcomeActivity extends Activity {
 
                     // clean out the toast message before reusing
                     sbToastMessage.delete(0,sbToastMessage.length());
-                    sbToastMessage = sbToastMessage.append(R.string.reconfiguring_boggle);
+                    sbToastMessage = sbToastMessage.append(getString(R.string.reconfiguring_boggle));
                     sbToastMessage = sbToastMessage.append(":");
                     sbToastMessage = sbToastMessage.append(choices);
                     sbToastMessage = sbToastMessage.append("x");
