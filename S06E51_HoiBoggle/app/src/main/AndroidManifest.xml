@@ -22,7 +22,7 @@
         </activity>
         <activity
             android:name="com.example.hoiwanlouis.s06e51_hoiboggle.BoardActivity"
-            android:label="@string/title_activity_board"
+            android:label="@string/board_activity"
             android:parentActivityName="com.example.hoiwanlouis.s06e51_hoiboggle.WelcomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

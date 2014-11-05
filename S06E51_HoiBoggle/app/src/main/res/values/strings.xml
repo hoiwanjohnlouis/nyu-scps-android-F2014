@@ -6,29 +6,29 @@
     <string name="pick">Please pick a</string>
     <string name="size">square grid size</string>
     <string name="submit">Submit</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_game_setup">GameSetupActivity</string>
     <string name="size_prompt">Choose a size</string>
+    <string name="board_activity">BoardActivity</string>
 
     <!--
         File name definitions
+    <string name="hello_world">Hello world!</string>
     -->
-    <string name="externalFileName">HoiExternalFile</string>
-    <string name="internalFileName">HoiInternalFile</string>
+    <string name="externalFileName">HoiExternalFile.txt</string>
+    <string name="internalFileName">HoiInternalFile.txt</string>
 
 
-    <string name="title_activity_board">BoardActivity</string>
 
     <!--
         Boggle Setting Variables
     -->
     <string name="action_settings">Boggle Action Settings</string>
     <string name="settings_activity">Boggle Settings Activity</string>
-    <string name="boggle_grid_shared_preferences">com.example.hoiwanlouis.s06e51_hoiboggle.gridsize</string>;
-    <string name="boggle_high_score_shared_preferences">com.example.hoiwanlouis.s06e51_hoiboggle.highscore</string>;
+    <string name="boggle_shared_preferences_file">com.example.hoiwanlouis.s06e51_hoiboggle.pref</string>;
+    <string name="boggle_grid_size_key">pref_boggle_grid_size</string>;
+    <string name="boggle_high_score_key">pref_boggle_high_score</string>;
 
-    <string name="default_number_of_boggle_dice">4x4</string>
+    <string name="default_size_of_boggle_grid">4</string>
     <string name="number_of_boggle_dice">Number of Boggle Dice</string>
-    <string name="number_of_boggle_dice_description">Select 4x4, 5x5, or 6x6 Boggle Dice</string>
+    <string name="number_of_boggle_dice_description">Select 4x4, 5x5, 6x6, or 7x7 Boggle Dice</string>
     <string name="reconfiguring_boggle">Reconfiguring Boggle to New Settings</string>
 </resources>

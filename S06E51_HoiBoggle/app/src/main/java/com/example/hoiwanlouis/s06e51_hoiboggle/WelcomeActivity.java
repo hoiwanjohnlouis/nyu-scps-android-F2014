@@ -19,9 +19,12 @@ public class WelcomeActivity extends Activity {
     private final String DEBUG_TAG = this.getClass().getSimpleName();
 
     // Keys for reading grid data from SharedPreferences
-    private String BOGGLE_GRID_SHARED_PREFERENCES;
+    private String BOGGLE_SHARED_PREFERENCES_FILE;
     private String DEFAULT_GRID_SIZE;
-    private SharedPreferences saveGridSize;
+    private String BOGGLE_GRID_SIZE_KEY;
+    private String BOGGLE_HIGH_SCORE_KEY;
+
+    private SharedPreferences boggleSharedPreferences;
     private String boggleGridSize;
 
     // trigger switch to denote a grid change
@@ -34,6 +37,9 @@ public class WelcomeActivity extends Activity {
 
         // init vars from strings.xml resources
         initStringResources();
+
+        // connect to boggle shared preferences for use by BoardActivity
+        connectSharedPreferences();
 
         // set default values in the apps SharedPreferences
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -76,16 +82,22 @@ public class WelcomeActivity extends Activity {
         Intent intent = new Intent(this, BoardActivity.class);
         startActivity(intent);
 
+        return;
     }
 
     //
     public void initStringResources() {
         Log.v(DEBUG_TAG,"initStringResources()");
 
-        BOGGLE_GRID_SHARED_PREFERENCES = getString(R.string.boggle_grid_shared_preferences);
-        DEFAULT_GRID_SIZE = getString(R.string.default_number_of_boggle_dice);
-        Log.i(DEBUG_TAG,"BOGGLE_GRID_SHARED_PREFERENCES:" + BOGGLE_GRID_SHARED_PREFERENCES);
+        BOGGLE_SHARED_PREFERENCES_FILE = getString(R.string.boggle_shared_preferences_file);
+        DEFAULT_GRID_SIZE = getString(R.string.default_size_of_boggle_grid);
+        BOGGLE_GRID_SIZE_KEY = getString(R.string.boggle_grid_size_key);
+        BOGGLE_HIGH_SCORE_KEY = getString(R.string.boggle_high_score_key);
+
+        Log.i(DEBUG_TAG,"BOGGLE_SHARED_PREFERENCES_FILE:" + BOGGLE_SHARED_PREFERENCES_FILE);
         Log.i(DEBUG_TAG,"DEFAULT_GRID_SIZE:" + DEFAULT_GRID_SIZE);
+        Log.i(DEBUG_TAG,"BOGGLE_GRID_SIZE_KEY:" + BOGGLE_GRID_SIZE_KEY);
+        Log.i(DEBUG_TAG,"BOGGLE_HIGH_SCORE_KEY:" + BOGGLE_HIGH_SCORE_KEY);
 
         return;
     }
@@ -93,30 +105,28 @@ public class WelcomeActivity extends Activity {
     //
     private void connectSharedPreferences() {
         Log.v(DEBUG_TAG,"connectSharedPreferences()");
-        saveGridSize = getSharedPreferences(BOGGLE_GRID_SHARED_PREFERENCES, 0);
-
-        // for debugging purposes
-        SharedPreferences.Editor newEdit = saveGridSize.edit();
-        newEdit.clear();
-        newEdit.commit();
+        boggleSharedPreferences = getSharedPreferences(BOGGLE_SHARED_PREFERENCES_FILE, 0);
+        return;
     }
 
 
     // retrieve the grid size from shared preferences
     private String getBoggleGridSize() {
         Log.v(DEBUG_TAG,"getBoggleGridSize()");
-        boggleGridSize = saveGridSize.getString(BOGGLE_GRID_SHARED_PREFERENCES, DEFAULT_GRID_SIZE);
+        boggleGridSize = boggleSharedPreferences.getString(BOGGLE_GRID_SIZE_KEY, "4");
         Log.i(DEBUG_TAG,"Using grid size of:" + boggleGridSize);
         return boggleGridSize;
     }
 
     // we have a new high score
     public void setBoggleGridSize(String newGridSize) {
-        Log.v(DEBUG_TAG,"getBoggleGridSize()");
-        SharedPreferences.Editor saveGridSizeEditor = saveGridSize.edit();
-        saveGridSizeEditor.putString(BOGGLE_GRID_SHARED_PREFERENCES, newGridSize);
-        saveGridSizeEditor.commit();
+        Log.v(DEBUG_TAG,"setBoggleGridSize()");
+        SharedPreferences.Editor spEditor = boggleSharedPreferences.edit();
+        spEditor.putString(BOGGLE_GRID_SIZE_KEY, newGridSize);
+        spEditor.commit();
+        boggleGridSize = newGridSize;
         Log.i(DEBUG_TAG,"New Grid Size is:" + newGridSize);
+        return;
     }
 
     // anonymous listener for settings
@@ -130,15 +140,23 @@ public class WelcomeActivity extends Activity {
                     preferencesChanged = true;
 
                     // # of choices to display has changed
+                    String choices = null;
                     Log.i(DEBUG_TAG, "key:" + key.toString());
-                    if (key.equals(BOGGLE_GRID_SHARED_PREFERENCES)) {
-                        String choices = sharedPreferences.getString(BOGGLE_GRID_SHARED_PREFERENCES, null);
+                    if (key.equals(BOGGLE_GRID_SIZE_KEY)) {
+                        choices = sharedPreferences.getString(BOGGLE_GRID_SIZE_KEY, DEFAULT_GRID_SIZE);
                         Log.i(DEBUG_TAG, "Boggle Grid changed to " + choices);
                         setBoggleGridSize(choices);
                     }
 
                     //
-                    Toast.makeText(WelcomeActivity.this, R.string.reconfiguring_boggle, Toast.LENGTH_LONG).show();
+                    StringBuilder sbTemp = new StringBuilder();
+                    sbTemp = sbTemp.append(R.string.reconfiguring_boggle);
+                    sbTemp = sbTemp.append(":");
+                    sbTemp = sbTemp.append(choices);
+                    sbTemp = sbTemp.append("x");
+                    sbTemp = sbTemp.append(choices);
+                    sbTemp = sbTemp.append(" grid");
+                    Toast.makeText(WelcomeActivity.this, sbTemp.toString(), Toast.LENGTH_LONG).show();
 
                     return;
                 }   // end of onSharedPreferenceChanged

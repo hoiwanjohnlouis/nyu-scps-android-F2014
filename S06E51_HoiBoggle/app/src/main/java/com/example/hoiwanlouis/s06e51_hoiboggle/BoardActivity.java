@@ -2,14 +2,12 @@ package com.example.hoiwanlouis.s06e51_hoiboggle;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.os.Environment;
 import android.util.Log;
-import android.util.StringBuilderPrinter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,26 +15,34 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 public class BoardActivity extends Activity implements BoardFragment.OnFragmentInteractionListener, HighScoreFragment.OnFragmentInteractionListener{
 
     private String DEBUG_TAG;
 
+    private Context context;
+
     // Keys for reading grid data from SharedPreferences
-    private String BOGGLE_GRID_SHARED_PREFERENCES;
+    private String BOGGLE_SHARED_PREFERENCES_FILE;
     private String DEFAULT_GRID_SIZE;
-    private SharedPreferences saveGridSize;
+    private String BOGGLE_GRID_SIZE_KEY;
+    private String BOGGLE_HIGH_SCORE_KEY;
+
+    private SharedPreferences boggleSharedPreferences;
+
+    // local store for grid size
     private String boggleGridSize;
 
-    // Key used to persistently store the value of high score
-    private String BOGGLE_HIGH_SCORE_SHARED_PREFERENCES;
-    private SharedPreferences saveHighScore;
+    // local store for high score
     private Integer boggleHighScore;
 
     // The letters that make up the board
@@ -55,12 +61,12 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
     public void onFragmentInteraction(Uri uri) {}
 
     private String internalFileName;
-    private FileOutputStream internalOutputStream;
     private File internalFile;
+    private PrintWriter pwInternalFile;
 
     private String externalFileName;
-    private FileOutputStream externalOutputStream;
     private File externalFile;
+    private PrintWriter pwExternalFile;
 
 
 
@@ -69,27 +75,28 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
 
-        DEBUG_TAG = getString(R.string.title_activity_board);
+        DEBUG_TAG = getString(R.string.board_activity);
         Log.v(DEBUG_TAG,"onCreate()");
+
+        context = this;
 
         // 20141025 initialized variables from resource file strings.xml
         initializeResources();
 
         // 20141025 initialized variables from resource file strings.xml
         connectSharedPreferences();
-
-        // 20141025 open the internal file, create if needed
-        internalFile = openInternalFile();
-
-        // 20141025 open the external file, create if needed
-        externalFile = openExternalFile();
-
-        // 20141025 open the sqlite db, create if needed
-        openSQLiteDB();
-
         // 20141104 get the boggle data shared preferences
         boggleGridSize = getBoggleGridSize();
         boggleHighScore = getBoggleHighScore();
+
+        // 20141025 open the internal file, create if needed
+        openInternalFile();
+
+        // 20141025 open the external file, create if needed
+        openExternalFile();
+
+        // 20141025 open the sqlite db, create if needed
+        openSQLiteDB();
 
         //
         myDict = BoggleDriver.loadDictionary(this);
@@ -521,38 +528,21 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
     private void initializeResources() {
         Log.v(DEBUG_TAG,"initializeResources()");
 
-        BOGGLE_GRID_SHARED_PREFERENCES = getString(R.string.boggle_grid_shared_preferences);
-        DEFAULT_GRID_SIZE = getString(R.string.default_number_of_boggle_dice);
-        Log.i(DEBUG_TAG,"BOGGLE_GRID_SHARED_PREFERENCES:" + BOGGLE_GRID_SHARED_PREFERENCES);
-        Log.i(DEBUG_TAG,"DEFAULT_GRID_SIZE:" + DEFAULT_GRID_SIZE);
+        BOGGLE_SHARED_PREFERENCES_FILE = getString(R.string.boggle_shared_preferences_file);
+        DEFAULT_GRID_SIZE = getString(R.string.default_size_of_boggle_grid);
+        BOGGLE_GRID_SIZE_KEY = getString(R.string.boggle_grid_size_key);
+        BOGGLE_HIGH_SCORE_KEY = getString(R.string.boggle_high_score_key);
 
-        BOGGLE_HIGH_SCORE_SHARED_PREFERENCES = getString(R.string.boggle_high_score_shared_preferences);
-        Log.i(DEBUG_TAG,"BOGGLE_HIGH_SCORE_SHARED_PREFERENCES:" + BOGGLE_HIGH_SCORE_SHARED_PREFERENCES);
+        Log.i(DEBUG_TAG,"BOGGLE_SHARED_PREFERENCES_FILE:" + BOGGLE_SHARED_PREFERENCES_FILE);
+        Log.i(DEBUG_TAG,"DEFAULT_GRID_SIZE:" + DEFAULT_GRID_SIZE);
+        Log.i(DEBUG_TAG,"BOGGLE_GRID_SIZE_KEY:" + BOGGLE_GRID_SIZE_KEY);
+        Log.i(DEBUG_TAG,"BOGGLE_HIGH_SCORE_KEY:" + BOGGLE_HIGH_SCORE_KEY);
 
         internalFileName = getString(R.string.internalFileName);
         externalFileName = getString(R.string.externalFileName);
+
         Log.i(DEBUG_TAG,"internalFileName:" + internalFileName);
         Log.i(DEBUG_TAG,"externalFileName:" + externalFileName);
-
-        return;
-    }
-
-    private File openInternalFile() {
-        Log.v(DEBUG_TAG,"openInternalFile()");
-        File intFile = null;
-
-        return intFile;
-    }
-
-    private File openExternalFile() {
-        Log.v(DEBUG_TAG,"openExternalFile()");
-        File extFile = null;
-
-        return extFile;
-    }
-
-    private void openSQLiteDB() {
-        Log.v(DEBUG_TAG,"openSQLiteDB()");
 
         return;
     }
@@ -561,20 +551,14 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
     private void connectSharedPreferences() {
         Log.v(DEBUG_TAG,"connectSharedPreferences()");
         // handles to shared preferences
-        saveGridSize = getSharedPreferences(BOGGLE_GRID_SHARED_PREFERENCES, 0);
-        saveHighScore = getSharedPreferences(BOGGLE_HIGH_SCORE_SHARED_PREFERENCES, 0);
-
-        // for debugging purposes
-        SharedPreferences.Editor newEdit = saveHighScore.edit();
-        newEdit.clear();
-        newEdit.commit();
-
+        boggleSharedPreferences = getSharedPreferences(BOGGLE_SHARED_PREFERENCES_FILE, 0);
+        return;
     }
 
     // retrieve the grid size from shared preferences
     private String getBoggleGridSize() {
         Log.v(DEBUG_TAG,"getBoggleGridSize()");
-        boggleGridSize = saveGridSize.getString(BOGGLE_GRID_SHARED_PREFERENCES, DEFAULT_GRID_SIZE);
+        boggleGridSize = boggleSharedPreferences.getString(BOGGLE_GRID_SIZE_KEY, DEFAULT_GRID_SIZE);
         Log.i(DEBUG_TAG,"Using grid size of:" + boggleGridSize);
         return boggleGridSize;
     }
@@ -582,7 +566,7 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
     // retrieve the high score from shared preferences
     private Integer getBoggleHighScore() {
         Log.v(DEBUG_TAG,"getBoggleHIghScore()");
-        boggleHighScore = saveHighScore.getInt(BOGGLE_HIGH_SCORE_SHARED_PREFERENCES, 0);
+        boggleHighScore = boggleSharedPreferences.getInt(BOGGLE_HIGH_SCORE_KEY, 0);
         Log.i(DEBUG_TAG,"Current high score is:" + boggleHighScore.toString());
         return boggleHighScore;
     }
@@ -590,10 +574,86 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
     // we have a new high score
     public void setBoggleHighScore(Integer newHighScore) {
         Log.v(DEBUG_TAG,"getBoggleHIghScore()");
-        SharedPreferences.Editor highScoreEditor = saveHighScore.edit();
-        highScoreEditor.putInt(BOGGLE_HIGH_SCORE_SHARED_PREFERENCES, newHighScore);
+        SharedPreferences.Editor highScoreEditor = boggleSharedPreferences.edit();
+        highScoreEditor.putInt(BOGGLE_HIGH_SCORE_KEY, newHighScore);
         highScoreEditor.commit();
         Log.i(DEBUG_TAG,"New high score is:" + newHighScore.toString());
+    }
+
+    private void openInternalFile() {
+        Log.v(DEBUG_TAG,"openInternalFile()");
+
+        // create a regular file
+        internalFile = new File(context.getFilesDir(), internalFileName);
+        Log.i(DEBUG_TAG, "Opening Internal File:" + internalFile.getAbsoluteFile().toString());
+        // open a regular file
+        try {
+            pwInternalFile = new PrintWriter(new BufferedWriter(new FileWriter(internalFile)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            pwInternalFile.close();
+        }
+        System.out.println(pwInternalFile);
+
+        return;
+    }
+
+    private void openExternalFile() {
+        Log.v(DEBUG_TAG,"openExternalFile()");
+
+        // build external directory location
+        File dir = null;
+        dir = new File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_NOTIFICATIONS),
+                "my_own_directory"
+        );
+        if (!isExternalStorageWritable() || !dir.mkdirs()) {
+            Log.e(DEBUG_TAG, "External directory not created");
+        }
+
+        // create an external file
+        externalFile = new File(dir, externalFileName);
+        Log.i(DEBUG_TAG, "Opening External File:" + externalFile.getAbsoluteFile().toString());
+        // open a regular file
+        try {
+            pwExternalFile = new PrintWriter(new BufferedWriter(new FileWriter(externalFile)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            pwExternalFile.close();
+        }
+
+        return;
+    }
+
+    private void openSQLiteDB() {
+        Log.v(DEBUG_TAG,"openSQLiteDB()");
+
+        return;
+    }
+
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (
+                (Environment.MEDIA_MOUNTED.equals(state)) ||
+                        (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state))
+                ) {
+            return true;
+        }
+        return false;
     }
 
 
