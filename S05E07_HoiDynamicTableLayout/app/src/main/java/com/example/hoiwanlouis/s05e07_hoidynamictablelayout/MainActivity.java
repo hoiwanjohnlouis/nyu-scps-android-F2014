@@ -60,8 +60,12 @@ public class MainActivity extends Activity {
         tv3.setText(" Stock Remaining ");
         tv3.setTextColor(Color.WHITE);
         tbrow0.addView(tv3);
+        TextView tv4 = new TextView(this);
+        tv4.setText(" Comments and Things ");
+        tv4.setTextColor(Color.WHITE);
+        tbrow0.addView(tv4);
         stk.addView(tbrow0);
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 30; i++) {
             TableRow tbrow = new TableRow(this);
             TextView t1v = new TextView(this);
             t1v.setText("" + i);
@@ -83,6 +87,11 @@ public class MainActivity extends Activity {
             t4v.setTextColor(Color.WHITE);
             t4v.setGravity(Gravity.CENTER);
             tbrow.addView(t4v);
+            TextView t5v = new TextView(this);
+            t5v.setText("" + i / 10);
+            t5v.setTextColor(Color.WHITE);
+            t5v.setGravity(Gravity.CENTER);
+            tbrow.addView(t5v);
             stk.addView(tbrow);
         }
 
