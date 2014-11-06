@@ -593,7 +593,9 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
             e.printStackTrace();
         }
         finally {
-            pwInternalFile.close();
+            if (pwInternalFile != null) {
+                pwInternalFile.close();
+            }
         }
         System.out.println(pwInternalFile);
 
@@ -616,14 +618,16 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
         // create an external file
         externalFile = new File(dir, externalFileName);
         Log.i(DEBUG_TAG, "Opening External File:" + externalFile.getAbsoluteFile().toString());
-        // open a regular file
+        // open a regular external file
         try {
             pwExternalFile = new PrintWriter(new BufferedWriter(new FileWriter(externalFile)));
         } catch (IOException e) {
             e.printStackTrace();
         }
         finally {
-            pwExternalFile.close();
+            if (pwExternalFile != null) {
+                pwExternalFile.close();
+            }
         }
 
         return;
