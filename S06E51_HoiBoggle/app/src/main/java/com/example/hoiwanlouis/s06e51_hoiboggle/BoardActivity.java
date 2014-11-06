@@ -69,7 +69,6 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
     private PrintWriter pwExternalFile;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +101,6 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
         myDict = BoggleDriver.loadDictionary(this);
         setupBoard();
 
-        return;
     }
 
     @Override
@@ -520,7 +518,6 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
             sequence.clear();
             clearWord();
 
-            return;
         }
     }
 
@@ -543,8 +540,6 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
 
         Log.i(DEBUG_TAG,"internalFileName:" + internalFileName);
         Log.i(DEBUG_TAG,"externalFileName:" + externalFileName);
-
-        return;
     }
 
     //
@@ -552,7 +547,6 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
         Log.v(DEBUG_TAG,"connectSharedPreferences()");
         // handles to shared preferences
         boggleSharedPreferences = getSharedPreferences(BOGGLE_SHARED_PREFERENCES_FILE, 0);
-        return;
     }
 
     // retrieve the grid size from shared preferences
@@ -598,8 +592,6 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
             }
         }
         System.out.println(pwInternalFile);
-
-        return;
     }
 
     private void openExternalFile() {
@@ -629,14 +621,11 @@ public class BoardActivity extends Activity implements BoardFragment.OnFragmentI
                 pwExternalFile.close();
             }
         }
-
-        return;
     }
 
     private void openSQLiteDB() {
         Log.v(DEBUG_TAG,"openSQLiteDB()");
 
-        return;
     }
 
     /* Checks if external storage is available for read and write */
