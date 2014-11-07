@@ -1,7 +1,6 @@
 package com.example.hoiwanlouis.s09e52_hoidynamicbuttonlayout;
 
         import android.app.Activity;
-        import android.content.Intent;
         import android.graphics.Color;
         import android.os.Bundle;
         import android.util.Log;
@@ -25,7 +24,7 @@ public class MainActivity extends Activity {
     private String DEBUG_TAG = this.getClass().getSimpleName();
     private Random randId = new Random(7919);  // a very large prime number
 
-    private List<Button> buttonList = new ArrayList<Button>();
+    private List<Button> letterList = new ArrayList<Button>();
     private Map<Integer,Integer> id2hash = new HashMap<Integer, Integer>();
     private Map<Integer,Integer> hash2Id = new HashMap<Integer, Integer>();
 
@@ -62,7 +61,7 @@ public class MainActivity extends Activity {
     public void init() {
 
         Log.v(DEBUG_TAG, "in init()");
-        TableLayout myTable = (TableLayout) findViewById(R.id.table_main);
+        TableLayout myTable = (TableLayout) findViewById(R.id.boggle_board_table_main);
 
         TableLayout.LayoutParams rowLayoutParams =
                 new TableLayout.LayoutParams(
@@ -79,7 +78,6 @@ public class MainActivity extends Activity {
             myRow.setLayoutParams(rowLayoutParams);
             myRow.setGravity(Gravity.CENTER);
             for (int j = 0; j < 5; j++) {
-                numberOfButtons++;
                 buttonId = randId.nextInt();
                 Button myButton = new Button(this);
                 myButton.setId(buttonId);
@@ -91,7 +89,7 @@ public class MainActivity extends Activity {
 //                Drawable tempDrawable = getDrawable(R.drawable.button);
 //                myButton.setBackground(tempDrawable);
 
-                Log.d(DEBUG_TAG, "Adding button=[" + numberOfButtons + "," + myButton.getText() + "], buttonId=" + (buttonId));
+                Log.d(DEBUG_TAG, "Adding button=[" + numberOfButtons + "," + myButton.getText() + "], Id=" + (buttonId));
                 myButton.setOnClickListener(
                         new View.OnClickListener() {
                             public void onClick(View v) {
@@ -105,14 +103,17 @@ public class MainActivity extends Activity {
                 // TODO: set up an intent somewhere to process a SUBMIT to process word array/hash.
                 // or add button to an arraylist/hash map for word comparison?
                 // hash map should use Id as key & numberOfButtons as data to reuse Mike's verification code?
-                buttonList.add(myButton);
+                letterList.add(myButton);
                 id2hash.put(numberOfButtons,buttonId);
                 Log.d(DEBUG_TAG, "id2hash.get("+numberOfButtons+")="+id2hash.get(numberOfButtons));
                 hash2Id.put(buttonId,numberOfButtons);
                 int xx = hash2Id.get(buttonId);
                 Log.d(DEBUG_TAG, "hash2Id.get("+buttonId+")="+hash2Id.get(buttonId));
-                tmpBtn = buttonList.get(xx -1);
+                tmpBtn = letterList.get(xx);
                 Log.d(DEBUG_TAG, "tmpBtn.getText()="+tmpBtn.getText());
+
+                // get the next button slot
+                numberOfButtons++;
             }
             myTable.addView(myRow);
         }
@@ -130,9 +131,14 @@ public class MainActivity extends Activity {
     public void chooseLetter(View v) {
         Log.v(DEBUG_TAG,"in chooseLetter()");
         Button btn = (Button) v;
-        Log.d(DEBUG_TAG,"buttonId=[" + v.getId() + "] letter=["
+        Log.d(DEBUG_TAG,
+                "letter=["
                 + btn.getText()
-                + "] clicked");
+                + "]"
+                + ", Id=["
+                + v.getId()
+                + "]"
+                + " clicked");
         if (btn.getCurrentTextColor() == Color.RED) {
             btn.setTextColor(Color.WHITE);
             // remove the letter from word array/hash

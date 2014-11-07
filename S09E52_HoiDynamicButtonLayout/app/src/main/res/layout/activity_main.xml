@@ -29,7 +29,7 @@
                 <!-- this will be a dynamically defined table -->
                 <!-- android:layout_centerHorizontal="true" -->
                 <TableLayout
-                    android:id="@+id/table_main"
+                    android:id="@+id/boggle_board_table_main"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
