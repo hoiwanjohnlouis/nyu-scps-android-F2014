@@ -29,6 +29,6 @@
 
     <string name="default_size_of_boggle_grid">4</string>
     <string name="number_of_boggle_dice">Number of Boggle Dice</string>
-    <string name="number_of_boggle_dice_description">Select 4x4, 5x5, 6x6, or 7x7 Boggle Dice</string>
+    <string name="number_of_boggle_dice_description">Select 3x3, 4x4, 5x5, or 6x6 Boggle Dice</string>
     <string name="reconfiguring_boggle">Reconfiguring Boggle to a(n)</string>
 </resources>
