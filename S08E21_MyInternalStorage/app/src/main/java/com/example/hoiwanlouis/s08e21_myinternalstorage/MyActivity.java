@@ -23,37 +23,6 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
-
-//        File myFile = new File("hoiBufferIO.txt");
-//        PrintWriter pwriter = new PrintWriter(new BufferedWriter(new FileWriter(myFile)));
-//        System.out.println(myFile.getAbsoluteFile());
-//        pwriter.println("Here's the value of pi:");  // no need for "\n", bufferedWrite auto includes
-//        pwriter.println(3.14159);
-//        pwriter.println("We are done!");
-//        pwriter.close();
-//
-//        BufferedReader preader = null;
-//        try {
-//            preader = new BufferedReader(new FileReader(myFile));
-//            System.out.println(myFile.getAbsoluteFile());
-//            System.out.println(preader.readLine());
-//            String piString = preader.readLine();
-//            double piValue = Double.parseDouble(piString);
-//            System.out.println(piValue);
-//            System.out.println(preader.readLine());
-//        } catch (NumberFormatException ex1) {
-//            System.out.println(ex1);
-//        } catch (NullPointerException ex2) {
-//            System.out.println(ex2);
-//        } catch (FileNotFoundException ex3) {
-//            System.out.println(ex3);
-//        } finally {
-//            if (preader != null) {
-//                preader.close();
-//            }
-//        }
-// change code to use bufferedio, streams are deprecated
-
         // create the Internal Storage File
         String fileName = "myInternalStorage.txt";
         Context context = this;
@@ -66,7 +35,7 @@ public class MyActivity extends Activity {
         PrintWriter pwMyFile = null;
         try {
             pwMyFile = new PrintWriter(new BufferedWriter(new FileWriter(myFile)));
-        } catch (IOException e) {
+        }   catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println(pwMyFile);
@@ -75,7 +44,7 @@ public class MyActivity extends Activity {
         File tmpFile = null;
         try {
             tmpFile = File.createTempFile(fileName, null, context.getCacheDir());
-        } catch (IOException e) {
+        }   catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println(tmpFile.getAbsoluteFile());
@@ -83,7 +52,7 @@ public class MyActivity extends Activity {
         PrintWriter pwTmpFile = null;
         try {
             pwTmpFile = new PrintWriter(new BufferedWriter(new FileWriter(tmpFile)));
-        } catch (IOException e) {
+        }   catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println(pwTmpFile);
@@ -109,11 +78,9 @@ public class MyActivity extends Activity {
                 sbText.append(myLine);
                 sbText.append('\n');
             }
-        }
-        catch (IOException e) {
+        }   catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
+        }   finally {
             if (brMyFile != null) {
                 try {
                     brMyFile.close();
@@ -132,11 +99,9 @@ public class MyActivity extends Activity {
                 sbText.append(tmpLine);
                 sbText.append('\n');
             }
-        }
-        catch (IOException e) {
+        }   catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
+        }   finally {
             if (brTmpFile != null) {
                 try {
                     brTmpFile.close();
