@@ -8,11 +8,10 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.hoiwanlouis.s10e03_robuserprefsheaders.MainActivity"
+            android:name="com.example.hoiwanlouis.s10e03_robuserprefsheaders.UserPrefsHeadersActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
