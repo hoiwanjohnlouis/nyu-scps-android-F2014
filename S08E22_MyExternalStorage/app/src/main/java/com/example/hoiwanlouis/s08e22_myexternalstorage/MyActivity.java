@@ -47,39 +47,8 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
-
-//        File myFile = new File("hoiBufferIO.txt");
-//        PrintWriter pwriter = new PrintWriter(new BufferedWriter(new FileWriter(myFile)));
-//        System.out.println(myFile.getAbsoluteFile());
-//        pwriter.println("Here's the value of pi:");  // no need for "\n", bufferedWrite auto includes
-//        pwriter.println(3.14159);
-//        pwriter.println("We are done!");
-//        pwriter.close();
-//
-//        BufferedReader preader = null;
-//        try {
-//            preader = new BufferedReader(new FileReader(myFile));
-//            System.out.println(myFile.getAbsoluteFile());
-//            System.out.println(preader.readLine());
-//            String piString = preader.readLine();
-//            double piValue = Double.parseDouble(piString);
-//            System.out.println(piValue);
-//            System.out.println(preader.readLine());
-//        } catch (NumberFormatException ex1) {
-//            System.out.println(ex1);
-//        } catch (NullPointerException ex2) {
-//            System.out.println(ex2);
-//        } catch (FileNotFoundException ex3) {
-//            System.out.println(ex3);
-//        } finally {
-//            if (preader != null) {
-//                preader.close();
-//            }
-//        }
-// change code to use bufferedio, streams are deprecated
-
         File dir = null;
-        dir = new File(
+        dir = new File (
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_NOTIFICATIONS),
                 "my_own_directory"
         );
@@ -127,8 +96,6 @@ public class MyActivity extends Activity {
 
         TextView tv = (TextView)findViewById(R.id.text_view);
         tv.setText(sbText);
-
-//        file.delete();
 
     }
 
