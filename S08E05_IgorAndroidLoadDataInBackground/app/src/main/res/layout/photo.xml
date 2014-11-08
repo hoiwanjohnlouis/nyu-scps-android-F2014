@@ -23,10 +23,13 @@
     android:layout_weight="3.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:image="http://schemas.android.com/apk/res/com.example.android.threadsample">
+
     <ProgressBar android:layout_gravity="center" android:id="@+id/photoProgress"
         android:layout_width="wrap_content" android:layout_height="wrap_content" />
-    <com.example.android.threadsample.PhotoView
+
+'    <com.example.android.threadsample.PhotoView
         android:id="@+id/photoView" android:layout_width="fill_parent"
         android:layout_height="fill_parent" android:scaleType="centerInside"
         image:hideShowSibling="@id/photoProgress" />
+
 </FrameLayout>
