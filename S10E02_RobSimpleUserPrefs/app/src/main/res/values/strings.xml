@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">User Prefs Headers</string>
-    <string name="action_settings">Rob User Prefs Headers Settings</string>
+    <string name="app_name">Simple User Prefs</string>
     <string-array name="char_gender_types">
         <item>Male</item>
         <item>Female</item>
