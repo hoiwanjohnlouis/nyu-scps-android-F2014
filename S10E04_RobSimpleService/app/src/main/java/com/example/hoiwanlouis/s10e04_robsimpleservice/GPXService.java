@@ -17,7 +17,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
+//import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -73,7 +73,7 @@ public class GPXService extends Service {
 		PendingIntent intentBack = PendingIntent.getActivity(
 				getApplicationContext(), 0, toLaunch, 0);
 		
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+		Notification.Builder builder = new Notification.Builder(getApplicationContext());
 		builder.setTicker("Builder GPS Tracking");
 		builder.setSmallIcon(android.R.drawable.stat_notify_more);
 		builder.setWhen(System.currentTimeMillis());
@@ -100,7 +100,7 @@ public class GPXService extends Service {
 		PendingIntent intentBack = PendingIntent.getActivity(
 				getApplicationContext(), 0, toLaunch, 0);
 		
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+		Notification.Builder builder = new Notification.Builder(getApplicationContext());
 		builder.setTicker("Builder GPS Tracking");
 		builder.setSmallIcon(android.R.drawable.stat_notify_more);
 		builder.setWhen(System.currentTimeMillis());
