@@ -3,7 +3,7 @@ package com.example.hoiwanlouis.s10e04_robsimpleservice;
 import java.util.Date;
 import java.util.Locale;
 
-import com.example.hoiwanlouis.s10e04_robsimpleservice.IRemoteInterface;
+//import com.example.hoiwanlouis.s10e04_robsimpleservice.IRemoteInterface;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -25,7 +25,7 @@ public class GPXService extends Service {
 	private static final int GPS_NOTIFY = 0x2001;
 	private static final String DEBUG_TAG = "GPXService";
 	public static final String EXTRA_UPDATE_RATE = "update-rate";
-	public static final String GPX_SERVICE = "com.example.hoiwanlouis.s10e04_robsimpleservice.GPXService.SERVICE";
+	public static final String GPX_SERVICE = "com.example.hoiwanlouis.GPXService.SERVICE";
 	private LocationManager location = null;
 	private NotificationManager notifier = null;
 	private int updateRate = -1;
