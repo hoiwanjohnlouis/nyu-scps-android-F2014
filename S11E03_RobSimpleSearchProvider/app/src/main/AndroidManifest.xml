@@ -49,11 +49,11 @@
         -->
         <meta-data
             android:name="android.app.default_searchable"
-            android:value="com.advancedandroidbook.simplesearchprovider.SimpleSearchableActivity" />
+            android:value="com.hoiwanlouis.contentproviders.s11e03_robsimplesearchprovider.SimpleSearchableActivity" />
 
         <provider
-            android:name="com.advancedandroidbook.simplesearchprovider.SimpleFieldnotesContentProvider"
-            android:authorities="com.advancedandroidbook.simplesearchprovider.SimpleFieldnotesContentProvider"
+            android:name="com.hoiwanlouis.contentproviders.s11e03_robsimplesearchprovider.SimpleFieldnotesContentProvider"
+            android:authorities="com.hoiwanlouis.contentproviders.s11e03_robsimplesearchprovider.SimpleFieldnotesContentProvider"
             android:multiprocess="true"
             android:exported="true">
         </provider>
