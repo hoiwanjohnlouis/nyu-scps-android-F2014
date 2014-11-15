@@ -3,7 +3,7 @@
     package="com.hoiwanlouis.contentproviders.s11e02_robsimpleaccessprovider" >
 
     <uses-permission
-        android:name="com.advancedandroidbook.simplesearchprovider.SimpleFieldnotesContentProvider.READ_DATABASE"
+        android:name="com.hoiwanlouis.contentproviders.s11e03_robsimplesearchprovider.SimpleFieldnotesContentProvider.READ_DATABASE"
         />
 
     <application

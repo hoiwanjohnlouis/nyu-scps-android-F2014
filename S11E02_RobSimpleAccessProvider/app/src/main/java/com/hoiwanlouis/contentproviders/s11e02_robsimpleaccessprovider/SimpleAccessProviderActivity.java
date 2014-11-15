@@ -10,7 +10,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 public class SimpleAccessProviderActivity extends Activity {
 
 	private Uri mUri = Uri
-			.parse("content://com.advancedandroidbook.simplesearchprovider."
+			.parse("content://com.hoiwanlouis.contentproviders.s11e03_robsimplesearchprovider."
 					+ "SimpleFieldnotesContentProvider/fieldnotes_provider");
 
 	@Override
