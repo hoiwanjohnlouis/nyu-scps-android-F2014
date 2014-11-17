@@ -55,6 +55,7 @@
     <LinearLayout
         android:id="@+id/linearLayoutForButtons"
         android:layout_alignParentBottom="true"
+        android:columnCount="2"
         android:layout_gravity="fill_horizontal"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -63,6 +64,7 @@
 
         <Button
             android:id="@+id/prevButton"
+            android:layout_column="0"
             android:layout_gravity="center_horizontal"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/button_padding"
@@ -74,9 +76,10 @@
             android:padding="@dimen/button_padding"
             android:text="@string/prevButton"
             />
-
+x
         <Button
             android:id="@+id/nextButton"
+            android:layout_column="1"
             android:layout_gravity="center_horizontal"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/button_padding"
