@@ -15,4 +15,15 @@
         android:layout_height="wrap_content"
         />
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="29dp"
+        android:onClick="onButtonClick"
+        android:text="Get a Random Number"
+        />
+
 </RelativeLayout>

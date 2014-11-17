@@ -1,90 +1,38 @@
 package com.hoiwanlouis.s10e52_hoiboundserviceexample_2;
 
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 
 public class MainActivity extends Activity {
-    private final String TAG = this.getClass().getSimpleName();
+    private final String DEBUG_TAG = this.getClass().getSimpleName();
     LocalService mService;
-    boolean mBound = false;
+    private boolean mBound = false;
 
-    MessengerService messengerService;
-
+    private Button button_local;
+    private Button button_messenger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(DEBUG_TAG, "in onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Bind to LocalService
-        Intent intent = new Intent(this, LocalService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        // Unbind from the service
-        if (mBound) {
-            unbindService(mConnection);
-            mBound = false;
-        }
-    }
-
-    /*
-    * HIGHLY not recommended: because these callbacks occur at every
-    * lifecycle transition and you should keep the processing that
-    * occurs at these transitions to a minimum
-    *
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Unbind from the service
-        if (mBound) {
-            unbindService(mConnection);
-            mBound = false;
-        }
-    }
-    */
-
-    /** Called when a button is clicked (the button in the layout file attaches to
-     * this method with the android:onClick attribute) */
-    public void onButtonClick(View v) {
-        if (mBound) {
-            // Call a method from the LocalService.
-            // However, if this call were something that might hang, then this request should
-            // occur in a separate thread to avoid slowing down the activity performance.
-            int num = mService.getRandomNumber();
-            Toast.makeText(this, "number: " + num, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void onMessengerButtonClick(View v) {
-
-        // Call the MessengerActivity.
-        // However, if this call were something that might hang, then this request should
-        // occur in a separate thread to avoid slowing down the activity performance.
-        Intent maIntent = new Intent(this,MessengerActivity.class);
-        startActivity(maIntent);
+        setupButtonLocal();
+        setupButtonMessenger();
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(DEBUG_TAG, "in onCreateOptionsMenu()");
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -92,34 +40,52 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(DEBUG_TAG, "in onOptionsItemSelected()");
+        boolean found;
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Log.d(DEBUG_TAG, "in onOptionsItemSelected();id=action_setting");
+            found = true;
         }
-
-        return super.onOptionsItemSelected(item);
+        else {
+            Log.d(DEBUG_TAG, "in onOptionsItemSelected();id=DEFAULT");
+            found = super.onOptionsItemSelected(item);
+        }
+        return found;
     }
 
-    /** Defines callbacks for service binding, passed to bindService() */
-    private ServiceConnection mConnection = new ServiceConnection() {
+    //
+    public void setupButtonLocal() {
+        Log.i(DEBUG_TAG, "setupButtonLocal()");
 
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-            LocalService.LocalBinder binder = (LocalService.LocalBinder) service;
-            mService = binder.getService();
-            mBound = true;
-        }
+        button_local = (Button) findViewById(R.id.button_local);
+        button_local.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent laIntent = new Intent(MainActivity.this, LocalActivity.class);
+                startActivity(laIntent);
+            }
+        });
 
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
-        }
-    };
+    }
+
+    //
+    public void setupButtonMessenger() {
+        Log.i(DEBUG_TAG, "setupButtonMessenger()");
+
+        button_messenger = (Button) findViewById(R.id.button_messenger);
+        button_messenger.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent maIntent = new Intent(MainActivity.this,MessengerActivity.class);
+                startActivity(maIntent);
+            }
+        });
+
+    }
 
 }

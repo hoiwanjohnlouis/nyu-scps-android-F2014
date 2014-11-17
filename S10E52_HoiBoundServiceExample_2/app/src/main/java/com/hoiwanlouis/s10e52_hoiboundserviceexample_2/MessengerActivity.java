@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,16 +18,13 @@ import android.widget.Toast;
 
 
 public class MessengerActivity extends Activity {
-
-    private final String TAG = this.getClass().getSimpleName();
-//    LocalService mService;
+    private final String DEBUG_TAG = this.getClass().getSimpleName();
     boolean mBound = false;
-
     Messenger mService;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(DEBUG_TAG, "in onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messenger);
     }

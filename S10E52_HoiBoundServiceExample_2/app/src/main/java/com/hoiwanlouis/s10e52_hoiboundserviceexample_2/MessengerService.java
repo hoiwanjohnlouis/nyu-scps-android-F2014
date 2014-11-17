@@ -9,7 +9,7 @@ import android.os.Messenger;
 import android.widget.Toast;
 
 public class MessengerService extends Service {
-    private final String TAG = this.getClass().getSimpleName();
+    private final String DEBUG_TAG = this.getClass().getSimpleName();
 
     public MessengerService() {
     }
