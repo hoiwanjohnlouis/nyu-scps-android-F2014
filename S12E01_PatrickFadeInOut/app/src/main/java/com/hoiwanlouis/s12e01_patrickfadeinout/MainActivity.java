@@ -1,7 +1,5 @@
 package com.hoiwanlouis.s12e01_patrickfadeinout;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -84,23 +82,66 @@ public class MainActivity extends Activity {
     }
 
     //
+    private void FadeAndSlideOut() {
+        AnimationSet set = new AnimationSet(false);
+        set.addAnimation(getFadeOutAnim());
+        set.addAnimation(getSlideOutAnim());
+        imgView.startAnimation(getFadeOutAnim());
+
+
+    }
+
+    //
     public void fadeIn() {
-        alphaAnimation = new AlphaAnimation(0, 1);
-        alphaAnimation.setDuration(1000);
-        alphaAnimation.setFillAfter(true);
-        alphaAnimation.setRepeatCount(7);
-        alphaAnimation.setAnimationListener(animationListener);
-        imgView.startAnimation(alphaAnimation);
+    //    alphaAnimation = new AlphaAnimation(0, 1);
+    //    alphaAnimation.setDuration(1000);
+    //    alphaAnimation.setFillAfter(true);
+    //    alphaAnimation.setRepeatCount(7);
+    //    alphaAnimation.setAnimationListener(animationListener);
+        imgView.startAnimation(getFadeInAnim());
     }
 
     //
     public void fadeOut() {
-        alphaAnimation = new AlphaAnimation(1, 0);
-        alphaAnimation.setDuration(1000);
-        alphaAnimation.setFillAfter(true);
-        alphaAnimation.setRepeatCount(3);
-        alphaAnimation.setAnimationListener(animationListener);
-        imgView.startAnimation(alphaAnimation);
+    //    alphaAnimation = new AlphaAnimation(1, 0);
+    //    alphaAnimation.setDuration(1000);
+    //    alphaAnimation.setFillAfter(true);
+    //    alphaAnimation.setRepeatCount(3);
+    //    alphaAnimation.setAnimationListener(animationListener);
+    //    imgView.startAnimation(alphaAnimation);
+        imgView.startAnimation(getFadeOutAnim());
+    }
+
+    //
+    private Animation getFadeInAnim() {
+        AlphaAnimation anim = new AlphaAnimation(0,1);
+        anim.setDuration(1000);
+        anim.setFillAfter(true);
+        anim.setRepeatCount(5);
+        anim.setStartOffset(2500);
+        anim.setAnimationListener(animationListener);
+        return anim;
+    }
+
+    //
+    private Animation getFadeOutAnim() {
+        AlphaAnimation anim = new AlphaAnimation(1, 0);
+        anim.setDuration(1000);
+        anim.setFillAfter(true);
+        anim.setRepeatCount(10);
+        anim.setStartOffset(3500);
+        anim.setAnimationListener(animationListener);
+        return anim;
+    }
+
+    private Animation getSlideOutAnim() {
+        AlphaAnimation anim = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT + 00.00f,
+                Animation.RELATIVE_TO_PARENT + 00.50f,
+                Animation.RELATIVE_TO_PARENT + 01.00f,
+                Animation.RELATIVE_TO_PARENT + 00.50f
+                );
+        return anim;
     }
 
     //
@@ -112,9 +153,11 @@ public class MainActivity extends Activity {
 
     //
     public void stopAnimation() {
-        alphaAnimation.cancel();
-        // this also works
-        //  imgView.clearAnimation();
+        if (alphaAnimation != null) {
+            alphaAnimation.cancel();
+            // this also works, just change the if condition
+            //  imgView.clearAnimation();
+        }
     }
 
     Animation.AnimationListener animationListener = new Animation.AnimationListener() {
