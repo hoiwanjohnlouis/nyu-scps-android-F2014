@@ -67,7 +67,7 @@ public class MyActivity extends Activity {
     }
 
     public void addListenerOnNextButton() {
-        Log.i(TAG, "addListenerOnNextButton Starting...");
+        Log.i(TAG, "addListenerOnNextButton Starting... ");
 
         nextButton = (Button) findViewById(R.id.nextButton);
         nextButton.setOnClickListener(new OnClickListener() {
