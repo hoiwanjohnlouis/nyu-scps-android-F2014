@@ -8,17 +8,4 @@
     <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:layout_height="wrap_content"
-        android:text="output"
-        android:id="@+id/textView1"
-        android:layout_width="fill_parent"
-        android:gravity="center"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="List"
-        android:id="@+id/listContact"
-        android:onClick="listContact"/>
-
 </RelativeLayout>
