@@ -31,7 +31,7 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.Toast;
 
-import com.hoiwanlouis.s13e51_bingbinparser.CsCmuXmlParser.Entry;
+import com.hoiwanlouis.s13e51_bingbinparser.CsCmuHtmlParser.Entry;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -64,7 +64,7 @@ public class NetworkActivity extends Activity {
     public static final String WIFI = "Wi-Fi";
     public static final String ANY = "Any";
     private static final String URL =
-            "http://stackoverflow.com/feeds/tag?tagnames=android&sort=newest";
+            "http://cs.cmu.edu/~bingbin/";
 
     // Whether there is a Wi-Fi connection.
     private static boolean wifiConnected = false;
@@ -213,7 +213,7 @@ public class NetworkActivity extends Activity {
     // HTML markup. Returns HTML string.
     private String loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
         InputStream stream = null;
-        CsCmuXmlParser stackOverflowXmlParser = new CsCmuXmlParser();
+        CsCmuHtmlParser stackOverflowXmlParser = new CsCmuHtmlParser();
         List<Entry> entries = null;
         String title = null;
         String url = null;
@@ -241,7 +241,7 @@ public class NetworkActivity extends Activity {
             }
         }
 
-        // CsCmuXmlParser returns a List (called "entries") of Entry objects.
+        // CsCmuHtmlParser returns a List (called "entries") of Entry objects.
         // Each Entry object represents a single post in the XML feed.
         // This section processes the entries list to combine each entry with HTML markup.
         // Each entry is displayed in the UI as a link that optionally includes
