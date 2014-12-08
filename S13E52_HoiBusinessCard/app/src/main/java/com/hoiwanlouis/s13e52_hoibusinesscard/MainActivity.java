@@ -22,9 +22,6 @@ public class MainActivity extends ActionBarActivity {
         Log.d(DEBUG_TAG, "in onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //
-        setupButton();
     }
 
 
@@ -52,31 +49,5 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void setupButton() {
-        Log.d(DEBUG_TAG, "setupButton");
-
-        // setup the action button
-        Button submitButton = (Button) findViewById(R.id.submit_button);
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                StringBuilder sb = null;
-                sb = sb.append("Hello ");
-                sb = sb.append(findViewById(R.id.user_name).toString());
-                sb = sb.append("!  Thank you for joining our mailing list.  ");
-                sb = sb.append("We will contact you using the email address:");
-                sb = sb.append(findViewById(R.id.email_address).toString());
-                sb = sb.append(".");
-                Toast.makeText(getApplicationContext(), sb, Toast.LENGTH_SHORT).show();
-                Log.d(DEBUG_TAG, sb.toString());
-
-//                Intent intent = new Intent(MainActivity.this, MyPrefActivity.class);
-//                startActivity(intent);
-
-            }
-        });
-
-    }
 
 }
