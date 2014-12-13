@@ -1,4 +1,4 @@
-package com.hoiwanlouis.s14s05_robsimpleservicegps;
+package com.hoiwanlouis.s14e06_robcamera2basic;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
