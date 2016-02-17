@@ -35,4 +35,4 @@ proguard/
 /.idea/tasks.xml
 
 # itellij folder should not be repo'ed at the root level
-/.idea
+# /.idea
