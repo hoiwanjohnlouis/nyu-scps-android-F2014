@@ -28,11 +28,11 @@ proguard/
 # apple files
 .DS_Store
 
-# itellij files
+# idea specific
+out/
+**/.idea/*.iws
 **/.idea/workspace.xml
 **/.idea/tasks.xml
-/.idea/workspace.xml
-/.idea/tasks.xml
+**/.idea/dictionaries
 
-# itellij folder should not be repo'ed at the root level
-# /.idea
+target/
