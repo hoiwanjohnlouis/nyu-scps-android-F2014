@@ -25,6 +25,6 @@
 # idea is generated
 **/.idea/
 
-# gradle is generated
+# gradle is like maven and should be uploaded
 # **/.gradle/
 
