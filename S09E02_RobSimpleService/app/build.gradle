@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "21.1.0"
+    buildToolsVersion "19.1.0"
 
     defaultConfig {
         applicationId "com.advancedandroidbook.simpleservice"
@@ -12,7 +12,7 @@ android {
 
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
