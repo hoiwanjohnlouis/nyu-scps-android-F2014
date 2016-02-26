@@ -11,7 +11,7 @@ public class PetTrackerActivity extends Activity {
 	protected PetTrackerDatabaseHelper mDatabase = null; 
 	protected Cursor mCursor = null;
 	protected SQLiteDatabase mDB = null;
-		
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
