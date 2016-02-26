@@ -6,13 +6,13 @@ android {
 
     defaultConfig {
         applicationId "com.advancedandroidbook.simpleasync"
-        minSdkVersion 11
+        minSdkVersion 19
         targetSdkVersion 19
     }
 
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
