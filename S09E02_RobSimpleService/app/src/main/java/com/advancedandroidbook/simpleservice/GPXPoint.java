@@ -11,7 +11,7 @@ public final class GPXPoint implements Parcelable {
 	public int longitude;
 	public Date timestamp;
 	public double elevation;
-
+//
 	public static final Parcelable.Creator<GPXPoint> CREATOR = new Parcelable.Creator<GPXPoint>() {
 
 		public GPXPoint createFromParcel(Parcel src) {
