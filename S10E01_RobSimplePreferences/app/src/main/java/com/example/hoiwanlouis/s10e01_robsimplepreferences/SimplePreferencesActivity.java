@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 // First activity screen (start screen)
-
 public class SimplePreferencesActivity extends SuperSimplePreferencesActivity {
     /** Called when the activity is first created. */
     @Override
