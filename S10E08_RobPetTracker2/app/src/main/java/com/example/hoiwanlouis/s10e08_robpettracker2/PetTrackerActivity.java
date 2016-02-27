@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 // Similar to PetTracker, although we are keeping persistent Cursor and Database instances around
 public class PetTrackerActivity extends Activity {
-
+//
 	protected PetTrackerDatabaseHelper mDatabase = null; 
 	protected Cursor mCursor = null;
 	protected SQLiteDatabase mDB = null;
