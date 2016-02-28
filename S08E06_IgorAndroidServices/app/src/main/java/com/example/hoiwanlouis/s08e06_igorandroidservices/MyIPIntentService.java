@@ -18,6 +18,8 @@ import java.io.IOException;
 
 public class MyIPIntentService extends IntentService {
 
+    private final String DEBUG_TAG = this.getClass().getSimpleName();
+
     private static final int NOTIFICATION_ID = 96;
     private static final String URL = "http://ip.jsontest.com";
 

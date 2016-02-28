@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 public class OverlayService extends Service {
 
+    private final String DEBUG_TAG = this.getClass().getSimpleName();
+
     private View overlayView;
 
     @Override

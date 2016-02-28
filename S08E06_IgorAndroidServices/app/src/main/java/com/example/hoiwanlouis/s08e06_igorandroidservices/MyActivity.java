@@ -8,6 +8,8 @@ import android.view.MenuItem;
 
 public class MyActivity extends Activity {
 
+    private final String DEBUG_TAG = this.getClass().getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

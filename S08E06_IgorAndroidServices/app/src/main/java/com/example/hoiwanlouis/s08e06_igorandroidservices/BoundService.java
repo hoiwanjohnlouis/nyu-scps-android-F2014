@@ -7,6 +7,8 @@ import android.os.IBinder;
 
 public class BoundService extends Service {
 
+    private final String DEBUG_TAG = this.getClass().getSimpleName();
+
     private IBinder localBinder = new LocalBinder();
 
     @Override

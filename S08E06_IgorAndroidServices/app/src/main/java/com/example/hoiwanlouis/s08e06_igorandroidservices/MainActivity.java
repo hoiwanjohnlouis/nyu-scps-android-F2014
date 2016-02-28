@@ -17,6 +17,8 @@ import android.widget.Toast;
  */
 public class MainActivity extends Activity {
 
+    private final String DEBUG_TAG = this.getClass().getSimpleName();
+
     private BoundService boundService;
 
     private Button startBoundServiceButton;
