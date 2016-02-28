@@ -13,9 +13,9 @@ import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 
 public class GameAreaView extends View {
-//
-    private static final String DEBUG_TAG = "SimpleGesture->GameAreaView";
-    
+
+    private final String DEBUG_TAG = this.getClass().getSimpleName();
+
     private GestureDetector gestures;
     private Matrix translate;
     private Bitmap droid;
