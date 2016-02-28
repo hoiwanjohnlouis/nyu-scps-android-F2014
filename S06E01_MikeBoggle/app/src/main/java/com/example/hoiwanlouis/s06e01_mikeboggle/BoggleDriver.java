@@ -18,7 +18,7 @@ import java.util.Set;
  * Created by Michael on 10/8/2014.
  */
 public class BoggleDriver {
-
+//
     public static String randomChar() {
         // Randomly select letter from alphabet
         String alphabet = "abcdefghijklmnopqrstuvwxyz";
