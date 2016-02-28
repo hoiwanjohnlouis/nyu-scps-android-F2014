@@ -13,7 +13,7 @@ import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 
 public class GameAreaView extends View {
-
+//
     private static final String DEBUG_TAG = "SimpleGesture->GameAreaView";
     
     private GestureDetector gestures;
