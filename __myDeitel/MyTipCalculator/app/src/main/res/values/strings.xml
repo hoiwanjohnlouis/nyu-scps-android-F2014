@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MyTipCalculator</string>
+    <string name="action_settings">Settings</string>
+    <string name="custom_percent_literal">Custom %:</string>
+    <string name="tip_fifteen_percent_literal">15%</string>
+    <string name="tip_eighteen_percent_literal">18%</string>
+    <string name="tip">Tip:</string>
+    <string name="total">Total:</string>
+    <string name="amount">Amount:</string>
+
+</resources>
