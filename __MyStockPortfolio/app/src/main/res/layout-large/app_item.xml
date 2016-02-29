@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_layout"
+    style="@style/item_layout"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    >
+
+    <TextView
+        android:id="@+id/TextView_symbol"
+        style="@style/item_field"
+        android:text="item-01"
+        />
+
+    <TextView
+        android:id="@+id/TextView_opening_price"
+        style="@style/item_field"
+        android:text="item-02"
+        />
+
+    <TextView
+        android:id="@+id/TextView_previous_closing_price"
+        style="@style/item_field"
+        android:text="item-03"
+        />
+
+    <TextView
+        android:id="@+id/TextView_bid_price"
+        style="@style/item_field"
+        android:text="item-04-bid"
+        />
+
+    <TextView
+        android:id="@+id/TextView_bid_size"
+        style="@style/item_field"
+        android:text="item-05-size"
+        />
+
+    <TextView
+        android:id="@+id/TextView_ask_price"
+        style="@style/item_field"
+        android:text="item-06-ask"
+        />
+
+    <TextView
+        android:id="@+id/TextView_ask_size"
+        style="@style/item_field"
+        android:text="item-07-size"
+        />
+
+    <TextView
+        android:id="@+id/TextView_last_trade_price"
+        style="@style/item_field"
+        android:text="item-08"
+        />
+
+    <TextView
+        android:id="@+id/TextView_last_trade_time"
+        style="@style/item_field"
+        android:text="item-09"
+        />
+
+</LinearLayout>
+
+

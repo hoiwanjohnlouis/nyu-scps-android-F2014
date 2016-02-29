@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/copyright_layout"
+    style="@style/copyright_layout"
+    >
+
+    <TextView
+        android:id="@+id/copyright_textView"
+        android:text="@string/copyright_textView"
+        style="@style/copyright_textView"
+        />
+
+
+    <!-- android bug fix -->
+    <TextView android:id="@android:id/empty"
+        android:gravity="center"
+        android:layout_width="1px"
+        android:layout_height="1px"
+        />
+
+
+</LinearLayout>

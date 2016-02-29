@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+     todo: add/define settings for app, may not be needed.
+    -->
+
+    <string-array name="array1">
+        <item>to do, not yet implemented</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/fragment_vertical_margin"
+    android:paddingLeft="@dimen/fragment_horizontal_margin"
+    android:paddingRight="@dimen/fragment_horizontal_margin"
+    android:paddingTop="@dimen/fragment_vertical_margin"
+    android:weightSum="3"
+    tools:context=".PrimoActivity" >
+
+    <fragment
+        android:id="@+id/inventoryFragment"
+        android:name="com.hoiwanlouis.mystockportfolio.fragments.InventoryFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_weight="1" />
+
+    <FrameLayout
+        android:id="@+id/rightPaneContainer"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2" >
+    </FrameLayout>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/copyright_layout"
+        style="@style/copyright_layout"
+        android:layout_gravity="bottom"
+        >
+        <TextView
+            android:id="@+id/copyright_textView"
+            android:text="@string/copyright_textView"
+            style="@style/copyright_textView"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>
