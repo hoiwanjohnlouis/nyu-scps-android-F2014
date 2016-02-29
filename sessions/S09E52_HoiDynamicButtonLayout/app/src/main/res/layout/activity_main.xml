@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".MyActivity"
+    >
+
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#3d455b"
+            android:orientation="horizontal"
+            >
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <!-- this will be a dynamically defined table -->
+                <!-- android:layout_centerHorizontal="true" -->
+                <TableLayout
+                    android:id="@+id/boggle_board_table_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/table_horizontal_margin"
+                    android:paddingRight="@dimen/table_horizontal_margin"
+                    android:paddingTop="@dimen/table_horizontal_margin"
+                    android:paddingBottom="@dimen/table_horizontal_margin"
+                    android:stretchColumns="*"
+                >
+                </TableLayout>
+
+        </HorizontalScrollView>
+    </ScrollView>
+
+</LinearLayout>
+

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="action_settings">Settings</string>
+    <string name="app_name">HoiSimpleService</string>
+    <string name="local_use_of_remote_service">Local use of remote service</string>
+    <string name="do_it">Do it</string>
+    <string name="stop_it">Stop it</string>
+    <string name="last_location">Last Location</string>
+
+    <string name="service_control_activity">HoiServiceControl</string>
+    <string name="gpx_service">HoiGPXService</string>
+</resources>
