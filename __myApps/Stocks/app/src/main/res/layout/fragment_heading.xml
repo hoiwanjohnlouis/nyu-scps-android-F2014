@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/heading2_layout"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:gravity="fill_horizontal"
+    android:orientation="horizontal"
+    android:background="@android:color/darker_gray"
+    >
+
+    <TextView
+        android:id="@+id/heading2_symbol_title"
+        android:text="@string/heading2_symbol_title"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_marginLeft="@dimen/ticker_horizontal_margin"
+        android:layout_marginRight="@dimen/ticker_horizontal_margin"
+        android:textColor="@android:color/black"
+        />
+
+    <TextView
+        android:id="@+id/heading2_opening_price_title"
+        android:text="@string/heading2_opening_price_title"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_marginLeft="@dimen/ticker_horizontal_margin"
+        android:layout_marginRight="@dimen/ticker_horizontal_margin"
+        android:textColor="@android:color/black"
+        />
+
+    <TextView
+        android:id="@+id/heading2_previous_closing_price_title"
+        android:text="@string/heading2_previous_closing_price_title"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_marginLeft="@dimen/ticker_horizontal_margin"
+        android:layout_marginRight="@dimen/ticker_horizontal_margin"
+        android:textColor="@android:color/black"
+        />
+
+    <TextView
+        android:id="@+id/heading2_last_trade_price_title"
+        android:text="@string/heading2_last_trade_price_title"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_marginLeft="@dimen/ticker_horizontal_margin"
+        android:layout_marginRight="@dimen/ticker_horizontal_margin"
+        android:textColor="@android:color/black"
+        />
+
+    <TextView
+        android:id="@+id/heading2_last_trade_time_title"
+        android:text="@string/heading2_last_trade_time_title"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_marginLeft="@dimen/ticker_horizontal_margin"
+        android:layout_marginRight="@dimen/ticker_horizontal_margin"
+        android:textColor="@android:color/black"
+        />
+
+</LinearLayout>
+
+

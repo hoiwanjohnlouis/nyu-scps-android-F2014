@@ -1,0 +1,43 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_container_id"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:weightSum="2"
+    >
+
+    <FrameLayout
+        android:id="@+id/add_fragment_id"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_weight="0.1"
+        >
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/heading_fragment_id"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_weight="0.05"
+        >
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/symbols_fragment_id"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_weight="1.8"
+        >
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/copyright_fragment_id"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_weight="0.05"
+        >
+    </FrameLayout>
+
+
+</LinearLayout>

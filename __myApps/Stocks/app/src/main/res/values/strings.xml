@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="price_feed_choices">Price Feed</string>
+    <string name="price_feed_description">Live or Test Prices</string>
+    <string name="test_stocks">Test Stocks</string>
+    <string name="test_stocks_description">Select Test Stocks for Test Prices</string>
+
+
+
+    <string name="hello_world">Hello World!</string>
+    <string name="app_name">Stocks</string>
+    <string name="app_title">Stocks</string>
+
+    <string name="title_activity_main">Main Activity</string>
+    <string name="action_settings">Settings</string>
+
+
+    <!-- start: string values for the menu_main/help -->
+    <string name="main_activity_help_title">Help</string>
+    <string name="main_activity_help_data">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <!-- end: string values for the menu_main/help -->
+
+
+    <!-- start: string values for the menu_main/setting -->
+    <string name="main_activity_settings_title">Settings</string>
+    <!-- end: string values for the menu_main/setting -->
+
+
+    <!-- start: string values for the menu_main/about -->
+    <string name="main_activity_about_title">About MyStockPortfolio...</string>
+    <string name="main_activity_about_data">
+           Final class project for android app development\n
+        1. Create the following fragments:
+            1a. SettingsFragment (change application settings)\n
+            1b. AddFragment (allow addition of stocks)\n
+            1c. HeadingFragment (display only fragment)\n
+            1d. InventoryFragment (list of current stocks)\n
+            1e. CopyrightFragment (display only fragment)\n
+
+        2. save a list of stocks in SQLite in AddFragment.\n
+        3. update listAdapter in InventoryFragment to reflect new stock.\n
+        4. go back to step 2 as needed.\n
+
+        - Wish List:
+            A. fetch current stock prices from finance.yahoo.com and save into SQLite.\n
+            B. add DetailFragment to show all fields in SQLite (Not yet implemented)\n
+            C. add UpdateFragment to allow updating of select fields in SQLite.\n
+
+           Copyright 2014, 2015 HW Tech Services, LLC</string>
+    <!-- end: string values for the menu_main/about -->
+
+
+    <!-- start: string values for general functionality -->
+    <string name="fragment_no_items">No Symbols</string>
+    <string name="fragment_menuitem_edit">Edit</string>
+    <string name="fragment_menuitem_delete">Delete</string>
+
+    <!-- start: string values for add fragment functionality -->
+    <string name="fragment_add_input_symbol_prompt">Enter a Ticker Symbol</string>
+    <string name="fragment_add_error_saving_button">Okay</string>
+    <string name="fragment_add_error_saving_message">Missing required data, error on save</string>
+    <string name="fragment_add_button_text">Add</string>
+    <string name="fragment_add_content_description">Add Symbol to Database</string>
+    <!-- end: string values for add fragment functionality -->
+
+    <!-- start: string values for the copyright fragment functionality -->
+    <string name="copyright_text_view">Copyright 2014, 2015 HW Tech Services, LLC</string>
+    <!-- end: string values for the copyright fragment functionality -->
+
+    <!-- start: string values for details fragment functionality -->
+    <string name="fragment_detail_delete_title">Are You Sure?</string>
+    <string name="fragment_detail_delete_message">This will permanently delete the symbol: \"%s\</string>
+    <string name="fragment_detail_delete_button_cancel">Cancel</string>
+    <string name="fragment_detail_delete_button_delete">Delete</string>
+    <!-- end: string values for details functionality -->
+
+    <!-- start: string values for the heading fragment functionality -->
+    <string name="heading2_symbol_title">Ticker</string>
+    <string name="heading2_company_title">Company</string>
+    <string name="heading2_opening_price_title">Open</string>
+    <string name="heading2_previous_closing_price_title">Close</string>
+    <string name="heading2_bid_price_title">Bid</string>
+    <string name="heading2_bid_size_title">Size</string>
+    <string name="heading2_ask_price_title">Ask</string>
+    <string name="heading2_ask_size_title">Size</string>
+    <string name="heading2_last_trade_price_title">Price</string>
+    <string name="heading2_last_trade_quantity_title">Shares</string>
+    <string name="heading2_last_trade_date_title">Date</string>
+    <string name="heading2_last_trade_time_title">Time</string>
+    <string name="heading2_insert_datetime_title">InsertDT</string>
+    <string name="heading2_modify_datetime_title">ModifyDT</string>
+    <!-- start: string values for the heading fragment functionality -->
+
+    <!-- start: string values for settings fragment functionality -->
+    <string name="fragment_settings_done_button">Done</string>
+    <!-- end: string values for settings fragment functionality -->
+
+    <!-- start: string values for symbols fragment functionality -->
+    <string name="fragment_symbols_delete_title">Are You Sure?</string>
+    <string name="fragment_symbols_delete_message">This will permanently delete the symbol: \"%s\</string>
+    <string name="fragment_symbols_delete_button_cancel">Cancel</string>
+    <string name="fragment_symbols_delete_button_delete">Delete</string>
+    <!-- end: string values for symbols fragment functionality -->
+
+    <!-- start: string values for update fragment functionality -->
+    <string name="fragment_update_button_text">Update</string>
+    <string name="fragment_update_button_content_description">Update Symbol Data to Database</string>
+    <string name="fragment_update_error_saving_button">Okay</string>
+    <string name="fragment_update_error_saving_message">Missing required data, error on save</string>
+    <!-- end: string values for update fragment functionality -->
+
+    <!--
+    See below URL for how to access finance.yahoo.com data
+    https://code.google.com/p/yahoo-finance-managed/wiki/csvQuotesDownload
+    -->
+    <string name="ticker_url">http://finance.yahoo.com/d/quotes.csv?s=</string>
+
+    <!--
+    See below URL for all possible 'f' values
+    https://code.google.com/p/yahoo-finance-managed/wiki/enumQuoteProperty
+        n0=name of company
+        s0=ticker symbol
+        o0=opening price
+        p0=previous days closing price
+        a0=ask price
+        a5=ask size
+        b0=bid price
+        b6=bid size
+        l1=last trade price
+        k3=last trade size
+        d1=last trade date
+        t1=last trade time
+    e.g. the tags for name(n), symbol(s), the latest value(l1), open(o), and the close value of the last trading day(p)
+    http://download.finance.yahoo.com/d/quotes.csv?s=GOOG,IBM&f=nsl1op
+    -->
+    <string name="default_ticker_fields">&amp;f=n0s0o0p0a0a5b0b6l1k3d1t1</string>
+
+    <!-- start: default string values for the portfolio record -->
+    <string name="default_opening_price">-40</string>
+    <string name="default_closing_price">-45</string>
+
+    <string name="default_bid_price">-50</string>
+    <string name="default_bid_size">-55</string>
+
+    <string name="default_ask_price">-60</string>
+    <string name="default_ask_size">-65</string>
+
+    <string name="default_trade_price">-70</string>
+    <string name="default_trade_quantity">-75</string>
+    <string name="default_trade_date">1900-01-01</string>
+    <string name="default_trade_time">23:59:59</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- end: default string values for the portfolio record -->
+
+
+
+
+
+</resources>

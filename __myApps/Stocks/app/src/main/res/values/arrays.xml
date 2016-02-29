@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+     todo: add/define settings for app, may not be needed.
+    -->
+
+    <string-array name="array1">
+        <item>to do, not yet implemented</item>
+    </string-array>
+
+
+    <string-array name="price_feed">
+        <item>TEST</item>
+        <item>LIVE</item>
+    </string-array>
+
+    <string-array name="test_stocks_for_test_prices">
+        <item>Test A, Test Symbol</item>
+        <item>Test B, Test Symbol</item>
+        <item>ZYSBB, Test Symbol</item>
+    </string-array>
+
+    <string-array name="test_stocks">
+        <item>TESTA</item>
+        <item>TESTB</item>
+        <item>ZYSBB</item>
+    </string-array>
+
+
+</resources>

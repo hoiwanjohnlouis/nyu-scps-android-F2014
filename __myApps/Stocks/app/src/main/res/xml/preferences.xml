@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+<!--
+    todo: add/define preferences for app, may not be needed.
+-->
+
+    <ListPreference
+        android:entries="@array/price_feed"
+        android:entryValues="@array/price_feed"
+        android:key="PREF_PRICE_FEED"
+        android:persistent="true"
+        android:summary="@string/price_feed_description"
+        android:title="@string/price_feed_choices"
+        android:defaultValue="TEST"
+        />
+
+    <MultiSelectListPreference
+        android:entries="@array/test_stocks_for_test_prices"
+        android:entryValues="@array/test_stocks"
+        android:key="PREF_TEST_STOCKS"
+        android:persistent="true"
+        android:summary="@string/test_stocks_description"
+        android:title="@string/test_stocks"
+        android:defaultValue="@array/test_stocks"
+        />
+
+</PreferenceScreen>

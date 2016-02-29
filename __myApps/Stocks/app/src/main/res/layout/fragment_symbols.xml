@@ -1,0 +1,40 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/symbols_container"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    >
+
+    <ListView
+        android:id="@+id/symbolsList"
+        android:layout_gravity="fill"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/ticker_horizontal_margin"
+        android:layout_marginRight="@dimen/ticker_horizontal_margin"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:divider="#000"
+        android:headerDividersEnabled="true"
+        android:isScrollContainer="true"
+        android:orientation="vertical"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        >
+    </ListView>
+
+
+<!--
+    <TextView android:id="@id/android:empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FF0000"
+        android:text="@string/fragment_no_items"
+        >
+    </TextView>
+-->
+
+
+</LinearLayout>

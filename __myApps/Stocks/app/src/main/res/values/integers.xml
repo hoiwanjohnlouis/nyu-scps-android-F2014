@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- sample integer array value -->
+    <integer-array name="number_array">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+
+    <!-- start: default integer values for the portfolio record -->
+    <integer name="default_company_id">-10</integer>
+    <integer name="default_exchange_id">-11</integer>
+    <integer name="default_catalogue_id">-12</integer>
+    <!-- end: default integer values for the portfolio record -->
+
+</resources>

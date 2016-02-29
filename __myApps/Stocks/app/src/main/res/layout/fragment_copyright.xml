@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/copyright_layout"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:background="@android:color/darker_gray"
+    >
+
+    <TextView
+        android:id="@+id/copyright_text_view"
+        android:text="@string/copyright_text_view"
+        android:layout_gravity="bottom"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal|bottom"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="@dimen/abc_text_size_caption_material"
+        />
+
+    <!-- android bug fix -->
+    <TextView android:id="@android:id/empty"
+        android:gravity="center"
+        android:layout_width="1px"
+        android:layout_height="1px"
+        />
+
+</RelativeLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- check if device supports multipane display -->
+    <bool name="dual_pane">true</bool>
+
+</resources>
+
