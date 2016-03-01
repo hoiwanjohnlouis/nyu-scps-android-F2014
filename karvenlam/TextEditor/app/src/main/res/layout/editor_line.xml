@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="0px"
+    android:layout_marginLeft="0px"
+    >
+
+<!--editor line with wrap, no line number for text-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="888"
+        android:textSize="15sp"
+        android:width="50sp"
+        android:textColor="#666666"
+        android:background="#DDDDDD"
+        android:gravity="center_vertical"
+        android:id="@+id/lineNum" />
+    <!--<com.ravenlamb.android.texteditor.LineEditText-->
+    <com.ravenlamb.android.texteditor.LineEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Text this is a long \nline of text, so it wraps"
+        android:textSize="@dimen/default_font_size"
+        android:background="@android:color/white"
+        android:textColor="@android:color/black"
+        android:gravity="bottom"
+        android:editable="true"
+        android:id="@+id/itemLine" />
+</LinearLayout>

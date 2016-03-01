@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_newDir" android:title="@string/action_newDir"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_largerText" android:title="@string/action_largerText"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_smallerText" android:title="@string/action_smallerText"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_clean" android:title="@string/action_clean"
+        android:orderInCategory="100" app:showAsAction="never" />
+</menu>
