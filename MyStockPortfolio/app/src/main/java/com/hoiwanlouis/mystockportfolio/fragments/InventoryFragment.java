@@ -144,6 +144,21 @@ public class InventoryFragment extends ListFragment {
 
 
     //
+    // *****************************************************
+    // respond to user touching an item/symbol in the ListView
+    // *****************************************************
+    AdapterView.OnItemClickListener viewItemListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.i(DEBUG_TAG, "in viewItemListener()/onItemClick()");
+
+            // let the callback take care of this
+            listener.onSymbolSelected(id);
+        }
+    };
+
+
+    //
     // called when Fragment's view needs creation
     //
     @Override
@@ -166,6 +181,44 @@ public class InventoryFragment extends ListFragment {
 
         return view;
     } // end method onCreateView
+
+
+    //
+    // *****************************************************
+    // using a separate subroutine instead of inline to remove clutter.
+    // *****************************************************
+    View.OnClickListener saveButtonOnClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            final EditText tickerSymbol = (EditText) v.findViewById(R.id.inputSymbolEditText);
+            long rowID;
+
+            // get DatabaseConnector to interact with the SQLite database
+            DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
+
+            // insert the contact information into the database
+            rowID = databaseConnector.insertItem(
+                    tickerSymbol.getText().toString(),
+                    defaultOpeningPrice,
+                    defaultClosingPrice,
+                    defaultBidPrice,
+                    defaultBidSize,
+                    defaultAskPrice,
+                    defaultAskSize,
+                    defaultTradePrice,
+                    defaultTradeQuantity,
+                    defaultTradeDate,
+                    defaultTradeTime,
+                    defaultInsertDateTime
+            );
+
+            // reset form
+            tickerSymbol.setText(null);
+        }
+
+    };
 
 
     //
@@ -200,20 +253,6 @@ public class InventoryFragment extends ListFragment {
         // set adapter that supplies data
         setListAdapter(cursorAdapter);
     } // end method onViewCreated()
-
-
-    //
-    // respond to user touching an item/symbol in the ListView
-    //
-    AdapterView.OnItemClickListener viewItemListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Log.i(DEBUG_TAG, "in viewItemListener()/onItemClick()");
-
-            // let the callback take care of this
-            listener.onSymbolSelected(id);
-        }
-    };
 
 
     //
@@ -311,6 +350,30 @@ public class InventoryFragment extends ListFragment {
     } // end method onOptionsItemSelected()
 
 
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    //
+    // callback methods implemented by caller/invoker, usually PrototypeActivity
+    //
+    public interface InventoryFragmentListener {
+
+        // called when user selects an item/symbol
+        void onSymbolSelected(long rowID);
+
+        // called when user adds a item/symbol
+        void onAddSymbolSelected();
+
+    }
+
+
     //
     // update data set
     //
@@ -349,42 +412,6 @@ public class InventoryFragment extends ListFragment {
         } // end method onPostExecute()
 
     } // end inner class GetContactsTask()
-
-    //
-    // using a separate subroutine instead of inline to remove clutter.
-    //
-    View.OnClickListener saveButtonOnClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-
-            final EditText tickerSymbol = (EditText) v.findViewById(R.id.inputSymbolEditText);
-            long rowID;
-
-            // get DatabaseConnector to interact with the SQLite database
-            DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
-
-            // insert the contact information into the database
-            rowID = databaseConnector.insertItem(
-                    tickerSymbol.getText().toString(),
-                    defaultOpeningPrice,
-                    defaultClosingPrice,
-                    defaultBidPrice,
-                    defaultBidSize,
-                    defaultAskPrice,
-                    defaultAskSize,
-                    defaultTradePrice,
-                    defaultTradeQuantity,
-                    defaultTradeDate,
-                    defaultTradeTime,
-                    defaultInsertDateTime
-            );
-
-            // reset form
-            tickerSymbol.setText(null);
-        }
-
-    };
 
 
 }

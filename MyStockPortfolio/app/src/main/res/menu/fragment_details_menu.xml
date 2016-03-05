@@ -9,7 +9,7 @@
         android:title="@string/fragment_menuitem_edit"
         android:orderInCategory="1"
         android:icon="@android:drawable/ic_menu_edit"
-        android:showAsAction="ifRoom|withText"
+        app:showAsAction="ifRoom|withText"
         >
     </item>
 
@@ -18,7 +18,7 @@
         android:title="@string/fragment_menuitem_delete"
         android:orderInCategory="2"
         android:icon="@android:drawable/ic_delete"
-        android:showAsAction="ifRoom|withText"
+        app:showAsAction="ifRoom|withText"
         >
     </item>
 

@@ -6,20 +6,16 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.hoiwanlouis.mystockportfolio.fragments.AddFragment;
-import com.hoiwanlouis.mystockportfolio.fragments.AddFragmentListener;
 import com.hoiwanlouis.mystockportfolio.fragments.EditFragment;
 import com.hoiwanlouis.mystockportfolio.fragments.DetailFragment;
 import com.hoiwanlouis.mystockportfolio.fragments.InventoryFragment;
-import com.hoiwanlouis.mystockportfolio.fragments.InventoryFragmentListener;
-import com.hoiwanlouis.mystockportfolio.fragments.EditFragmentListener;
-import com.hoiwanlouis.mystockportfolio.fragments.DetailFragmentListener;
 
 
 public class PrimoActivity extends Activity
-        implements  InventoryFragmentListener,
-                    AddFragmentListener,
-                    EditFragmentListener,
-                    DetailFragmentListener {
+        implements  InventoryFragment.InventoryFragmentListener,
+                    AddFragment.AddFragmentListener,
+                    EditFragment.EditFragmentListener,
+                    DetailFragment.DetailFragmentListener {
 
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();

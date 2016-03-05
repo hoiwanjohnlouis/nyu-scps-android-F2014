@@ -58,26 +58,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sbCreateCompanyTable.append("CREATE TABLE ");
         sbCreateCompanyTable.append(Company.COMPANY_TABLE_NAME);
         sbCreateCompanyTable.append(" (");
-
         sbCreateCompanyTable.append(Company._ID);
         sbCreateCompanyTable.append(" INTEGER PRIMARY KEY AUTOINCREMENT, ");
-
         sbCreateCompanyTable.append(Company.COMPANY_NAME);
         sbCreateCompanyTable.append(" TEXT NOT NULL UNIQUE, ");
-
         sbCreateCompanyTable.append(Company.COMPANY_LONG_NAME);
         sbCreateCompanyTable.append(" TEXT, ");
-
         sbCreateCompanyTable.append(Company.INSERT_DATETIME);
         sbCreateCompanyTable.append(" DATETIME, ");
-
         sbCreateCompanyTable.append(Company.MODIFY_DATETIME);
         sbCreateCompanyTable.append(" DATETIME ");
-
         sbCreateCompanyTable.append("); ");
-        Log.i(DEBUG_TAG, "using SQL[" + sbCreateCompanyTable.toString() + "].");
+        Log.i(DEBUG_TAG, "executing SQL[" + sbCreateCompanyTable.toString() + "].");
         db.execSQL(sbCreateCompanyTable.toString());
-        Log.v(DEBUG_TAG, "creating " + Company.COMPANY_TABLE_NAME + " complete.");
+        Log.v(DEBUG_TAG, Company.COMPANY_TABLE_NAME + " created.");
 
 
         // Create the Exchange table
@@ -87,25 +81,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sbCreateExchangeTable.append("CREATE TABLE " );
         sbCreateExchangeTable.append(Exchange.EXCHANGE_TABLE_NAME);
         sbCreateExchangeTable.append(" (");
-
         sbCreateExchangeTable.append(Exchange._ID);
         sbCreateExchangeTable.append(" INTEGER PRIMARY KEY AUTOINCREMENT, ");
-
         sbCreateExchangeTable.append(Exchange.EXCHANGE_CODE);
         sbCreateExchangeTable.append(" TEXT NOT NULL UNIQUE, ");
-
         sbCreateExchangeTable.append(Exchange.EXCHANGE_NAME );
         sbCreateExchangeTable.append(" TEXT, ");
-
         sbCreateExchangeTable.append(Exchange.INSERT_DATETIME);
         sbCreateExchangeTable.append(" DATETIME, ");
-
         sbCreateExchangeTable.append(Exchange.MODIFY_DATETIME);
         sbCreateExchangeTable.append(" DATETIME ");
         sbCreateExchangeTable.append(");");
-        Log.i(DEBUG_TAG, "using SQL[" + sbCreateExchangeTable.toString() + "].");
+        Log.i(DEBUG_TAG, "executing SQL[" + sbCreateExchangeTable.toString() + "].");
         db.execSQL(sbCreateExchangeTable.toString());
-        Log.v(DEBUG_TAG, "creating " + Exchange.EXCHANGE_TABLE_NAME + " complete.");
+        Log.v(DEBUG_TAG, Exchange.EXCHANGE_TABLE_NAME + " created.");
 
 
         // Create the Catalogue table
@@ -115,29 +104,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sbCreateCatalogueTable.append("CREATE TABLE ");
         sbCreateCatalogueTable.append(Catalogue.CATALOGUE_TABLE_NAME);
         sbCreateCatalogueTable.append(" (");
-
         sbCreateCatalogueTable.append(Catalogue._ID);
         sbCreateCatalogueTable.append(" INTEGER PRIMARY KEY AUTOINCREMENT, ");
-
         sbCreateCatalogueTable.append(Catalogue.PORTFOLIO_ID);
         sbCreateCatalogueTable.append(" INTEGER, ");
-
         sbCreateCatalogueTable.append(Catalogue.COMPANY_ID);
         sbCreateCatalogueTable.append(" INTEGER, ");
-
         sbCreateCatalogueTable.append(Catalogue.EXCHANGE_ID);
         sbCreateCatalogueTable.append(" INTEGER, ");
-
         sbCreateCatalogueTable.append(Catalogue.INSERT_DATETIME);
         sbCreateCatalogueTable.append(" DATETIME, ");
-
         sbCreateCatalogueTable.append(Catalogue.MODIFY_DATETIME);
         sbCreateCatalogueTable.append(" DATETIME ");
-
         sbCreateCatalogueTable.append(");");
-        Log.i(DEBUG_TAG, "using SQL[" + sbCreateCatalogueTable.toString() + "].");
+        Log.i(DEBUG_TAG, "executing SQL[" + sbCreateCatalogueTable.toString() + "].");
         db.execSQL(sbCreateCatalogueTable.toString());
-        Log.v(DEBUG_TAG, "creating " + Catalogue.CATALOGUE_TABLE_NAME + " complete.");
+        Log.v(DEBUG_TAG, Catalogue.CATALOGUE_TABLE_NAME + " created.");
 
 
         // Create the Portfolio table
@@ -147,53 +129,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sbCreatePortfolioTable.append("CREATE TABLE ");
         sbCreatePortfolioTable.append(Portfolio.PORTFOLIO_TABLE_NAME);
         sbCreatePortfolioTable.append(" (");
-
         sbCreatePortfolioTable.append(Portfolio._ID);
         sbCreatePortfolioTable.append(" INTEGER PRIMARY KEY AUTOINCREMENT, ");
-
         sbCreatePortfolioTable.append(Portfolio.SYMBOL);
         sbCreatePortfolioTable.append(" TEXT NOT NULL UNIQUE, ");
-
         sbCreatePortfolioTable.append(Portfolio.OPENING_PRICE);
         sbCreatePortfolioTable.append(" DOUBLE, ");
-
         sbCreatePortfolioTable.append(Portfolio.PREVIOUS_CLOSING_PRICE);
         sbCreatePortfolioTable.append(" DOUBLE, ");
-
         sbCreatePortfolioTable.append(Portfolio.BID_PRICE);
         sbCreatePortfolioTable.append(" DOUBLE, ");
-
         sbCreatePortfolioTable.append(Portfolio.BID_SIZE );
         sbCreatePortfolioTable.append(" DOUBLE, ");
-
         sbCreatePortfolioTable.append(Portfolio.ASK_PRICE );
         sbCreatePortfolioTable.append(" DOUBLE, ");
-
         sbCreatePortfolioTable.append(Portfolio.ASK_SIZE );
         sbCreatePortfolioTable.append(" DOUBLE, ");
-
         sbCreatePortfolioTable.append(Portfolio.LAST_TRADE_PRICE);
         sbCreatePortfolioTable.append(" DOUBLE, ");
-
         sbCreatePortfolioTable.append(Portfolio.LAST_TRADE_QUANTITY);
         sbCreatePortfolioTable.append(" DOUBLE, ");
-
         sbCreatePortfolioTable.append(Portfolio.LAST_TRADE_DATE);
         sbCreatePortfolioTable.append(" TEXT, ");
-
         sbCreatePortfolioTable.append(Portfolio.LAST_TRADE_TIME);
         sbCreatePortfolioTable.append(" TEXT, ");
-
         sbCreatePortfolioTable.append(Portfolio.INSERT_DATETIME);
         sbCreatePortfolioTable.append(" DATETIME, ");
-
         sbCreatePortfolioTable.append(Portfolio.MODIFY_DATETIME);
         sbCreatePortfolioTable.append(" DATETIME ");
-
         sbCreatePortfolioTable.append(");");
-        Log.i(DEBUG_TAG, "using SQL[" + sbCreatePortfolioTable.toString() + "].");
+        Log.i(DEBUG_TAG, "executing SQL[" + sbCreatePortfolioTable.toString() + "].");
         db.execSQL(sbCreatePortfolioTable.toString());
-        Log.v(DEBUG_TAG, "creating " + Portfolio.PORTFOLIO_TABLE_NAME + " complete.");
+        Log.v(DEBUG_TAG, Portfolio.PORTFOLIO_TABLE_NAME + " created.");
 
     }
 
