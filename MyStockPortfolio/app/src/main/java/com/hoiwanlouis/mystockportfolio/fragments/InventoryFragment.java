@@ -52,50 +52,6 @@ public class InventoryFragment extends ListFragment {
 
     private final String DEBUG_TAG = this.getClass().getSimpleName();
 
-    private final String asColumnsToReturn[] = {
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio._ID,
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.SYMBOL,
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.OPENING_PRICE,
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.PREVIOUS_CLOSING_PRICE,
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.BID_PRICE,
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.ASK_PRICE,
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.LAST_TRADE_PRICE,
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.LAST_TRADE_TIME
-    };
-
-    private final String fromDBColumns[] =  {
-            Database.Portfolio.SYMBOL,
-            Database.Portfolio.OPENING_PRICE,
-            Database.Portfolio.PREVIOUS_CLOSING_PRICE,
-            Database.Portfolio.BID_PRICE,
-            Database.Portfolio.ASK_PRICE,
-            Database.Portfolio.LAST_TRADE_PRICE,
-            Database.Portfolio.LAST_TRADE_TIME
-    };
-
-    private final int toRIds[] = {
-            R.id.TextView_symbol,
-            R.id.TextView_opening_price,
-            R.id.TextView_previous_closing_price,
-            R.id.TextView_bid_price,
-            R.id.TextView_ask_price,
-            R.id.TextView_last_trade_price,
-            R.id.TextView_last_trade_time
-    };
-
-
-    private String defaultOpeningPrice = ""+R.string.default_opening_price;
-    private String defaultClosingPrice = ""+R.string.default_closing_price;
-    private String defaultBidPrice = ""+R.string.default_bid_price;
-    private String defaultBidSize = ""+R.string.default_bid_size;
-    private String defaultAskPrice = ""+R.string.default_ask_price;
-    private String defaultAskSize = ""+R.string.default_ask_size;
-    private String defaultTradePrice = ""+R.string.default_trade_price;
-    private String defaultTradeQuantity = ""+R.string.default_trade_quantity;
-    private String defaultTradeDate = ""+R.string.default_trade_date;
-    private String defaultTradeTime = ""+R.string.default_trade_time;
-    private String defaultInsertDateTime = R.string.default_trade_date+"_"+R.string.default_trade_time;
-
 
     private InventoryFragmentListener listener;
 
@@ -105,7 +61,6 @@ public class InventoryFragment extends ListFragment {
     private CursorAdapter cursorAdapter;
 
     private ImageButton saveButton;
-//    private int iNumberOfSymbols;   // keep track of how records were extracted from SQLite.
 
 
     //
@@ -153,7 +108,7 @@ public class InventoryFragment extends ListFragment {
             Log.i(DEBUG_TAG, "in viewItemListener()/onItemClick()");
 
             // let the callback take care of this
-            listener.onSymbolSelected(id);
+            listener.onIFLSymbolSelected(id);
         }
     };
 
@@ -177,52 +132,33 @@ public class InventoryFragment extends ListFragment {
 
         // setup Save Button listener, etc
         saveButton = (ImageButton) view.findViewById(R.id.saveButton);
-        saveButton.setOnClickListener(saveButtonOnClickListener);
+        // saveButton.setOnClickListener(saveButtonOnClickListener);
+        saveButton.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                final EditText tickerSymbol = (EditText) v.findViewById(R.id.inputSymbolEditText);
+
+                // get DatabaseConnector to interact with the SQLite database
+                DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
+
+                // insert the contact information into the database
+                long rowID = databaseConnector.addTickerSymbol(tickerSymbol.getText().toString());
+
+                // reset form
+                tickerSymbol.setText(null);
+            }
+
+        }
+        );
 
         return view;
     } // end method onCreateView
 
 
     //
-    // *****************************************************
-    // using a separate subroutine instead of inline to remove clutter.
-    // *****************************************************
-    View.OnClickListener saveButtonOnClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-
-            final EditText tickerSymbol = (EditText) v.findViewById(R.id.inputSymbolEditText);
-            long rowID;
-
-            // get DatabaseConnector to interact with the SQLite database
-            DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
-
-            // insert the contact information into the database
-            rowID = databaseConnector.insertItem(
-                    tickerSymbol.getText().toString(),
-                    defaultOpeningPrice,
-                    defaultClosingPrice,
-                    defaultBidPrice,
-                    defaultBidSize,
-                    defaultAskPrice,
-                    defaultAskSize,
-                    defaultTradePrice,
-                    defaultTradeQuantity,
-                    defaultTradeDate,
-                    defaultTradeTime,
-                    defaultInsertDateTime
-            );
-
-            // reset form
-            tickerSymbol.setText(null);
-        }
-
-    };
-
-
-    //
-    // called after View is created
+    // called after LayoutFragment is created
     //
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -247,8 +183,8 @@ public class InventoryFragment extends ListFragment {
                         getActivity(),
                         R.layout.app_item,
                         null,
-                        fromDBColumns,
-                        toRIds,
+                        Database.fromDBColumns,
+                        LayoutFragment.toRIds,
                         0);
         // set adapter that supplies data
         setListAdapter(cursorAdapter);
@@ -262,7 +198,7 @@ public class InventoryFragment extends ListFragment {
     public void onResume() {
         Log.i(DEBUG_TAG, "in onResume()");
         super.onResume();
-        new GetItemsAsyncTask().execute((Object[]) null);
+        updateListView();  // calls new GetAllTickerSymbolsAsyncTask().execute((Object[]) null);
     } // end method onResume()
 
 
@@ -337,7 +273,7 @@ public class InventoryFragment extends ListFragment {
                 break;
 
             case R.id.action_add:;
-                listener.onAddSymbolSelected();
+                listener.onIFLAddSymbolSelected();
                 selected = true;
                 break;
 
@@ -366,10 +302,10 @@ public class InventoryFragment extends ListFragment {
     public interface InventoryFragmentListener {
 
         // called when user selects an item/symbol
-        void onSymbolSelected(long rowID);
+        void onIFLSymbolSelected(long rowID);
 
         // called when user adds a item/symbol
-        void onAddSymbolSelected();
+        void onIFLAddSymbolSelected();
 
     }
 
@@ -379,7 +315,7 @@ public class InventoryFragment extends ListFragment {
     //
     public void updateListView() {
         Log.i(DEBUG_TAG, "in updateListView()");
-        new GetItemsAsyncTask().execute((Object[]) null);
+        new GetAllTickerSymbolsAsyncTask().execute((Object[]) null);
     } // end method updateListView()
 
 
@@ -387,7 +323,7 @@ public class InventoryFragment extends ListFragment {
     // *****************************************************
     // perform database query outside the GUI thread
     // *****************************************************
-    private class GetItemsAsyncTask extends AsyncTask<Object, Object, Cursor> {
+    private class GetAllTickerSymbolsAsyncTask extends AsyncTask<Object, Object, Cursor> {
 
         DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
 
@@ -396,9 +332,9 @@ public class InventoryFragment extends ListFragment {
         //
         @Override
         protected Cursor doInBackground(Object... params) {
-            Log.i(DEBUG_TAG, "in GetItemsAsyncTask()/doInBackground()");
+            Log.i(DEBUG_TAG, "in GetAllTickerSymbolsAsyncTask()/doInBackground()");
             databaseConnector.open();
-            return databaseConnector.getAllItems();
+            return databaseConnector.getAllTickerSymbols();
         } // end method doInBackground()
 
         //
@@ -406,7 +342,7 @@ public class InventoryFragment extends ListFragment {
         //
         @Override
         protected void onPostExecute(Cursor results) {
-            Log.i(DEBUG_TAG, "in GetItemsAsyncTask()/onPostExecute()");
+            Log.i(DEBUG_TAG, "in GetAllTickerSymbolsAsyncTask()/onPostExecute()");
             cursorAdapter.changeCursor(results);
             databaseConnector.close();
         } // end method onPostExecute()

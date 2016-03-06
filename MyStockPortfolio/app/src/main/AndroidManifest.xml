@@ -23,7 +23,7 @@
             android:name=".SettingsActivity"
             android:label="@string/main_activity_settings_title" >
         </activity>
-        <activity android:name=".database.PortfolioActivity" />
+        <activity android:name=".database.DatabaseActivity" />
         <activity android:name=".factories.TestFactoriesActivity" />
         <activity android:name=".observers.TestPriceObserver" />
         <activity

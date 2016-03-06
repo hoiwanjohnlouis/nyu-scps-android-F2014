@@ -22,13 +22,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 
-
-public class PortfolioActivity extends Activity {
+public class DatabaseActivity extends Activity {
 
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
 
-    protected DatabaseHelper mDatabase = null;
+    protected DatabaseHelper mDatabaseHelper = null;
     protected Cursor mCursor = null;
     protected SQLiteDatabase mDB = null;
 
@@ -38,12 +37,12 @@ public class PortfolioActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.v(DEBUG_TAG, "in onCreate");
         super.onCreate(savedInstanceState);
-        mDatabase = new DatabaseHelper(
+        mDatabaseHelper = new DatabaseHelper(
                 this.getApplicationContext(),
                 Database.DATABASE_NAME,
                 null,   // cursor factory
                 Database.DATABASE_VERSION);
-        mDB = mDatabase.getWritableDatabase();
+        mDB = mDatabaseHelper.getWritableDatabase();
     }
 
 
@@ -60,9 +59,9 @@ public class PortfolioActivity extends Activity {
         }
 
         // close the database
-        if(mDatabase != null)
+        if(mDatabaseHelper != null)
         {
-            mDatabase.close();
+            mDatabaseHelper.close();
         }
     }
 
@@ -72,8 +71,8 @@ public class PortfolioActivity extends Activity {
         Log.v(DEBUG_TAG, "in open");
 
         // open the database for update
-        if(mDatabase != null) {
-            mDB = mDatabase.getWritableDatabase();
+        if(mDatabaseHelper != null) {
+            mDB = mDatabaseHelper.getWritableDatabase();
         }
 
     }
@@ -90,9 +89,9 @@ public class PortfolioActivity extends Activity {
         }
 
         // close the database
-        if(mDatabase != null)
+        if(mDatabaseHelper != null)
         {
-            mDatabase.close();
+            mDatabaseHelper.close();
         }
 
     }

@@ -33,7 +33,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hoiwanlouis.mystockportfolio.PrimoActivity;
@@ -68,8 +67,7 @@ public class DetailFragment extends Fragment {
     private TextView askSizeTextView;
     private TextView lastTradePriceTextView;
     private TextView lastTradeQuantityTextView;
-    private TextView lastTradeDateTextView;
-    private TextView lastTradeTimeTextView;
+    private TextView lastTradeDateTimeTextView;
     private TextView insertDateTimeTextView;
     private TextView modifyDateTimeTextView;
 
@@ -83,8 +81,7 @@ public class DetailFragment extends Fragment {
     int askSizeIndex;
     int lastTradePriceIndex;
     int lastTradeQuantityIndex;
-    int lastTradeDateIndex;
-    int lastTradeTimeIndex;
+    int lastTradeDateTimeIndex;
     int insertDateTimeIndex;
     int modifyDateTimeIndex;
 
@@ -156,8 +153,7 @@ public class DetailFragment extends Fragment {
         askSizeTextView = (TextView) view.findViewById(R.id.askSizeTextView);
         lastTradePriceTextView = (TextView) view.findViewById(R.id.lastTradePriceTextView);
         lastTradeQuantityTextView = (TextView) view.findViewById(R.id.lastTradeQuantityTextView);
-        lastTradeDateTextView = (TextView) view.findViewById(R.id.lastTradeDateTextView);
-        lastTradeTimeTextView = (TextView) view.findViewById(R.id.lastTradeTimeTextView);
+        lastTradeDateTimeTextView = (TextView) view.findViewById(R.id.lastTradeTimeTextView); // ONLY TIME IS DISPLAYED
         insertDateTimeTextView = (TextView) view.findViewById(R.id.insertDateTimeTextView);
         modifyDateTimeTextView = (TextView) view.findViewById(R.id.modifyDateTimeTextView);
 
@@ -219,13 +215,12 @@ public class DetailFragment extends Fragment {
                 arguments.putCharSequence(Database.Portfolio.ASK_SIZE, askPriceTextView.getText());
                 arguments.putCharSequence(Database.Portfolio.LAST_TRADE_PRICE, lastTradePriceTextView.getText());
                 arguments.putCharSequence(Database.Portfolio.LAST_TRADE_QUANTITY, lastTradeQuantityTextView.getText());
-                arguments.putCharSequence(Database.Portfolio.LAST_TRADE_DATE, lastTradeDateTextView.getText());
-                arguments.putCharSequence(Database.Portfolio.LAST_TRADE_TIME, lastTradeTimeTextView.getText());
+                arguments.putCharSequence(Database.Portfolio.LAST_TRADE_DATETIME, lastTradeDateTimeTextView.getText());
                 arguments.putCharSequence(Database.Portfolio.INSERT_DATETIME, insertDateTimeTextView.getText());
-//                arguments.putCharSequence(Database.Portfolio.MODIFY_DATETIME, modifyDateTimeTextView.getText());
+                arguments.putCharSequence(Database.Portfolio.MODIFY_DATETIME, modifyDateTimeTextView.getText());
 
                 // pass Bundle to listener for processing
-                listener.onEditSymbolSelected(arguments);
+                listener.onDFLEditSymbolSelected(arguments);
                 return true;
 
             case R.id.action_delete:
@@ -256,10 +251,10 @@ public class DetailFragment extends Fragment {
     public interface DetailFragmentListener {
 
         // called when a item/symbol is deleted
-        void onDeleteSymbolCompleted();
+        void onDFLDeleteSymbolCompleted();
 
         // called to pass Bundle of item/symbol's info for editing
-        void onEditSymbolSelected(Bundle arguments);
+        void onDFLEditSymbolSelected(Bundle arguments);
 
     }
 
@@ -290,7 +285,7 @@ public class DetailFragment extends Fragment {
             Log.i(DEBUG_TAG, "in doInBackground()");
             databaseConnector.open();
 
-            return databaseConnector.getOneItem(params[0]);
+            return databaseConnector.getTickerSymbolUsingId(params[0]);
         } // end method doInBackground()
 
 
@@ -314,8 +309,7 @@ public class DetailFragment extends Fragment {
             askSizeIndex = result.getColumnIndex(Database.Portfolio.ASK_SIZE);
             lastTradePriceIndex = result.getColumnIndex(Database.Portfolio.LAST_TRADE_PRICE);
             lastTradeQuantityIndex = result.getColumnIndex(Database.Portfolio.LAST_TRADE_QUANTITY);
-            lastTradeDateIndex = result.getColumnIndex(Database.Portfolio.LAST_TRADE_DATE);
-            lastTradeTimeIndex = result.getColumnIndex(Database.Portfolio.LAST_TRADE_TIME);
+            lastTradeDateTimeIndex = result.getColumnIndex(Database.Portfolio.LAST_TRADE_DATETIME);
             insertDateTimeIndex = result.getColumnIndex(Database.Portfolio.INSERT_DATETIME);
             modifyDateTimeIndex = result.getColumnIndex(Database.Portfolio.MODIFY_DATETIME);
 
@@ -329,8 +323,7 @@ public class DetailFragment extends Fragment {
             askSizeTextView.setText(result.getString(askSizeIndex));
             lastTradePriceTextView.setText(result.getString(lastTradePriceIndex));
             lastTradeQuantityTextView.setText(result.getString(lastTradeQuantityIndex));
-            lastTradeDateTextView.setText(result.getString(lastTradeDateIndex));
-            lastTradeTimeTextView.setText(result.getString(lastTradeTimeIndex));
+            lastTradeDateTimeTextView.setText(result.getString(lastTradeDateTimeIndex));
             insertDateTimeTextView.setText(result.getString(insertDateTimeIndex));
             modifyDateTimeTextView.setText(result.getString(modifyDateTimeIndex));
 
@@ -372,14 +365,14 @@ public class DetailFragment extends Fragment {
                                                 @Override
                                                 protected Object doInBackground(Long... params) {
                                                     Log.i(DEBUG_TAG, "in doInBackground()");
-                                                    databaseConnector.deleteOneItem(params[0], "some symbol");
+                                                    databaseConnector.deleteTickerSymbol(params[0], "some symbol");
                                                     return null;
                                                 }
 
                                                 @Override
                                                 protected void onPostExecute(Object result) {
                                                     Log.i(DEBUG_TAG, "in onPostExecute()");
-                                                    listener.onDeleteSymbolCompleted();
+                                                    listener.onDFLDeleteSymbolCompleted();
                                                 }
                                             }; // end new AsyncTask
 

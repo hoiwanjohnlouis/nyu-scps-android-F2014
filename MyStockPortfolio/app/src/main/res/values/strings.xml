@@ -115,19 +115,17 @@
     <string name="defaultTickerFields">&amp;f=n0s0o0p0a0a5b0b6l1k3d1t1</string>
 
     <!-- start: default string values for the portfolio record -->
-    <string name="default_opening_price">-40</string>
-    <string name="default_closing_price">-45</string>
+    <string name="default_opening_price">0.00</string>
+    <string name="default_closing_price">0.00</string>
 
-    <string name="default_bid_price">-50</string>
-    <string name="default_bid_size">-55</string>
+    <string name="default_bid_price">0.01</string>
+    <string name="default_bid_size">1</string>
 
-    <string name="default_ask_price">-60</string>
-    <string name="default_ask_size">-65</string>
+    <string name="default_ask_price">0.02</string>
+    <string name="default_ask_size">1</string>
 
-    <string name="default_trade_price">-70</string>
-    <string name="default_trade_quantity">-75</string>
-    <string name="default_trade_date">1900-01-01</string>
-    <string name="default_trade_time">23:59:59</string>
+    <string name="default_trade_price">0.015</string>
+    <string name="default_trade_quantity">1</string>
     <!-- end: default string values for the portfolio record -->
 
 

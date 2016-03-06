@@ -18,6 +18,7 @@ package com.hoiwanlouis.mystockportfolio.database;
 
 import android.provider.BaseColumns;
 
+
 //FYI: This is the same setup as PetTracker, same schema
 public final class Database {
 
@@ -76,12 +77,32 @@ public final class Database {
         public static final String ASK_SIZE = "ask_size";  // bid size of quote
         public static final String LAST_TRADE_PRICE = "last_trade_price";  // price of last trade
         public static final String LAST_TRADE_QUANTITY = "last_trade_quantity";  // share quantity of last trade
-        public static final String LAST_TRADE_DATE = "last_trade_date";  // date of last trade
-        public static final String LAST_TRADE_TIME = "last_trade_time";  // time of last trade
-        public static final String INSERT_DATETIME = "insert_datetime";  // date of insertion
-        public static final String MODIFY_DATETIME = "modify_datetime";  // date of last modification
+        public static final String LAST_TRADE_DATETIME = "last_trade_datetime";  // datetime of last trade
+        public static final String INSERT_DATETIME = "insert_datetime";  // datetime of insertion
+        public static final String MODIFY_DATETIME = "modify_datetime";  // datetime of last modification
         public static final String DEFAULT_SORT_ORDER = SYMBOL + " ASC";
     }
 
+
+    public static final String asColumnsToReturn[] = {
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio._ID,
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.SYMBOL,
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.OPENING_PRICE,
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.PREVIOUS_CLOSING_PRICE,
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.BID_PRICE,
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.ASK_PRICE,
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.LAST_TRADE_PRICE,
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.LAST_TRADE_DATETIME
+    };
+
+    public static final String fromDBColumns[] =  {
+            Database.Portfolio.SYMBOL,
+            Database.Portfolio.OPENING_PRICE,
+            Database.Portfolio.PREVIOUS_CLOSING_PRICE,
+            Database.Portfolio.BID_PRICE,
+            Database.Portfolio.ASK_PRICE,
+            Database.Portfolio.LAST_TRADE_PRICE,
+            Database.Portfolio.LAST_TRADE_DATETIME
+    };
 
 }

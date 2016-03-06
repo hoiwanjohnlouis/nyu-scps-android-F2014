@@ -79,17 +79,17 @@ public class PrimoActivity extends Activity
      *
      * Start of InventoryFragmentListener interfaces implementations
      *
-     *      1.  public void onSymbolSelected(long rowID)
-     *      2.  public void onAddSymbolSelected();
+     *      1.  public void onIFLSymbolSelected(long rowID)
+     *      2.  public void onIFLAddSymbolSelected();
      *
      ***************************************************************/
     //
     // implementing InventoryFragmentListener interfaces
-    // display DetailsFragment for selected item/symbol
+    // show the DetailsFragment for selected item/symbol
     //
     @Override
-    public void onSymbolSelected(long rowID) {
-        Log.i(DEBUG_TAG, "in onSymbolSelected()");
+    public void onIFLSymbolSelected(long rowID) {
+        Log.i(DEBUG_TAG, "in onIFLSymbolSelected()");
         if (isAPhoneDevice()) {
             // phone
             displaySymbol(rowID, R.id.fragmentContainer);
@@ -100,23 +100,23 @@ public class PrimoActivity extends Activity
             displaySymbol(rowID, R.id.rightPaneContainer);
         }
 
-    } // end method onSymbolSelected
+    } // end method onIFLSymbolSelected
 
 
     //
     // implementing InventoryFragmentListener interfaces
-    // display the EditFragment to add a new item/symbol
+    // showAddFragment to add a new item/symbol
     //
     @Override
-    public void onAddSymbolSelected() {
-        Log.i(DEBUG_TAG, "in onAddSymbolSelected()");
+    public void onIFLAddSymbolSelected() {
+        Log.i(DEBUG_TAG, "in onIFLAddSymbolSelected()");
         if (isAPhoneDevice()) {
-            displayAddFragment(R.id.fragmentContainer, null);
+            showAddFragment(R.id.fragmentContainer, null);
         }
         else {
-            displayAddFragment(R.id.rightPaneContainer, null);
+            showAddFragment(R.id.rightPaneContainer, null);
         }
-    } // end method onAddSymbol
+    } // end method onIFLAddSymbolSelected
     /***************************************************************
      *
      * End of InventoryFragmentListener interfaces implementations
@@ -129,16 +129,16 @@ public class PrimoActivity extends Activity
      *
      * Start of AddFragmentListener interfaces implementations
      *
-     *      1.  onAddSymbolCompleted
+     *      1.  onAFLAddSymbolCompleted
      *
      ***************************************************************/
     //
-    // implementing EditFragmentListener interfaces
+    // implementing AddFragmentListener interfaces
     // update GUI after new item/symbol is saved
     //
     @Override
-    public void onAddSymbolCompleted(long rowID) {
-        Log.i(DEBUG_TAG, "in onAddSymbolCompleted()");
+    public void onAFLAddSymbolCompleted(long rowID) {
+        Log.i(DEBUG_TAG, "in onAFLAddSymbolCompleted()");
         // removes top of back stack
         getFragmentManager().popBackStack();
 
@@ -152,7 +152,7 @@ public class PrimoActivity extends Activity
             // on tablet, display contact that was just added or edited
             displaySymbol(rowID, R.id.rightPaneContainer);
         }
-    } // end method onEditSymbolCompleted
+    } // end method onAFLAddSymbolCompleted
     /***************************************************************
      *
      * End of AddFragmentListener interfaces implementations
@@ -161,12 +161,11 @@ public class PrimoActivity extends Activity
 
 
 
-
     /***************************************************************
      *
      * Start of EditFragmentListener interfaces implementations
      *
-     *      1.  onEditSymbolCompleted
+     *      1.  onEFLEditSymbolCompleted
      *
      ***************************************************************/
     //
@@ -174,8 +173,8 @@ public class PrimoActivity extends Activity
     // update GUI after updated item/symbol saved
     //
     @Override
-    public void onEditSymbolCompleted(long rowID) {
-        Log.i(DEBUG_TAG, "in onEditSymbolCompleted()");
+    public void onEFLEditSymbolCompleted(long rowID) {
+        Log.i(DEBUG_TAG, "in onEFLEditSymbolCompleted()");
         // removes top of back stack
         getFragmentManager().popBackStack();
 
@@ -189,7 +188,7 @@ public class PrimoActivity extends Activity
             // on tablet, display contact that was just added or edited
             displaySymbol(rowID, R.id.rightPaneContainer);
         }
-    } // end method onEditSymbolCompleted
+    } // end method onEFLEditSymbolCompleted
     /***************************************************************
      *
      * End of EditFragmentListener interfaces implementations
@@ -198,13 +197,12 @@ public class PrimoActivity extends Activity
 
 
 
-
     /***************************************************************
      *
      * Start of DetailFragmentListener interfaces implementations
      *
-     *      1. public void onDeleteSymbolCompleted();
-     *      2. public void onEditSymbolSelected(Bundle arguments);
+     *      1. public void onDFLDeleteSymbolCompleted();
+     *      2. public void onDFLEditSymbolSelected(Bundle arguments);
      *
      ***************************************************************/
     //
@@ -212,15 +210,15 @@ public class PrimoActivity extends Activity
     // return to inventory when displayed item/symbol is deleted
     //
     @Override
-    public void onDeleteSymbolCompleted() {
-        Log.i(DEBUG_TAG, "in onDeleteSymbolCompleted()");
+    public void onDFLDeleteSymbolCompleted() {
+        Log.i(DEBUG_TAG, "in onDFLDeleteSymbolCompleted()");
         getFragmentManager().popBackStack(); // removes top of back stack
 
         if (isATabletDevice()) {
             // must be a tablet
             inventoryFragment.updateListView();
         }
-    } // end method onSymbolDeleted
+    } // end method onDFLDeleteSymbolCompleted
 
 
     //
@@ -228,17 +226,17 @@ public class PrimoActivity extends Activity
     // display the updated data after edit is complete
     //
     @Override
-    public void onEditSymbolSelected(Bundle arguments) {
-        Log.i(DEBUG_TAG, "in onEditSymbolSelected");
+    public void onDFLEditSymbolSelected(Bundle arguments) {
+        Log.i(DEBUG_TAG, "in onDFLEditSymbolSelected");
         if (isAPhoneDevice()) {
             // phone
-            displayEditFragment(R.id.fragmentContainer, arguments);
+            showEditFragment(R.id.fragmentContainer, arguments);
         }
         else {
             // must be a tablet
-            displayEditFragment(R.id.rightPaneContainer, arguments);
+            showEditFragment(R.id.rightPaneContainer, arguments);
         }
-    } // end method onEditSymbol
+    } // end method onDFLEditSymbolSelected
     /***************************************************************
      *
      * End of DetailFragmentListener interfaces implementations
@@ -301,13 +299,13 @@ public class PrimoActivity extends Activity
     /***************************************************************
      *
      *  worker function:
-     *      private void displayAddFragment(int viewID, Bundle arguments)
+     *      private void showAddFragment(int viewID, Bundle arguments)
      *
      *          display fragment for adding a new symbol
      *
      ***************************************************************/
-    private void displayAddFragment(int viewID, Bundle arguments) {
-        Log.i(DEBUG_TAG, "in displayAddFragment()");
+    private void showAddFragment(int viewID, Bundle arguments) {
+        Log.i(DEBUG_TAG, "in showAddFragment()");
 
         // set the bundled arguments into the DetailsFragment
         AddFragment addFragment = new AddFragment();
@@ -322,19 +320,19 @@ public class PrimoActivity extends Activity
         transaction.addToBackStack(null);
         // causes AddFragment to display
         transaction.commit();
-    } // end method displayAddFragment
+    } // end method showAddFragment
 
 
     /***************************************************************
      *
      *  worker function:
-     *      private void displayEditFragment(int viewID, Bundle arguments)
+     *      private void showEditFragment(int viewID, Bundle arguments)
      *
      *          display fragment for editing an existing contact
      *
      ***************************************************************/
-    private void displayEditFragment(int viewID, Bundle arguments) {
-        Log.i(DEBUG_TAG, "in displayEditFragment()");
+    private void showEditFragment(int viewID, Bundle arguments) {
+        Log.i(DEBUG_TAG, "in showEditFragment()");
 
         // set the bundled arguments into the DetailsFragment
         EditFragment editFragment = new EditFragment();
@@ -349,6 +347,6 @@ public class PrimoActivity extends Activity
         transaction.addToBackStack(null);
         // causes EditFragment to display
         transaction.commit();
-    } // end method displayEditFragment
+    } // end method showEditFragment
 
 }

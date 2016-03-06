@@ -57,6 +57,9 @@ public class EditFragment extends Fragment {
     // argument for editing a contact
     private Bundle infoBundle;
 
+    // Save Contact Button
+    private Button saveButton;
+
     // define the EditText for display, must match the detail layout
     private EditText symbolEditText;
     private EditText openingPriceEditText;
@@ -67,8 +70,7 @@ public class EditFragment extends Fragment {
     private EditText askSizeEditText;
     private EditText lastTradePriceEditText;
     private EditText lastTradeQuantityEditText;
-    private EditText lastTradeDateEditText;
-    private EditText lastTradeTimeEditText;
+    private EditText lastTradeDateTimeEditText;
     private EditText insertDateTimeEditText;
     private EditText modifyDateTimeEditText;
 
@@ -131,8 +133,10 @@ public class EditFragment extends Fragment {
         askSizeEditText = (EditText) view.findViewById(R.id.askSizeEditText);
         lastTradePriceEditText = (EditText) view.findViewById(R.id.lastTradePriceEditText);
         lastTradeQuantityEditText = (EditText) view.findViewById(R.id.lastTradeQuantityEditText);
-        lastTradeDateEditText = (EditText) view.findViewById(R.id.lastTradeDateEditText);
-        lastTradeTimeEditText = (EditText) view.findViewById(R.id.lastTradeTimeEditText);
+
+        // todo: GUI only displays time
+        lastTradeDateTimeEditText = (EditText) view.findViewById(R.id.lastTradeDateEditText);
+
         insertDateTimeEditText = (EditText) view.findViewById(R.id.insertDateTimeEditText);
         modifyDateTimeEditText = (EditText) view.findViewById(R.id.modifyDateTimeEditText);
 
@@ -151,15 +155,70 @@ public class EditFragment extends Fragment {
             askSizeEditText.setText(infoBundle.getString(Database.Portfolio.ASK_SIZE));
             lastTradePriceEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_PRICE));
             lastTradeQuantityEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_QUANTITY));
-            lastTradeDateEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_DATE));
-            lastTradeTimeEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_TIME));
+            lastTradeDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_DATETIME));
+
+            // todo: should never update insert datetime
             insertDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.INSERT_DATETIME));
+
+            // todo: let db update the modify datetime
             modifyDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.MODIFY_DATETIME));
+
+            // todo: may need to strip off DATE for display since GUI only has space for TIME
+            lastTradeDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_DATETIME));
         }
 
+
         // set Save Contact Button's event listener
-        Button saveButton = (Button) view.findViewById(R.id.saveButton);
-        saveButton.setOnClickListener(saveButtonClicked);
+        saveButton = (Button) view.findViewById(R.id.saveButton);
+        // saveButton.setOnClickListener(saveButtonClicked);
+        saveButton.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (symbolEditText.getText().toString().trim().length() != 0) {
+                    // AsyncTask to save contact, then notify listener
+                    AsyncTask<Object, Object, Object> saveContactTask =
+                            new AsyncTask<Object, Object, Object>() {
+                                @Override
+                                protected Object doInBackground(Object... params) {
+                                    // save contact to the database
+                                    saveInformation();
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Object result) {
+                                    // hide soft keyboard
+                                    InputMethodManager imm = (InputMethodManager)
+                                            getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+                                    listener.onEFLEditSymbolCompleted(rowID);
+                                }
+                            }; // end AsyncTask
+
+                    // save the contact to the database using a separate thread
+                    saveContactTask.execute((Object[]) null);
+                }
+                // required field is blank, so display error dialog
+                else {
+                    DialogFragment errorSaving =
+                            new DialogFragment() {
+                                @Override
+                                public Dialog onCreateDialog(Bundle savedInstanceState) {
+                                    AlertDialog.Builder builder =
+                                            new AlertDialog.Builder(getActivity());
+                                    builder.setMessage(R.string.fragment_error_saving_message);
+                                    builder.setPositiveButton(R.string.fragment_error_saving_button, null);
+                                    return builder.create();
+                                }
+                            };
+
+                    errorSaving.show(getFragmentManager(), "error saving item/symbol");
+                }
+            } // end method onClick
+        } // end OnClickListener saveButtonClicked
+        );
 
         return view;
     } // end method onCreateView
@@ -181,7 +240,7 @@ public class EditFragment extends Fragment {
     public interface EditFragmentListener {
 
         // called after edit completed so the item/symbol can be redisplayed
-        void onEditSymbolCompleted(long rowID);
+        void onEFLEditSymbolCompleted(long rowID);
 
     }
 
@@ -197,24 +256,13 @@ public class EditFragment extends Fragment {
 
         if (infoBundle == null) {
             // insert the contact information into the database
-            rowID = databaseConnector.insertItem(
-                    symbolEditText.getText().toString(),
-                    openingPriceEditText.getText().toString(),
-                    previousClosingPriceEditText.getText().toString(),
-                    bidPriceEditText.getText().toString(),
-                    bidSizeEditText.getText().toString(),
-                    askPriceEditText.getText().toString(),
-                    askSizeEditText.getText().toString(),
-                    lastTradePriceEditText.getText().toString(),
-                    lastTradeQuantityEditText.getText().toString(),
-                    lastTradeDateEditText.getText().toString(),
-                    lastTradeTimeEditText.getText().toString(),
-                    insertDateTimeEditText.getText().toString()
+            rowID = databaseConnector.addTickerSymbol(
+                    symbolEditText.getText().toString()
             );
         }
         else
         {
-            databaseConnector.updateItem(
+            databaseConnector.updateTickerSymbol(
                     rowID,
                     symbolEditText.getText().toString(),
                     openingPriceEditText.getText().toString(),
@@ -225,64 +273,10 @@ public class EditFragment extends Fragment {
                     askSizeEditText.getText().toString(),
                     lastTradePriceEditText.getText().toString(),
                     lastTradeQuantityEditText.getText().toString(),
-                    lastTradeDateEditText.getText().toString(),
-                    lastTradeTimeEditText.getText().toString(),
-                    modifyDateTimeEditText.getText().toString()
+                    lastTradeDateTimeEditText.getText().toString()
             );
         }
     } // end method saveContact
-
-
-    //
-    // responds to event generated when user saves a contact
-    //
-    View.OnClickListener saveButtonClicked = new View.OnClickListener()
-    {
-        @Override
-        public void onClick(View v) {
-            if (symbolEditText.getText().toString().trim().length() != 0) {
-                // AsyncTask to save contact, then notify listener
-                AsyncTask<Object, Object, Object> saveContactTask =
-                        new AsyncTask<Object, Object, Object>() {
-                            @Override
-                            protected Object doInBackground(Object... params) {
-                                // save contact to the database
-                                saveInformation();
-                                return null;
-                            }
-
-                            @Override
-                            protected void onPostExecute(Object result) {
-                                // hide soft keyboard
-                                InputMethodManager imm = (InputMethodManager)
-                                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-
-                                listener.onEditSymbolCompleted(rowID);
-                            }
-                        }; // end AsyncTask
-
-                // save the contact to the database using a separate thread
-                saveContactTask.execute((Object[]) null);
-            }
-            // required field is blank, so display error dialog
-            else {
-                DialogFragment errorSaving =
-                        new DialogFragment() {
-                            @Override
-                            public Dialog onCreateDialog(Bundle savedInstanceState) {
-                                AlertDialog.Builder builder =
-                                        new AlertDialog.Builder(getActivity());
-                                builder.setMessage(R.string.fragment_error_saving_message);
-                                builder.setPositiveButton(R.string.fragment_error_saving_button, null);
-                                return builder.create();
-                            }
-                        };
-
-                errorSaving.show(getFragmentManager(), "error saving item/symbol");
-            }
-        } // end method onClick
-    }; // end OnClickListener saveButtonClicked
 
 
 }
