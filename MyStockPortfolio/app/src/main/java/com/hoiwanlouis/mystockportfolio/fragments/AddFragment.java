@@ -91,6 +91,7 @@ public class AddFragment extends Fragment {
     public void onAttach(Activity activity) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(activity);
+        // init callback to interface implementation
         listener = (AddFragmentListener) activity;
     } // end method onAttach
 
@@ -102,6 +103,7 @@ public class AddFragment extends Fragment {
     public void onDetach() {
         Log.i(DEBUG_TAG, "in onDetach()");
         super.onDetach();
+        // clean up callback methods implemented by caller/invoker
         listener = null;
     } // end method onDetach
 
@@ -152,14 +154,8 @@ public class AddFragment extends Fragment {
             askSizeEditText.setText(infoBundle.getString(Database.Portfolio.ASK_SIZE));
             lastTradePriceEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_PRICE));
             lastTradeQuantityEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_QUANTITY));
-
-            // todo: may need to strip off DATE for display since GUI only has space for TIME
             lastTradeDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_DATETIME));
-
-            // todo: should never update insert datetime
             insertDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.INSERT_DATETIME));
-
-            // todo: let db update the modify datetime
             modifyDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.MODIFY_DATETIME));
         }
 

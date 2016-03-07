@@ -31,7 +31,7 @@ import com.hoiwanlouis.mystockportfolio.R;
  * with in the forecastles of American whalers. 
  *
  ***************************************************************************/
-public final class LayoutFragment {
+public final class LayoutHelper {
 
     public static final int toRIds[] = {
             R.id.TextView_symbol,

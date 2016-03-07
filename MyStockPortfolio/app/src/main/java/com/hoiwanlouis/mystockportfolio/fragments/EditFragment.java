@@ -91,6 +91,7 @@ public class EditFragment extends Fragment {
     public void onAttach(Activity activity) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(activity);
+        // init callback to interface implementation
         listener = (EditFragmentListener) activity;
     } // end method onAttach
 
@@ -102,6 +103,7 @@ public class EditFragment extends Fragment {
     public void onDetach() {
         Log.i(DEBUG_TAG, "in onDetach()");
         super.onDetach();
+        // clean up callback methods implemented by caller/invoker
         listener = null;
     } // end method onDetach
 
@@ -133,10 +135,7 @@ public class EditFragment extends Fragment {
         askSizeEditText = (EditText) view.findViewById(R.id.askSizeEditText);
         lastTradePriceEditText = (EditText) view.findViewById(R.id.lastTradePriceEditText);
         lastTradeQuantityEditText = (EditText) view.findViewById(R.id.lastTradeQuantityEditText);
-
-        // todo: GUI only displays time
-        lastTradeDateTimeEditText = (EditText) view.findViewById(R.id.lastTradeDateEditText);
-
+        lastTradeDateTimeEditText = (EditText) view.findViewById(R.id.lastTradeTimeEditText); // ONLY TIME IS DISPLAYED
         insertDateTimeEditText = (EditText) view.findViewById(R.id.insertDateTimeEditText);
         modifyDateTimeEditText = (EditText) view.findViewById(R.id.modifyDateTimeEditText);
 
@@ -156,14 +155,8 @@ public class EditFragment extends Fragment {
             lastTradePriceEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_PRICE));
             lastTradeQuantityEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_QUANTITY));
             lastTradeDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_DATETIME));
-
-            // todo: should never update insert datetime
             insertDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.INSERT_DATETIME));
-
-            // todo: let db update the modify datetime
             modifyDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.MODIFY_DATETIME));
-
-            // todo: may need to strip off DATE for display since GUI only has space for TIME
             lastTradeDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_DATETIME));
         }
 

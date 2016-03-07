@@ -41,7 +41,7 @@ import android.widget.Toast;
 
 import com.hoiwanlouis.mystockportfolio.database.Database;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseActivity;
-import com.hoiwanlouis.mystockportfolio.fragments.LayoutFragment;
+import com.hoiwanlouis.mystockportfolio.fragments.LayoutHelper;
 
 import java.util.Locale;
 
@@ -248,7 +248,7 @@ public class PrototypeActivity extends DatabaseActivity
                     R.layout.app_item,
                     mCursor,
                     Database.fromDBColumns,
-                    LayoutFragment.toRIds,
+                    LayoutHelper.toRIds,
                     1);
 
             // refresh the ListView to the adapter

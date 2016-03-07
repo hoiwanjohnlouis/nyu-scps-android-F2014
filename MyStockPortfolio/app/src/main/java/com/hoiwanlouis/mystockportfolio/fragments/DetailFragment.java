@@ -91,12 +91,8 @@ public class DetailFragment extends Fragment {
     public void onAttach(Activity activity) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(activity);
-
-        //
-        // for callback methods implemented by caller/invoker, usually PrototypeActivity
-        //
+        // init callback to interface implementation
         listener = (DetailFragmentListener) activity;
-
     } // end method onAttach
 
 
@@ -105,12 +101,8 @@ public class DetailFragment extends Fragment {
     public void onDetach() {
         Log.i(DEBUG_TAG, "in onDetach()");
         super.onDetach();
-
-        //
-        // clean up callback methods implemented by caller/invoker, usually PrototypeActivity
-        //
+        // clean up callback methods implemented by caller/invoker
         listener = null;
-
     } // end method onDetach
 
 

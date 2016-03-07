@@ -92,14 +92,13 @@ public class PrimoActivity extends Activity
         Log.i(DEBUG_TAG, "in onIFLSymbolSelected()");
         if (isAPhoneDevice()) {
             // phone
-            displaySymbol(rowID, R.id.fragmentContainer);
+            displayTickerSymbolDetail(rowID, R.id.fragmentContainer);
         }
         else {
             // tablet
             getFragmentManager().popBackStack(); // removes top of back stack
-            displaySymbol(rowID, R.id.rightPaneContainer);
+            displayTickerSymbolDetail(rowID, R.id.rightPaneContainer);
         }
-
     } // end method onIFLSymbolSelected
 
 
@@ -150,7 +149,7 @@ public class PrimoActivity extends Activity
             inventoryFragment.updateListView();
 
             // on tablet, display contact that was just added or edited
-            displaySymbol(rowID, R.id.rightPaneContainer);
+            displayTickerSymbolDetail(rowID, R.id.rightPaneContainer);
         }
     } // end method onAFLAddSymbolCompleted
     /***************************************************************
@@ -186,7 +185,7 @@ public class PrimoActivity extends Activity
             inventoryFragment.updateListView();
 
             // on tablet, display contact that was just added or edited
-            displaySymbol(rowID, R.id.rightPaneContainer);
+            displayTickerSymbolDetail(rowID, R.id.rightPaneContainer);
         }
     } // end method onEFLEditSymbolCompleted
     /***************************************************************
@@ -271,12 +270,12 @@ public class PrimoActivity extends Activity
     /***************************************************************
      *
      *  worker function:
-     *      private void displaySymbol(long rowID, int viewID)
+     *      private void displayTickerSymbolDetail(long rowID, int viewID)
      *
      *          display a item/symbol
      *
      ***************************************************************/
-    private void displaySymbol(long rowID, int viewID) {
+    private void displayTickerSymbolDetail(long rowID, int viewID) {
         Log.i(DEBUG_TAG, "in displayItem()");
 
         // save the rowID into a bundle for the DetailsFragment
@@ -293,7 +292,7 @@ public class PrimoActivity extends Activity
         transaction.addToBackStack(null);
         // causes DetailsFragment to display
         transaction.commit();
-    } // end method displaySymbol
+    } // end method displayTickerSymbolDetail
 
 
     /***************************************************************

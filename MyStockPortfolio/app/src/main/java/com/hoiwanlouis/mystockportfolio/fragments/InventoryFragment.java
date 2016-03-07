@@ -79,7 +79,6 @@ public class InventoryFragment extends ListFragment {
     public void onAttach(Activity activity) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(activity);
-
         // init callback to interface implementation
         listener = (InventoryFragmentListener) activity;
     } // end method onAttach()
@@ -92,7 +91,6 @@ public class InventoryFragment extends ListFragment {
     public void onDetach() {
         Log.i(DEBUG_TAG, "in onDetach()");
         super.onDetach();
-
         // clean up callback for interface implementation
         listener = null;
     } // end method onDetach
@@ -158,7 +156,7 @@ public class InventoryFragment extends ListFragment {
 
 
     //
-    // called after LayoutFragment is created
+    // called after LayoutHelper is created
     //
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -184,7 +182,7 @@ public class InventoryFragment extends ListFragment {
                         R.layout.app_item,
                         null,
                         Database.fromDBColumns,
-                        LayoutFragment.toRIds,
+                        LayoutHelper.toRIds,
                         0);
         // set adapter that supplies data
         setListAdapter(cursorAdapter);
