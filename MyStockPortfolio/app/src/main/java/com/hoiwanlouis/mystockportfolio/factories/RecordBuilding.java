@@ -19,7 +19,7 @@ package com.hoiwanlouis.mystockportfolio.factories;
 
 import android.util.Log;
 
-import com.hoiwanlouis.mystockportfolio.fields.ERecordType;
+import com.hoiwanlouis.mystockportfolio.enums.ERecordType;
 
 
 public abstract class RecordBuilding {

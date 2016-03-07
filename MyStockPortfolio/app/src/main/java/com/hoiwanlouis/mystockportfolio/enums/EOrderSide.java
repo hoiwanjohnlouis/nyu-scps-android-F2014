@@ -15,11 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package com.hoiwanlouis.mystockportfolio.fields;
-
-import android.util.Log;
-
-import com.hoiwanlouis.mystockportfolio.enums.EFieldType;
+package com.hoiwanlouis.mystockportfolio.enums;
 
 /***************************************************************************
  * Program Synopsis
@@ -31,27 +27,42 @@ import com.hoiwanlouis.mystockportfolio.enums.EFieldType;
  * H. Melville    1851.01.31 Wooden whales, or whales cut in profile out of
  *
  ***************************************************************************/
-public class Symbol {
-    private final String DEBUG_TAG = this.getClass().getSimpleName();
-    private final EFieldType fieldType;
-    private String symbol;
+// from FixProtocol.org website www.fixprotocol.org
+public enum EOrderSide {
 
-    public Symbol(EFieldType fieldType, String symbol) {
-        Log.v(DEBUG_TAG, "in constructor(..)");
-        this.fieldType = fieldType;
-        this.symbol = symbol;
+    BUY ("1"),
+    SELL ("2"),
+    BUY_MINUS ("3"),
+    SELL_PLUS ("4"),
+    SELL_SHORT ("5"),
+    SELL_SHORT_EXEMPT ("6"),
+    UNDISCLOSED ("7"),
+    CROSS ("8"),
+    CROSS_SHORT ("9"),
+    CROSS_SHORT_EXEMPT ("A"),
+    AS_DEFINED ("B"),
+    OPPOSITE ("C"),
+    SUBSCRIBE ("D"),
+    REDEEM ("E"),
+    LEND_FINANCING ("F"),
+    BORROW_FINANCING ("G");
+
+    private final String orderSideValue;
+
+    EOrderSide(final String side) {
+        this.orderSideValue = side;
     }
 
-    public String getSymbol() {
-        return this.symbol;
+    public String getOrderSideValue() {
+        return orderSideValue;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(fieldType.toString());
+        sb.append(this.name());
         sb.append(":[");
-        sb.append(getSymbol());
+        sb.append(getOrderSideValue());
         sb.append("]");
         return sb.toString();
     }

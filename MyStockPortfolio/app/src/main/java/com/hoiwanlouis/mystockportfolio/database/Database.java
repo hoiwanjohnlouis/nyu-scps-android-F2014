@@ -24,10 +24,10 @@ public final class Database {
 
     private Database() {}
 
-    public static final String DATABASE_NAME = "portfolio.db";
+    public static final String DATABASE_NAME = "portfolio.sqlite3";
     public static final int DATABASE_VERSION = 1;
 
-    // todo: Company table: contains Company data
+    // todo: CompanyImpl table: contains CompanyImpl data
     public static final class Company implements BaseColumns {
         private Company() {}
         public static final String COMPANY_TABLE_NAME = "company_table";

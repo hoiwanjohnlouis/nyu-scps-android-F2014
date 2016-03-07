@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.hoiwanlouis.mystockportfolio.R;
 
-import com.hoiwanlouis.mystockportfolio.fields.ERecordType;
+import com.hoiwanlouis.mystockportfolio.enums.ERecordType;
 
 
 public class TestFactoriesActivity extends Activity {

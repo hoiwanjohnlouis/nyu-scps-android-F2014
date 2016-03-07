@@ -18,8 +18,8 @@ package com.hoiwanlouis.mystockportfolio.factories;
 
 import android.util.Log;
 
-import com.hoiwanlouis.mystockportfolio.fields.EDescription;
-import com.hoiwanlouis.mystockportfolio.fields.IRecordFactory;
+import com.hoiwanlouis.mystockportfolio.enums.EFieldType;
+import com.hoiwanlouis.mystockportfolio.interfaces.IRecordFactory;
 
 
 public class Trade extends Record {
@@ -29,16 +29,15 @@ public class Trade extends Record {
 
     // We define the type of record we want to create
     // by stating the factory to build trades
-
-    com.hoiwanlouis.mystockportfolio.fields.IRecordFactory IRecordFactory;
+    IRecordFactory recordFactory;
 
     // The trade factory is sent to this method.
     // The factory will specifies what fields to populate
 
-    public Trade(IRecordFactory IRecordFactory) {
+    public Trade(IRecordFactory recordFactory) {
         Log.v(DEBUG_TAG, "in Trade constructor");
 
-        this.IRecordFactory = IRecordFactory;
+        this.recordFactory = recordFactory;
 
     }
 
@@ -46,39 +45,15 @@ public class Trade extends Record {
         Log.v(DEBUG_TAG, "in prepare");
 
         // The fields needed were passed in the factory
+        // should use factory builder method.
 
-        company = IRecordFactory.addCompany();
-        company.setDescription(EDescription.COMPANY);
-        company.setLongName("");
-
-        symbol = IRecordFactory.addSymbol();
-        symbol.setDescription(EDescription.SYMBOL);
-        symbol.setSymbol("");
-
-        openingPrice = IRecordFactory.addOpeningPrice();
-        openingPrice.setDescription(EDescription.OPENING_PRICE);
-        openingPrice.setPrice(0.00);
-
-        previousDaysClosingPrice = IRecordFactory.addPreviousDaysClosingPrice();
-        previousDaysClosingPrice.setDescription(EDescription.PREVIOUS_DAYS_CLOSING_PRICE);
-        previousDaysClosingPrice.setPrice(0.00);
-
-        lastTradePrice = IRecordFactory.addTradePrice();
-        lastTradePrice.setDescription(EDescription.TRADE_PRICE);
-        lastTradePrice.setPrice(0.00);
-
-        lastTradeQuantity = IRecordFactory.addTradeQuantity();
-        lastTradeQuantity.setDescription(EDescription.TRADE_QUANTITY);
-        lastTradeQuantity.setQuantity(0.00);
-
-        lastTradeDateStamp = IRecordFactory.addTradeDateStamp();
-        lastTradeDateStamp.setDescription(EDescription.TRADE_DATE_STAMP);
-        lastTradeDateStamp.setDateStamp("");
-
-        lastTradeTimeStamp = IRecordFactory.addTradeTimeStamp();
-        lastTradeTimeStamp.setDescription(EDescription.TRADE_TIME_STAMP);
-        lastTradeTimeStamp.setTimeStamp("");
-
+        company = recordFactory.addCompany(EFieldType.COMPANY_NAME, "");
+        symbol = recordFactory.addSymbol(EFieldType.TICKER_SYMBOL, "");
+        openingPrice = recordFactory.addOpeningPrice(EFieldType.OPENING_PRICE, 0.0);
+        previousDaysClosingPrice = recordFactory.addPreviousDaysClosingPrice(EFieldType.PREVIOUS_DAYS_CLOSING_PRICE, 0.0);
+        lastTradePrice = recordFactory.addTradePrice(EFieldType.TRADE_PRICE, 0.0);
+        lastTradeQuantity = recordFactory.addTradeQuantity(EFieldType.TRADE_QUANTITY, 0.0);
+        lastTradeDateTimeStamp = recordFactory.addTradeDateTimeStamp(EFieldType.TRADE_DATE_TIME_STAMP, "");
 
     }
 

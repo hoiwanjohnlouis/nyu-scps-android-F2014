@@ -15,11 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package com.hoiwanlouis.mystockportfolio.fields;
-
-import android.util.Log;
-
-import com.hoiwanlouis.mystockportfolio.enums.EFieldType;
+package com.hoiwanlouis.mystockportfolio.enums;
 
 /***************************************************************************
  * Program Synopsis
@@ -31,27 +27,47 @@ import com.hoiwanlouis.mystockportfolio.enums.EFieldType;
  * H. Melville    1851.01.31 Wooden whales, or whales cut in profile out of
  *
  ***************************************************************************/
-public class Symbol {
-    private final String DEBUG_TAG = this.getClass().getSimpleName();
-    private final EFieldType fieldType;
-    private String symbol;
+// from FixProtocol.org website www.fixprotocol.org
+public enum EMsgType {
 
-    public Symbol(EFieldType fieldType, String symbol) {
-        Log.v(DEBUG_TAG, "in constructor(..)");
-        this.fieldType = fieldType;
-        this.symbol = symbol;
+    HEARTBEAT("0", "Heartbeat"),
+    TEST_REQUEST("1", "Test Request"),
+    RESEND_REQUEST("2", "Resend Request"),
+    REJECT("3", "Reject"),
+    SEQUENCE_RESET("4", "Sequence Reset"),
+    LOGOUT("5", "Logout"),
+    EXECUTION_REPORT("8", "Execution Report"),
+    ORDER_CANCEL_REJECT("9", "Order Cancel Reject"),
+    NEW_ORDER("D", "New Order - Single"),
+    ORDER_CANCEL_REQUEST("F", "Order Cancel Request"),
+    ORDER_MODIFICATION_REQUEST("G", "Order Cancel/Replace Request"),
+    ORDER_STATUS_REQUEST("H", "Order Status Request");
+
+    private final String msgTypeValue;
+    private final String msgTypeDescription;
+
+    private EMsgType(final String msgType, final String msgDescription) {
+        this.msgTypeValue = msgType;
+        this.msgTypeDescription = msgDescription;
     }
 
-    public String getSymbol() {
-        return this.symbol;
+    public String getMsgTypeValue() {
+        return msgTypeValue;
+    }
+
+    public String getMsgTypeDescription() {
+        return msgTypeDescription;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(fieldType.toString());
+        sb.append(this.name());
         sb.append(":[");
-        sb.append(getSymbol());
+        sb.append(getMsgTypeValue());
+        sb.append("]");
+        sb.append(":[");
+        sb.append(getMsgTypeDescription());
         sb.append("]");
         return sb.toString();
     }

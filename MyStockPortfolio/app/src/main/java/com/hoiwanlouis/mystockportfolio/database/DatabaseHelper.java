@@ -50,8 +50,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        // Create the Company table
-        // todo: add support in code to use the Company table
+        // Create the CompanyImpl table
+        // todo: add support in code to use the CompanyImpl table
         Log.v(DEBUG_TAG, "creating " + Company.COMPANY_TABLE_NAME + "...");
         StringBuilder sbCreateCompanyTable = new StringBuilder();
         sbCreateCompanyTable.append("CREATE TABLE ");

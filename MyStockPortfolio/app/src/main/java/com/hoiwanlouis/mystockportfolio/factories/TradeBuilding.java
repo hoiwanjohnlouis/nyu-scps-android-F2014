@@ -18,8 +18,8 @@ package com.hoiwanlouis.mystockportfolio.factories;
 
 import android.util.Log;
 
-import com.hoiwanlouis.mystockportfolio.fields.ERecordType;
-import com.hoiwanlouis.mystockportfolio.fields.IRecordFactory;
+import com.hoiwanlouis.mystockportfolio.enums.ERecordType;
+import com.hoiwanlouis.mystockportfolio.interfaces.IRecordFactory;
 
 
 public class TradeBuilding extends RecordBuilding {

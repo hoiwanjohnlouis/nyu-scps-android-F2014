@@ -16,13 +16,12 @@ package com.hoiwanlouis.mystockportfolio.factories;
 */
 
 
-import com.hoiwanlouis.mystockportfolio.fields.ERecordType;
-import com.hoiwanlouis.mystockportfolio.fields.ICompany;
-import com.hoiwanlouis.mystockportfolio.fields.IDateStamp;
-import com.hoiwanlouis.mystockportfolio.fields.IPrice;
-import com.hoiwanlouis.mystockportfolio.fields.IQuantity;
-import com.hoiwanlouis.mystockportfolio.fields.ISymbol;
-import com.hoiwanlouis.mystockportfolio.fields.ITimeStamp;
+import com.hoiwanlouis.mystockportfolio.enums.ERecordType;
+import com.hoiwanlouis.mystockportfolio.fields.Company;
+import com.hoiwanlouis.mystockportfolio.fields.DateTimeStamp;
+import com.hoiwanlouis.mystockportfolio.fields.Price;
+import com.hoiwanlouis.mystockportfolio.fields.Quantity;
+import com.hoiwanlouis.mystockportfolio.fields.Symbol;
 
 
 public abstract class Record {
@@ -35,14 +34,13 @@ public abstract class Record {
     private StringBuilder stringBuilder = new StringBuilder();
 
 
-    protected ICompany company;                 // 1
-    protected ISymbol symbol;                   // 2
-    protected IPrice openingPrice;              // 3
-    protected IPrice previousDaysClosingPrice;  // 4
-    protected IPrice lastTradePrice;            // 5
-    protected IQuantity lastTradeQuantity;      // 6
-    protected IDateStamp lastTradeDateStamp;    // 7
-    protected ITimeStamp lastTradeTimeStamp;    // 8
+    protected Company company;                 // 1
+    protected Symbol symbol;                   // 2
+    protected Price openingPrice;              // 3
+    protected Price previousDaysClosingPrice;  // 4
+    protected Price lastTradePrice;            // 5
+    protected Quantity lastTradeQuantity;      // 6
+    protected DateTimeStamp lastTradeDateTimeStamp;    // 7
 
 
     // concrete definition is by whom inherits this class
@@ -64,41 +62,23 @@ public abstract class Record {
     public String toString(){
 
         // clean up the buffer before using.
-        stringBuilder.delete(0,stringBuilder.length());
+        stringBuilder.delete(0, stringBuilder.length());
 
         stringBuilder.append(this.getRecordType());
         stringBuilder.append("\n");
-        stringBuilder.append(company.getDescription());
-        stringBuilder.append(":");
-        stringBuilder.append(company.getLongName());
+        stringBuilder.append(company.toString());
         stringBuilder.append(",\n");
-        stringBuilder.append(symbol.getDescription());
-        stringBuilder.append(":");
-        stringBuilder.append(symbol.getSymbol());
+        stringBuilder.append(symbol.toString());
         stringBuilder.append(",\n");
-        stringBuilder.append(openingPrice.getDescription());
-        stringBuilder.append(":");
-        stringBuilder.append(openingPrice.getPrice());
+        stringBuilder.append(openingPrice.toString());
         stringBuilder.append(",\n");
-        stringBuilder.append(previousDaysClosingPrice.getDescription());
-        stringBuilder.append(":");
-        stringBuilder.append(previousDaysClosingPrice.getPrice());
+        stringBuilder.append(previousDaysClosingPrice.toString());
         stringBuilder.append(",\n");
-        stringBuilder.append(lastTradePrice.getDescription());
-        stringBuilder.append(":");
-        stringBuilder.append(lastTradePrice.getPrice());
+        stringBuilder.append(lastTradePrice.toString());
         stringBuilder.append(",\n");
-        stringBuilder.append(lastTradeQuantity.getDescription());
-        stringBuilder.append(":");
-        stringBuilder.append(lastTradeQuantity.getQuantity());
+        stringBuilder.append(lastTradeQuantity.toString());
         stringBuilder.append(",\n");
-        stringBuilder.append(lastTradeDateStamp.getDescription());
-        stringBuilder.append(":");
-        stringBuilder.append(lastTradeDateStamp.getDateStamp());
-        stringBuilder.append(",\n");
-        stringBuilder.append(lastTradeTimeStamp.getDescription());
-        stringBuilder.append(":");
-        stringBuilder.append(lastTradeTimeStamp.getTimeStamp());
+        stringBuilder.append(lastTradeDateTimeStamp.toString());
 
         return stringBuilder.toString();
 

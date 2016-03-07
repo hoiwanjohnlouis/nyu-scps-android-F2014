@@ -31,19 +31,19 @@ import com.hoiwanlouis.mystockportfolio.enums.EFieldType;
  * H. Melville    1851.01.31 Wooden whales, or whales cut in profile out of
  *
  ***************************************************************************/
-public class Symbol {
+public class DateTimeStamp {
     private final String DEBUG_TAG = this.getClass().getSimpleName();
     private final EFieldType fieldType;
-    private String symbol;
+    private final String dateTimeStamp;
 
-    public Symbol(EFieldType fieldType, String symbol) {
+    public DateTimeStamp(EFieldType fieldType, String dateTimeStamp) {
         Log.v(DEBUG_TAG, "in constructor(..)");
         this.fieldType = fieldType;
-        this.symbol = symbol;
+        this.dateTimeStamp = dateTimeStamp;
     }
 
-    public String getSymbol() {
-        return this.symbol;
+    public String getDateTimeStamp() {
+        return this.dateTimeStamp;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class Symbol {
         StringBuilder sb = new StringBuilder();
         sb.append(fieldType.toString());
         sb.append(":[");
-        sb.append(getSymbol());
+        sb.append(getDateTimeStamp());
         sb.append("]");
         return sb.toString();
     }

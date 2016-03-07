@@ -15,11 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package com.hoiwanlouis.mystockportfolio.fields;
-
-import android.util.Log;
-
-import com.hoiwanlouis.mystockportfolio.enums.EFieldType;
+package com.hoiwanlouis.mystockportfolio.enums;
 
 /***************************************************************************
  * Program Synopsis
@@ -31,29 +27,27 @@ import com.hoiwanlouis.mystockportfolio.enums.EFieldType;
  * H. Melville    1851.01.31 Wooden whales, or whales cut in profile out of
  *
  ***************************************************************************/
-public class Symbol {
-    private final String DEBUG_TAG = this.getClass().getSimpleName();
-    private final EFieldType fieldType;
-    private String symbol;
+// from FixProtocol.org website www.fixprotocol.org
+public enum EFieldType {
 
-    public Symbol(EFieldType fieldType, String symbol) {
-        Log.v(DEBUG_TAG, "in constructor(..)");
-        this.fieldType = fieldType;
-        this.symbol = symbol;
-    }
+    DEFAULT_COMPANY_NAME,
+    DEFAULT_TICKER_SYMBOL,
+    DEFAULT_PRICE,
+    DEFAULT_QUANTITY,
+    DEFAULT_DATE_TIME_STAMP,
 
-    public String getSymbol() {
-        return this.symbol;
-    }
+    COMPANY_NAME,
+    TICKER_SYMBOL,
+    OPENING_PRICE,
+    PREVIOUS_DAYS_CLOSING_PRICE,
+    TRADE_PRICE,
+    TRADE_QUANTITY,
+    TRADE_DATE_TIME_STAMP;
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(fieldType.toString());
-        sb.append(":[");
-        sb.append(getSymbol());
-        sb.append("]");
+        sb.append(this.name());
         return sb.toString();
     }
-
 }
