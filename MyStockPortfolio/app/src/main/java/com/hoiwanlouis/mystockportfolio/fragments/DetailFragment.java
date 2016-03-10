@@ -159,7 +159,7 @@ public class DetailFragment extends Fragment {
         Log.i(DEBUG_TAG, "in onResume()");
         super.onResume();
         // load contact at rowID
-        new LoadItemAsyncTask().execute(rowID);
+        new LoadTickerSymbolAsyncTask().execute(rowID);
     } // end method onResume()
 
     //
@@ -264,7 +264,7 @@ public class DetailFragment extends Fragment {
     // *****************************************************
     // performs database query outside GUI thread
     // *****************************************************
-    private class LoadItemAsyncTask extends AsyncTask<Long, Object, Cursor>
+    private class LoadTickerSymbolAsyncTask extends AsyncTask<Long, Object, Cursor>
     {
         DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
 
@@ -323,7 +323,7 @@ public class DetailFragment extends Fragment {
             // close database connection
             databaseConnector.close();
         } // end method onPostExecute
-    } // end class LoadItemAsyncTask
+    } // end class LoadTickerSymbolAsyncTask
 
 
     //

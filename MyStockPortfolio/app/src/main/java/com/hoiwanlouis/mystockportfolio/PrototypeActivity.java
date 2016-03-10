@@ -40,7 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hoiwanlouis.mystockportfolio.database.Database;
-import com.hoiwanlouis.mystockportfolio.database.DatabaseActivity;
+import com.hoiwanlouis.mystockportfolio.database.DatabaseAbstractActivity;
 import com.hoiwanlouis.mystockportfolio.fragments.LayoutHelper;
 
 import java.util.Locale;
@@ -57,12 +57,11 @@ import java.util.Locale;
  * with in the forecastles of American whalers.
  *
  ***************************************************************************/
-public class PrototypeActivity extends DatabaseActivity
+public class PrototypeActivity extends DatabaseAbstractActivity
 {
 
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
-
     private ListAdapter adapter = null;
     private ListView listView = null;
     private ImageButton saveButton;
@@ -120,8 +119,7 @@ public class PrototypeActivity extends DatabaseActivity
                         // add the new symbol to db
                         //
                         ContentValues cv = new ContentValues();
-                        cv.put(Database.Portfolio.SYMBOL,
-                                tmpTicker);
+                        cv.put(Database.Portfolio.SYMBOL, tmpTicker);
 
                         rowID = mDB.insert(Database.Portfolio.PORTFOLIO_TABLE_NAME,
                                 Database.Portfolio.SYMBOL,
@@ -237,7 +235,8 @@ public class PrototypeActivity extends DatabaseActivity
         numberOfSymbols = mCursor.getCount();
         if (numberOfSymbols >= 0) {
 
-            Toast.makeText(this.getApplicationContext(), "portfolioQB.query: " + numberOfSymbols + " records",Toast.LENGTH_SHORT)
+            Toast.makeText(this.getApplicationContext(),
+                    "portfolioQB.query: " + numberOfSymbols + " records",Toast.LENGTH_SHORT)
                     .show();
 
             // Use an adapter to bind the data to a ListView where the data will be displayed
@@ -278,16 +277,12 @@ public class PrototypeActivity extends DatabaseActivity
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog,
                                                             int which) {
-
                                             // Delete the Symbol
                                             deleteSymbol(symbolId, symbolName);
-
                                             // a symbol was deleted, refresh the data in our cursor, therefore our List
                                             fillFromDatabase();
-
                                         }
                                     }).show();
-
                 }
 
             }
@@ -300,16 +295,12 @@ public class PrototypeActivity extends DatabaseActivity
 
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
                     Log.i(DEBUG_TAG, "in symbolListLongListener");
-
                     // Check for delete button
                     final long symbolId = id;
-
                     LinearLayout item = (LinearLayout) view;
                     TextView nameView = (TextView) item.findViewById(R.id.TextView_symbol);
                     final String symbolName = nameView.getText().toString();
-
                     // Use an Alert dialog to confirm delete operation
                     new AlertDialog.Builder(PrototypeActivity.this)
                             .setMessage("Delete Symbol Record for " + symbolName + "?")
@@ -317,13 +308,10 @@ public class PrototypeActivity extends DatabaseActivity
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog,
                                                             int which) {
-
                                             // Delete the Symbol
                                             deleteSymbol(symbolId, symbolName);
-
                                             // a symbol was deleted, refresh the data in our cursor, therefore our List
                                             fillFromDatabase();
-
                                         }
                                     }).show();
                     return false;
@@ -331,7 +319,6 @@ public class PrototypeActivity extends DatabaseActivity
 
             }
             );
-
         } else  {
             // Alert user that the query failed
             Toast.makeText(this.getApplicationContext(), "portfolioQB.query: failed", Toast.LENGTH_SHORT).show();
@@ -344,10 +331,9 @@ public class PrototypeActivity extends DatabaseActivity
     //
     public void deleteSymbol(Long symbolId, String symbolName) {
         Log.i(DEBUG_TAG, "deleteSymbol[" + symbolName + "], _ID[" + symbolId.toString() + "] Starts...");
-        String deleteArgs[] = { symbolId.toString() };
 
         // todo: should add triggers to handle multiple tables
-
+        String deleteArgs[] = { symbolId.toString() };
         long rc = mDB.delete(
                 Database.Portfolio.PORTFOLIO_TABLE_NAME,
                 Database.Portfolio._ID + "=?",

@@ -22,11 +22,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 
-public class DatabaseActivity extends Activity {
+public abstract class DatabaseAbstractActivity extends Activity {
 
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
-
     protected DatabaseHelper mDatabaseHelper = null;
     protected Cursor mCursor = null;
     protected SQLiteDatabase mDB = null;
@@ -51,13 +50,11 @@ public class DatabaseActivity extends Activity {
     protected void onDestroy() {
         Log.v(DEBUG_TAG, "in onDestroy");
         super.onDestroy();
-
         // close cursor
         if(mDB != null)
         {
             mDB.close();
         }
-
         // close the database
         if(mDatabaseHelper != null)
         {
@@ -69,31 +66,26 @@ public class DatabaseActivity extends Activity {
     // open a database connection
     public void open() {
         Log.v(DEBUG_TAG, "in open");
-
         // open the database for update
         if(mDatabaseHelper != null) {
             mDB = mDatabaseHelper.getWritableDatabase();
         }
-
     }
 
 
     // close a database connection
     public void close() {
         Log.v(DEBUG_TAG, "in close");
-
         // close cursor
         if(mDB != null)
         {
             mDB.close();
         }
-
         // close the database
         if(mDatabaseHelper != null)
         {
             mDatabaseHelper.close();
         }
-
     }
 
 }

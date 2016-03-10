@@ -122,7 +122,7 @@ public class EditFragment extends Fragment {
         setHasOptionsMenu(true);
 
         // Inflate the GUI and get references to EditText(s)
-        View view = inflater.inflate(R.layout.fragment_add_edit, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit, container, false);
 
         // get the EditText data, must match the detail layout
         symbolEditText = (EditText) view.findViewById(R.id.symbolEditText);

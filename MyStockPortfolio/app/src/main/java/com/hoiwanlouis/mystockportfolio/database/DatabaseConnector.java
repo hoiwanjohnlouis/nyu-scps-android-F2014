@@ -185,14 +185,13 @@ public class DatabaseConnector {
 
 
     // **************************************************************
-    //  ported from PrototypeActivity
+    // delete the specified ticker symbol using database _ID field
     // **************************************************************
     public void deleteTickerSymbol(Long id, String symbol) {
         Log.i(DEBUG_TAG, "deleteTickerSymbol[" + symbol + "], _ID[" + id.toString() + "] Starts...");
+
         String deleteArgs[] = { id.toString() };
-
         // todo: should add triggers to handle multiple tables
-
         long rc = mSQL.delete(
                 Database.Portfolio.PORTFOLIO_TABLE_NAME,
                 Database.Portfolio._ID + "=?",

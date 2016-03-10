@@ -17,11 +17,16 @@
  ***************************************************************************/
 package com.hoiwanlouis.mystockportfolio;
 
-import android.app.Activity;
+// import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import com.hoiwanlouis.mystockportfolio.database.DatabaseAbstractActivity;
 import com.hoiwanlouis.mystockportfolio.fragments.AddFragment;
 import com.hoiwanlouis.mystockportfolio.fragments.EditFragment;
 import com.hoiwanlouis.mystockportfolio.fragments.DetailFragment;
@@ -39,7 +44,7 @@ import com.hoiwanlouis.mystockportfolio.fragments.InventoryFragment;
  * the small dark slabs of the noble South Sea war-wood, are frequently met
  * with in the forecastles of American whalers.
  ***************************************************************************/
-public class PrimoActivity extends Activity
+public class PrimoActivity  extends DatabaseAbstractActivity
         implements  InventoryFragment.InventoryFragmentListener,
                     AddFragment.AddFragmentListener,
                     EditFragment.EditFragmentListener,
@@ -47,16 +52,13 @@ public class PrimoActivity extends Activity
 
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
-
     // keys for storing row ID in Bundle passed to a fragment
     public static final String ROW_ID = "row_id";
-
     // displays item/symbol list
     InventoryFragment inventoryFragment;
 
-
     //
-    // display InventoryFragment when PrototypeActivity first loads
+    // display InventoryFragment when Activity first loads
     //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,16 +87,70 @@ public class PrimoActivity extends Activity
     } // end method onCreate()
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        Log.i(DEBUG_TAG, "onCreateOptionsMenu Starting...");
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        Log.i(DEBUG_TAG, "onCreateOptionsMenu Ends");
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Log.i(DEBUG_TAG, "onOptionsItemSelected Starting...");
+
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        boolean selected;
+        int id = item.getItemId();
+        if (id == R.id.main_activity_settings_id)
+        {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            selected = true;
+        }
+        else
+        if (id == R.id.main_activity_help_id) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.main_activity_help_title);
+            builder.setMessage(R.string.main_activity_help_data);
+            AlertDialog dialog=builder.create();
+            dialog.show();
+            selected = true;
+        }
+        else
+        if (id == R.id.main_activity_about_id) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.main_activity_about_title);
+            builder.setMessage(R.string.main_activity_about_data);
+            AlertDialog dialog=builder.create();
+            dialog.show();
+            selected = true;
+        }
+        else {
+            selected = super.onOptionsItemSelected(item);
+        }
+
+        Log.i(DEBUG_TAG, "onOptionsItemSelected Ends: " + selected);
+        return selected;
+    }
+
+
     //
-    // called when PrototypeActivity resumes
+    // called when Activity resumes
     //
     @Override
     protected void onResume() {
         Log.i(DEBUG_TAG, "in onResume()");
         super.onResume();
 
-        // if this is a tablet, then inventoryFragment is null,
-        // so get reference from FragmentManager
+        // if this is a tablet, then inventoryFragment is not set yet. i.e. it is null,
+        // so get reference from FragmentManager and set it.
         if (isATabletDevice()) {
             inventoryFragment =
                     (InventoryFragment) getFragmentManager().findFragmentById(R.id.inventoryFragment);

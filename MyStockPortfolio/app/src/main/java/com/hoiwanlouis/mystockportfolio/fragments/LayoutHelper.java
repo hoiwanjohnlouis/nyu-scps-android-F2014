@@ -33,6 +33,8 @@ import com.hoiwanlouis.mystockportfolio.R;
  ***************************************************************************/
 public final class LayoutHelper {
 
+    private LayoutHelper() {}
+
     public static final int toRIds[] = {
             R.id.TextView_symbol,
             R.id.TextView_opening_price,

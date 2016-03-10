@@ -122,7 +122,7 @@ public class AddFragment extends Fragment {
         setHasOptionsMenu(true);
 
         // Inflate the GUI and get references to EditText(s)
-        View view = inflater.inflate(R.layout.fragment_add_edit, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit, container, false);
 
         // get the EditText data, must match the detail layout
         symbolEditText = (EditText) view.findViewById(R.id.symbolEditText);
@@ -138,10 +138,8 @@ public class AddFragment extends Fragment {
         insertDateTimeEditText = (EditText) view.findViewById(R.id.insertDateTimeEditText);
         modifyDateTimeEditText = (EditText) view.findViewById(R.id.modifyDateTimeEditText);
 
-
         // can be null if creating new contact.
         infoBundle = getArguments();
-
         if (infoBundle != null) {
             rowID = infoBundle.getLong(PrimoActivity.ROW_ID);
             symbolEditText.setText(infoBundle.getString(Database.Portfolio.SYMBOL));
@@ -158,7 +156,6 @@ public class AddFragment extends Fragment {
             modifyDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.MODIFY_DATETIME));
         }
 
-
         // set Save Contact Button's event listener
         saveButton = (Button) view.findViewById(R.id.saveButton);
         // saveButton.setOnClickListener = (saveButtonClicked);
@@ -173,7 +170,7 @@ public class AddFragment extends Fragment {
                                 @Override
                                 protected Object doInBackground(Object... params) {
                                     // save contact to the database
-                                    saveInformation();
+                                    saveInformation(infoBundle);
                                     return null;
                                 }
 
@@ -239,13 +236,13 @@ public class AddFragment extends Fragment {
     //
     // saves information to the database
     //
-    private void saveInformation() {
+    private void saveInformation(Bundle saveBundle) {
         Log.i(DEBUG_TAG, "in saveInformation()");
 
         // get DatabaseConnector to interact with the SQLite database
         DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
 
-        if (infoBundle == null) {
+        if (saveBundle == null) {
             // insert the contact information into the database
             rowID = databaseConnector.addTickerSymbol(
                     symbolEditText.getText().toString()
