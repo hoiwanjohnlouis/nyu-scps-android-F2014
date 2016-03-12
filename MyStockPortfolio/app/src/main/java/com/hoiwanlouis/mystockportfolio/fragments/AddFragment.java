@@ -223,7 +223,7 @@ public class AddFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     //
-    // callback methods implemented by caller/invoker, usually PrototypeActivity
+    // callback methods implemented by caller/invoker, usually Prototype
     //
     public interface AddFragmentListener {
 

@@ -10,26 +10,21 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
         <activity
-            android:name=".PrototypeActivity"
-            android:label="@string/app_name" >
+            android:name=".PrimoActivity"
+            android:label="@string/title_activity_primo" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".SettingsActivity"
             android:label="@string/main_activity_settings_title" >
         </activity>
-        <activity android:name=".database.DatabaseAbstractActivity" />
         <activity android:name=".factories.TestFactoriesActivity" />
         <activity android:name=".observers.TestPriceObserver" />
-        <activity
-            android:name=".PrimoActivity"
-            android:label="@string/title_activity_primo" >
-        </activity>
     </application>
 
 </manifest>

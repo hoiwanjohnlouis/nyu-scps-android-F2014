@@ -49,7 +49,7 @@ public class DetailFragment extends Fragment {
     private final String DEBUG_TAG = this.getClass().getSimpleName();
 
     //
-    // for callback methods implemented by caller/invoker, usually PrototypeActivity
+    // for callback methods implemented by caller/invoker, usually Prototype
     //
     private DetailFragmentListener listener;
 
@@ -237,7 +237,7 @@ public class DetailFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     //
-    // callback methods implemented by caller/invoker, usually PrototypeActivity
+    // callback methods implemented by caller/invoker, usually Prototype
     //
     public interface DetailFragmentListener {
 
@@ -269,12 +269,12 @@ public class DetailFragment extends Fragment {
         DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
 
         //
-        // open database & get Cursor representing specified contact's data
+        // openForUpdate database & get Cursor representing specified contact's data
         //
         @Override
         protected Cursor doInBackground(Long... params) {
             Log.i(DEBUG_TAG, "in doInBackground()");
-            databaseConnector.open();
+            databaseConnector.openForUpdate();
 
             return databaseConnector.getTickerSymbolUsingId(params[0]);
         } // end method doInBackground()

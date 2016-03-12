@@ -17,20 +17,34 @@
  ***************************************************************************/
 package com.hoiwanlouis.mystockportfolio;
 
-// import android.app.Activity;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.hoiwanlouis.mystockportfolio.database.DatabaseAbstractActivity;
+import com.hoiwanlouis.mystockportfolio.database.Database;
+import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
 import com.hoiwanlouis.mystockportfolio.fragments.AddFragment;
 import com.hoiwanlouis.mystockportfolio.fragments.EditFragment;
 import com.hoiwanlouis.mystockportfolio.fragments.DetailFragment;
 import com.hoiwanlouis.mystockportfolio.fragments.InventoryFragment;
+import com.hoiwanlouis.mystockportfolio.fragments.LayoutHelper;
 
 
 /***************************************************************************
@@ -44,7 +58,7 @@ import com.hoiwanlouis.mystockportfolio.fragments.InventoryFragment;
  * the small dark slabs of the noble South Sea war-wood, are frequently met
  * with in the forecastles of American whalers.
  ***************************************************************************/
-public class PrimoActivity  extends DatabaseAbstractActivity
+public class PrimoActivity  extends Activity
         implements  InventoryFragment.InventoryFragmentListener,
                     AddFragment.AddFragmentListener,
                     EditFragment.EditFragmentListener,
@@ -54,8 +68,9 @@ public class PrimoActivity  extends DatabaseAbstractActivity
     private final String DEBUG_TAG = this.getClass().getSimpleName();
     // keys for storing row ID in Bundle passed to a fragment
     public static final String ROW_ID = "row_id";
+
     // displays item/symbol list
-    InventoryFragment inventoryFragment;
+    private InventoryFragment inventoryFragment;
 
     //
     // display InventoryFragment when Activity first loads
@@ -66,13 +81,14 @@ public class PrimoActivity  extends DatabaseAbstractActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_primo);
 
+
         // return if Activity is being restored, no need to recreate GUI
         if (savedInstanceState != null) {
             return;
         }
 
         // check whether layout contains fragmentContainer (phone layout);
-        // inventoryFragment is always displayed
+        // inventoryFragment is always displayed, tablet devices will be initialized later in "onResume"
         if (isAPhoneDevice()) {
             // create ContactListFragment
             inventoryFragment = new InventoryFragment();
@@ -431,5 +447,9 @@ public class PrimoActivity  extends DatabaseAbstractActivity
         // causes EditFragment to display
         transaction.commit();
     } // end method showEditFragment
+
+
+///////////////////////////////////////////////////////////////////////////////
+
 
 }

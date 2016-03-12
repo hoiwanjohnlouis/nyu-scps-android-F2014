@@ -100,7 +100,7 @@
         k3=last trade size
         d1=last trade date
         t1=last trade time
-    e.g. the tags for name(n), symbol(s), the latest value(l1), open(o), and the close value of the last trading day(p)
+    e.g. the tags for name(n), symbol(s), the latest value(l1), openForUpdate(o), and the close value of the last trading day(p)
     http://download.finance.yahoo.com/d/quotes.csv?s=GOOG,IBM&f=nsl1op
     -->
     <string name="defaultTickerFields">&amp;f=n0s0o0p0a0a5b0b6l1k3d1t1</string>

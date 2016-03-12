@@ -28,36 +28,34 @@ public class DatabaseConnector {
     private final String DEBUG_TAG = this.getClass().getSimpleName();
 
     // for interacting with the database
-    private SQLiteDatabase mSQL;
-
+    protected SQLiteDatabase sqLiteDatabase;
     // creates the database
-    private DatabaseHelper mDBHelper;
-
+    protected DatabaseCreator databaseCreator;
 
     // public constructor for DatabaseConnector
     public DatabaseConnector(Context context) {
         Log.i(DEBUG_TAG, "in DatabaseConnector()");
 
-        // create a new DatabaseHelper
-        mDBHelper = new DatabaseHelper(
+        // create a new DatabaseCreator
+        databaseCreator = new DatabaseCreator(
                 context,
                 Database.DATABASE_NAME,
                 null,   // cursor factory
                 Database.DATABASE_VERSION);
-
     } // end constructor DatabaseConnector
 
 
     //
-    // open the database connection
+    // openForUpdate the database connection
     //
-    public void open() throws SQLException {
-        Log.i(DEBUG_TAG, "in open()");
+    public void openForUpdate() throws SQLException {
+        Log.i(DEBUG_TAG, "in openForUpdate()");
 
-        // create or open a mDB for reading/writing
-        mSQL = mDBHelper.getWritableDatabase();
-
-    } // end method open()
+        // create or openForUpdate a mDB for reading/writing
+        if(databaseCreator != null) {
+            sqLiteDatabase = databaseCreator.getWritableDatabase();
+        }
+    } // end method openForUpdate()
 
 
     // **************************************************************
@@ -66,32 +64,33 @@ public class DatabaseConnector {
     public void close() {
         Log.i(DEBUG_TAG, "in close()");
 
-        if (mSQL != null) {
-            // close the database connection
-            mSQL.close();
+        // close the database connection
+        if (sqLiteDatabase != null) {
+            sqLiteDatabase.close();
         }
 
+        // todo: may not be necessary to close the databaseCreator. if problems remove this close.
+        if(databaseCreator != null) {
+            databaseCreator.close();
+        }
     } // end method close()
 
 
     // **************************************************************
     // inserts a new item/symbol row into the database
     // **************************************************************
-    public long addTickerSymbol(
-            String tickerSymbol             // 1
-    ) {
+    public long addTickerSymbol( String tickerSymbol ) {
         Log.i(DEBUG_TAG, "in addTickerSymbol()");
 
         // create a content object
         ContentValues cv = new ContentValues();
         cv.put(Database.Portfolio.SYMBOL,                       tickerSymbol);  // 1
 
-        // open the database
-        open();
-        long rowID = mSQL.insert(Database.Portfolio.PORTFOLIO_TABLE_NAME, Database.Portfolio.SYMBOL, cv);
-        Log.i(DEBUG_TAG, "mSQL.insert: Symbol[" + tickerSymbol + "], portfolio rowID[" + rowID + "]");
-        // close the database, always free resources when done. this is not batch processing.
-        close();
+        // openForUpdate the database
+        openForUpdate();
+        long rowID = sqLiteDatabase.insert(Database.Portfolio.PORTFOLIO_TABLE_NAME, Database.Portfolio.SYMBOL, cv);
+        Log.i(DEBUG_TAG, "sqLiteDatabase.insert: Symbol[" + tickerSymbol + "], portfolio rowID[" + rowID + "]");
+        close();  // always free resources when done. this is not batch processing.
 
         return rowID;
     } // end method addTickerSymbol
@@ -127,12 +126,17 @@ public class DatabaseConnector {
         cv.put(Database.Portfolio.ASK_SIZE,                     askSize);
         cv.put(Database.Portfolio.LAST_TRADE_PRICE,             tradePrice);
         cv.put(Database.Portfolio.LAST_TRADE_QUANTITY,          tradeQuantity); // 10
-        cv.put(Database.Portfolio.LAST_TRADE_DATETIME,          tradeDateTime);
+        cv.put(Database.Portfolio.LAST_TRADE_DATETIME, tradeDateTime);
 
-        open(); // open the database
-        long rowID = mSQL.update(Database.Portfolio.PORTFOLIO_TABLE_NAME, cv, "_id=" + id, null);
-        Log.i(DEBUG_TAG, "mSQL.update: Symbol[" + tickerSymbol + "], portfolio rowID[" + rowID + "], id[" + id + "]");
-        close(); // close the database
+        openForUpdate(); // openForUpdate the database
+        long rowID = sqLiteDatabase.update(
+                Database.Portfolio.PORTFOLIO_TABLE_NAME,
+                cv,
+                "_id=" + id,
+                null
+        );
+        Log.i(DEBUG_TAG, "sqLiteDatabase.update: Symbol[" + tickerSymbol + "], portfolio rowID[" + rowID + "], id[" + id + "]");
+        close();  // always free resources when done. this is not batch processing.
 
     } // end method updateTickerSymbol
 
@@ -143,7 +147,7 @@ public class DatabaseConnector {
     public Cursor getAllTickerSymbols() {
         Log.i(DEBUG_TAG, "in getAllTickerSymbols()");
 
-        return mSQL.query(
+        return sqLiteDatabase.query(
                 Database.Portfolio.PORTFOLIO_TABLE_NAME,
                 Database.asColumnsToReturn,
                 null, null, null, null,
@@ -157,7 +161,7 @@ public class DatabaseConnector {
     public Cursor getTickerSymbolUsingId(long id) {
         Log.i(DEBUG_TAG, "in getTickerSymbolUsingId()");
 
-        return mSQL.query(
+        return sqLiteDatabase.query(
                 Database.Portfolio.PORTFOLIO_TABLE_NAME,
                 Database.asColumnsToReturn,
                 "_id=" + id, null, null, null,
@@ -176,7 +180,7 @@ public class DatabaseConnector {
         tmpSelection.append(Database.Portfolio.SYMBOL);
         tmpSelection.append("=");
         tmpSelection.append(searchSymbol);
-        return mSQL.query(
+        return sqLiteDatabase.query(
                 Database.Portfolio.PORTFOLIO_TABLE_NAME,
                 Database.asColumnsToReturn,
                 tmpSelection.toString(), null, null, null,
@@ -192,11 +196,15 @@ public class DatabaseConnector {
 
         String deleteArgs[] = { id.toString() };
         // todo: should add triggers to handle multiple tables
-        long rc = mSQL.delete(
+
+        // openForUpdate the database
+        openForUpdate();
+        long rc = sqLiteDatabase.delete(
                 Database.Portfolio.PORTFOLIO_TABLE_NAME,
                 Database.Portfolio._ID + "=?",
                 deleteArgs
         );
+        close();  // always free resources when done. this is not batch processing.
 
         Log.i(DEBUG_TAG, "deleteTickerSymbol[" + symbol + "], _ID[" + id.toString() + "], delete_code[" + rc + "] Ends");
     }

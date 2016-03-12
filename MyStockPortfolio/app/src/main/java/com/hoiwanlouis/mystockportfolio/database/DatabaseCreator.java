@@ -28,16 +28,14 @@ import com.hoiwanlouis.mystockportfolio.database.Database.Exchange;
 import com.hoiwanlouis.mystockportfolio.database.Database.Catalogue;
 import com.hoiwanlouis.mystockportfolio.database.Database.Portfolio;
 
-
-
 //FYI: This is the same setup as PetTracker
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseCreator extends SQLiteOpenHelper {
 
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
 
 
-    public DatabaseHelper(
+    public DatabaseCreator(
             Context context,
             String databaseName,
             CursorFactory cursorFactory,
