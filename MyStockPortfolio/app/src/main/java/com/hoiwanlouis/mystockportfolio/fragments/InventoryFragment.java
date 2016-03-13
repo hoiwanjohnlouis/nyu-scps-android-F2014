@@ -20,10 +20,8 @@ package com.hoiwanlouis.mystockportfolio.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListFragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -38,17 +36,13 @@ import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hoiwanlouis.mystockportfolio.R;
 import com.hoiwanlouis.mystockportfolio.SettingsActivity;
-import com.hoiwanlouis.mystockportfolio.database.Database;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
+import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
 
 
 /**
@@ -135,18 +129,18 @@ public class InventoryFragment extends ListFragment {
         // setup Save Button listener, etc
         saveButton = (ImageButton) view.findViewById(R.id.saveButton);
         // saveButton.setOnClickListener(saveButtonOnClickListener);
-        saveButton.setOnClickListener( new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
+                                          @Override
+                                          public void onClick(View v) {
 
-                final EditText tickerSymbol = (EditText) v.findViewById(R.id.inputSymbolEditText);
-                // get DatabaseConnector to interact with the SQLite database
-                DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
-                // insert the contact information into the database
-                long rowID = databaseConnector.addTickerSymbol(tickerSymbol.getText().toString());
-                // reset form
-                tickerSymbol.setText(null);
+                                              final EditText tickerSymbol = (EditText) v.findViewById(R.id.inputSymbolEditText);
+                                              // get DatabaseConnector to interact with the SQLite database
+                                              DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
+                                              // insert the contact information into the database
+                                              long rowID = databaseConnector.addTickerSymbol(tickerSymbol.getText().toString());
+                                              // reset form
+                                              tickerSymbol.setText(null);
             }
 
         }
@@ -157,7 +151,7 @@ public class InventoryFragment extends ListFragment {
 
 
     //
-    // called after LayoutHelper is created
+    // called after Gui2Database is created
     //
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -168,7 +162,7 @@ public class InventoryFragment extends ListFragment {
         setRetainInstance(true);
         // this fragment has menu items to display
         setHasOptionsMenu(true);
-        // set text to display when there are no contacts
+        // set text to display when there is no data
         setEmptyText(getResources().getString(R.string.fragment_no_items));
 
         // get ListView reference and configure it (the ListView)
@@ -182,8 +176,8 @@ public class InventoryFragment extends ListFragment {
                         getActivity(),
                         R.layout.app_item,
                         null,
-                        Database.fromDBColumns,
-                        LayoutHelper.toRIds,
+                        Gui2Database.fromDBColumns,
+                        Gui2Database.toRIds,
                         0);
         // set adapter that supplies data
         setListAdapter(cursorAdapter);
@@ -347,147 +341,5 @@ public class InventoryFragment extends ListFragment {
         } // end method onPostExecute()
 
     } // end inner class GetContactsTask()
-
-    //
-    // from PortfolioListActivity
-    //
-    public void fillFromDatabase() {
-        Log.i(DEBUG_TAG, "fillFromDatabase Starts...");
-
-        // get DatabaseConnector to interact with the SQLite database
-        DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
-        Cursor mCursor = null;
-
-        ListAdapter adapter = null;
-        ListView listView = null;
-        ImageButton saveButton;
-
-        int numberOfSymbols;   // keep track of how records were extracted from SQLite.
-        SQLiteQueryBuilder portfolioQB = new SQLiteQueryBuilder();
-
-        // SQL Query
-        portfolioQB.setTables(Database.Portfolio.PORTFOLIO_TABLE_NAME);
-
-        // refresh cursor with current data
-        mCursor = portfolioQB.query(
-                databaseConnector.,
-                Database.asColumnsToReturn,
-                null, null, null, null,
-                Database.Portfolio.DEFAULT_SORT_ORDER,
-                null);
-
-        mCursor.moveToFirst();
-
-        // make some toasties
-        numberOfSymbols = mCursor.getCount();
-        if (numberOfSymbols >= 0) {
-
-            Toast.makeText(this.getActivity(),
-                    "portfolioQB.query: " + numberOfSymbols + " records", Toast.LENGTH_SHORT)
-                    .show();
-
-            // Use an adapter to bind the data to a ListView where the data will be displayed
-
-            // refresh the adapter with updated cursor information
-            adapter = new SimpleCursorAdapter(
-                    getActivity(),
-                    R.layout.app_item,
-                    mCursor,
-                    Database.fromDBColumns,
-                    LayoutHelper.toRIds,
-                    1);
-
-            // refresh the ListView to the adapter
-            listView = (ListView) findViewById(R.id.symbolList);
-            listView.setAdapter(adapter);
-
-            // normal click will display company info, currently doing deletes
-            // listView.setOnItemClickListener(symbolListListener);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                                                @Override
-                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                                                    Log.i(DEBUG_TAG, "in symbolListListener");
-
-                                                    // Check for delete button
-                                                    final long symbolId = id;
-
-                                                    LinearLayout item = (LinearLayout) view;
-                                                    TextView nameView = (TextView) item.findViewById(R.id.TextView_symbol);
-                                                    final String symbolName = nameView.getText().toString();
-
-                                                    // Use an Alert dialog to confirm delete operation
-                                                    new AlertDialog.Builder(Prototype.this)
-                                                            .setMessage("Delete Symbol Record for " + symbolName + "?")
-                                                            .setPositiveButton("Delete",
-                                                                    new DialogInterface.OnClickListener() {
-                                                                        public void onClick(DialogInterface dialog,
-                                                                                            int which) {
-                                                                            // Delete the Symbol
-                                                                            deleteSymbol(symbolId, symbolName);
-                                                                            // a symbol was deleted, refresh the data in our cursor, therefore our List
-                                                                            fillFromDatabase();
-                                                                        }
-                                                                    }).show();
-                                                }
-
-                                            }
-            );
-
-            // todo: replace delete symbol with edit option
-            // long click will allow edit symbol
-            // listView.setOnItemLongClickListener(symbolListLongListener);
-            listView.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
-
-                                                     @Override
-                                                     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                                                         Log.i(DEBUG_TAG, "in symbolListLongListener");
-                                                         // Check for delete button
-                                                         final long symbolId = id;
-                                                         LinearLayout item = (LinearLayout) view;
-                                                         TextView nameView = (TextView) item.findViewById(R.id.TextView_symbol);
-                                                         final String symbolName = nameView.getText().toString();
-                                                         // Use an Alert dialog to confirm delete operation
-                                                         new AlertDialog.Builder(Prototype.this)
-                                                                 .setMessage("Delete Symbol Record for " + symbolName + "?")
-                                                                 .setPositiveButton("Delete",
-                                                                         new DialogInterface.OnClickListener() {
-                                                                             public void onClick(DialogInterface dialog,
-                                                                                                 int which) {
-                                                                                 // Delete the Symbol
-                                                                                 deleteSymbol(symbolId, symbolName);
-                                                                                 // a symbol was deleted, refresh the data in our cursor, therefore our List
-                                                                                 fillFromDatabase();
-                                                                             }
-                                                                         }).show();
-                                                         return false;
-                                                     }
-
-                                                 }
-            );
-        } else  {
-            // Alert user that the query failed
-            Toast.makeText(this.getActivity(), "portfolioQB.query: failed", Toast.LENGTH_SHORT).show();
-        }
-
-        Log.i(DEBUG_TAG, "fillFromDatabase, iNumberOfSymbols[" + numberOfSymbols + "] Ends");
-    }
-
-
-    //
-    public void deleteSymbol(Long symbolId, String symbolName) {
-        Log.i(DEBUG_TAG, "deleteSymbol[" + symbolName + "], _ID[" + symbolId.toString() + "] Starts...");
-
-        // todo: should add triggers to handle multiple tables
-        String deleteArgs[] = { symbolId.toString() };
-        long rc = mDB.delete(
-                Database.Portfolio.PORTFOLIO_TABLE_NAME,
-                Database.Portfolio._ID + "=?",
-                deleteArgs
-        );
-
-        Log.i(DEBUG_TAG, "deleteSymbol[" + symbolName + "], _ID[" + symbolId.toString() + "], delete_code[" + rc + "] Ends");
-    }
 
 }

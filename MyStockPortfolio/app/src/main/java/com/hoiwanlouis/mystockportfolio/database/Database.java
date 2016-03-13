@@ -27,7 +27,7 @@ public final class Database {
     public static final String DATABASE_NAME = "portfolio.sqlite3";
     public static final int DATABASE_VERSION = 1;
 
-    // todo: CompanyImpl table: contains CompanyImpl data
+    // todo: Company table: contains Company data
     public static final class Company implements BaseColumns {
         private Company() {}
         public static final String COMPANY_TABLE_NAME = "company_table";
@@ -83,26 +83,5 @@ public final class Database {
         public static final String DEFAULT_SORT_ORDER = SYMBOL + " ASC";
     }
 
-
-    public static final String asColumnsToReturn[] = {
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio._ID,
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.SYMBOL,
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.OPENING_PRICE,
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.PREVIOUS_CLOSING_PRICE,
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.BID_PRICE,
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.ASK_PRICE,
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.LAST_TRADE_PRICE,
-            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.LAST_TRADE_DATETIME
-    };
-
-    public static final String fromDBColumns[] =  {
-            Database.Portfolio.SYMBOL,
-            Database.Portfolio.OPENING_PRICE,
-            Database.Portfolio.PREVIOUS_CLOSING_PRICE,
-            Database.Portfolio.BID_PRICE,
-            Database.Portfolio.ASK_PRICE,
-            Database.Portfolio.LAST_TRADE_PRICE,
-            Database.Portfolio.LAST_TRADE_DATETIME
-    };
 
 }

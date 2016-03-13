@@ -1,8 +1,111 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/inventoryFragmentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hoiwanlouis.mystockportfolio.fragments.InventoryFragment">
+    android:paddingLeft="@dimen/app_horizontal_margin"
+    android:paddingRight="@dimen/app_horizontal_margin"
+    android:paddingTop="@dimen/app_horizontal_margin"
+    android:paddingBottom="@dimen/app_horizontal_margin"
+    tools:context=".InventoryFragment"
+    android:columnCount="1"
+    >
+
+    <LinearLayout
+        android:id="@+id/linearInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill_horizontal"
+        android:orientation="horizontal"
+        >
+
+        <EditText
+            android:id="@+id/inputSymbolEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:hint="@string/inputSymbolPrompt"
+            android:imeOptions="actionDone"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            />
+
+        <ImageButton
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/saveItem"
+            android:src="@android:drawable/ic_menu_save"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            />
+
+    </LinearLayout>
 
 
-</FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/heading2_layout"
+        style="@style/heading2_layout"
+        android:background="@android:color/darker_gray">
+
+        <TextView
+            android:id="@+id/heading2_symbol_title"
+            android:text="@string/heading2_symbol_title"
+            style="@style/heading2_field"
+            />
+
+        <TextView
+            android:id="@+id/heading2_opening_price_title"
+            android:text="@string/heading2_opening_price_title"
+            style="@style/heading2_field"
+            />
+
+        <TextView
+            android:id="@+id/heading2_previous_closing_price_title"
+            android:text="@string/heading2_previous_closing_price_title"
+            style="@style/heading2_field"
+            />
+
+        <TextView
+            android:id="@+id/heading2_last_trade_price_title"
+            android:text="@string/heading2_last_trade_price_title"
+            style="@style/heading2_field"
+            />
+
+        <TextView
+            android:id="@+id/heading2_last_trade_time_title"
+            android:text="@string/heading2_last_trade_time_title"
+            style="@style/heading2_field"
+            />
+
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/symbolList"
+        style="@style/symbolList"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/copyright_layout"
+        style="@style/copyright_layout"
+        android:background="@android:color/darker_gray">
+
+        <TextView
+            android:id="@+id/copyright_textView"
+            android:text="@string/copyright_textView"
+            style="@style/copyright_textView"
+            />
+
+    </LinearLayout>
+
+    <!-- android bug fix -->
+    <TextView android:id="@android:id/empty"
+        android:gravity="center"
+        android:layout_width="1px"
+        android:layout_height="1px"
+        />
+
+
+</GridLayout>

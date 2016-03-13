@@ -41,7 +41,7 @@ import android.widget.Toast;
 
 import com.hoiwanlouis.mystockportfolio.database.Database;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseAbstractActivity;
-import com.hoiwanlouis.mystockportfolio.fragments.LayoutHelper;
+import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
 
 import java.util.Locale;
 

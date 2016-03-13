@@ -23,6 +23,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
+
 public class DatabaseConnector {
 
     private final String DEBUG_TAG = this.getClass().getSimpleName();
@@ -149,7 +151,7 @@ public class DatabaseConnector {
 
         return sqLiteDatabase.query(
                 Database.Portfolio.PORTFOLIO_TABLE_NAME,
-                Database.asColumnsToReturn,
+                Gui2Database.asColumnsToReturn,
                 null, null, null, null,
                 Database.Portfolio.DEFAULT_SORT_ORDER);
     } // end method getAllContacts
@@ -163,7 +165,7 @@ public class DatabaseConnector {
 
         return sqLiteDatabase.query(
                 Database.Portfolio.PORTFOLIO_TABLE_NAME,
-                Database.asColumnsToReturn,
+                Gui2Database.asColumnsToReturn,
                 "_id=" + id, null, null, null,
                 null);
     } // end method getTickerSymbolUsingId
@@ -182,7 +184,7 @@ public class DatabaseConnector {
         tmpSelection.append(searchSymbol);
         return sqLiteDatabase.query(
                 Database.Portfolio.PORTFOLIO_TABLE_NAME,
-                Database.asColumnsToReturn,
+                Gui2Database.asColumnsToReturn,
                 tmpSelection.toString(), null, null, null,
                 null);
     } // end method getTickerSymbolUsingString

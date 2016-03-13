@@ -15,9 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package com.hoiwanlouis.mystockportfolio.fragments;
+package com.hoiwanlouis.mystockportfolio.fields;
 
 import com.hoiwanlouis.mystockportfolio.R;
+import com.hoiwanlouis.mystockportfolio.database.Database;
 
 /***************************************************************************
  * Program Synopsis
@@ -31,9 +32,11 @@ import com.hoiwanlouis.mystockportfolio.R;
  * with in the forecastles of American whalers. 
  *
  ***************************************************************************/
-public final class LayoutHelper {
+public final class Gui2Database {
 
-    private LayoutHelper() {}
+    // todo: should make wrapper methods to map the fields instead of hard coding. need to think about it.
+
+    private Gui2Database() {}
 
     public static final int toRIds[] = {
             R.id.TextView_symbol,
@@ -57,6 +60,27 @@ public final class LayoutHelper {
         public static final String defaultTradePrice = "" + R.string.default_trade_price;
         public static final String defaultTradeQuantity = "" + R.string.default_trade_quantity;
     }
+
+    public static final String asColumnsToReturn[] = {
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio._ID,
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.SYMBOL,
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.OPENING_PRICE,
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.PREVIOUS_CLOSING_PRICE,
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.BID_PRICE,
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.ASK_PRICE,
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.LAST_TRADE_PRICE,
+            Database.Portfolio.PORTFOLIO_TABLE_NAME + "." + Database.Portfolio.LAST_TRADE_DATETIME
+    };
+
+    public static final String fromDBColumns[] =  {
+            Database.Portfolio.SYMBOL,
+            Database.Portfolio.OPENING_PRICE,
+            Database.Portfolio.PREVIOUS_CLOSING_PRICE,
+            Database.Portfolio.BID_PRICE,
+            Database.Portfolio.ASK_PRICE,
+            Database.Portfolio.LAST_TRADE_PRICE,
+            Database.Portfolio.LAST_TRADE_DATETIME
+    };
 
 
 }

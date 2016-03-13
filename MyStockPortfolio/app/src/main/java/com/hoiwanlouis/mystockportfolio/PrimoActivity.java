@@ -20,31 +20,16 @@ package com.hoiwanlouis.mystockportfolio;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.hoiwanlouis.mystockportfolio.database.Database;
-import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
 import com.hoiwanlouis.mystockportfolio.fragments.AddFragment;
 import com.hoiwanlouis.mystockportfolio.fragments.EditFragment;
 import com.hoiwanlouis.mystockportfolio.fragments.DetailFragment;
 import com.hoiwanlouis.mystockportfolio.fragments.InventoryFragment;
-import com.hoiwanlouis.mystockportfolio.fragments.LayoutHelper;
 
 
 /***************************************************************************

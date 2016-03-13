@@ -130,7 +130,7 @@ public class DetailFragment extends Fragment {
         }
 
         // inflate DetailFragment's layout
-        View view = inflater.inflate(R.layout.fragment_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_detail, container, false);
         // this fragment has menu items to display
         setHasOptionsMenu(true);
 
