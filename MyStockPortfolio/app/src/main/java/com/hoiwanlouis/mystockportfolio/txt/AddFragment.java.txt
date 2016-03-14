@@ -33,22 +33,22 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.hoiwanlouis.mystockportfolio.database.Database;
+import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
-import com.hoiwanlouis.mystockportfolio.PrimoActivity;
+import com.hoiwanlouis.mystockportfolio.MainActivity;
 import com.hoiwanlouis.mystockportfolio.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditFragment extends Fragment {
+public class AddFragment extends Fragment {
 
     private final String DEBUG_TAG = this.getClass().getSimpleName();
 
     //
     // callback method
     //
-    private EditFragmentListener listener;
+    private AddFragmentListener listener;
 
     // database row id of the current contact
     private long rowID;
@@ -77,21 +77,21 @@ public class EditFragment extends Fragment {
     //
     //
     //
-    public EditFragment() {
+    public AddFragment() {
         // Required empty public constructor
-        Log.i(DEBUG_TAG, "in EditFragment()");
+        Log.i(DEBUG_TAG, "in AddFragment()");
     } // end method EditFragment
 
 
     //
-    // set EditFragmentListener when Fragment attached
+    // set AddFragmentListener when Fragment attached
     //
     @Override
     public void onAttach(Activity activity) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(activity);
         // init callback to interface implementation
-        listener = (EditFragmentListener) activity;
+        listener = (AddFragmentListener) activity;
     } // end method onAttach
 
 
@@ -138,10 +138,8 @@ public class EditFragment extends Fragment {
         insertDateTimeEditText = (EditText) view.findViewById(R.id.insertDateTimeEditText);
         modifyDateTimeEditText = (EditText) view.findViewById(R.id.modifyDateTimeEditText);
 
-
         // can be null if creating new contact.
         infoBundle = getArguments();
-
         if (infoBundle != null) {
             rowID = infoBundle.getLong(PrimoActivity.ROW_ID);
             symbolEditText.setText(infoBundle.getString(Database.Portfolio.SYMBOL));
@@ -156,13 +154,11 @@ public class EditFragment extends Fragment {
             lastTradeDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_DATETIME));
             insertDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.INSERT_DATETIME));
             modifyDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.MODIFY_DATETIME));
-            lastTradeDateTimeEditText.setText(infoBundle.getString(Database.Portfolio.LAST_TRADE_DATETIME));
         }
-
 
         // set Save Contact Button's event listener
         saveButton = (Button) view.findViewById(R.id.saveButton);
-        // saveButton.setOnClickListener(saveButtonClicked);
+        // saveButton.setOnClickListener = (saveButtonClicked);
         saveButton.setOnClickListener( new View.OnClickListener() {
 
             @Override
@@ -174,7 +170,7 @@ public class EditFragment extends Fragment {
                                 @Override
                                 protected Object doInBackground(Object... params) {
                                     // save contact to the database
-                                    saveInformation();
+                                    saveInformation(infoBundle);
                                     return null;
                                 }
 
@@ -185,7 +181,7 @@ public class EditFragment extends Fragment {
                                             getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                                     imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 
-                                    listener.onEFLEditSymbolCompleted(rowID);
+                                    listener.onAFLAddSymbolCompleted(rowID);
                                 }
                             }; // end AsyncTask
 
@@ -229,10 +225,10 @@ public class EditFragment extends Fragment {
     //
     // callback methods implemented by caller/invoker, usually Prototype
     //
-    public interface EditFragmentListener {
+    public interface AddFragmentListener {
 
-        // called after edit completed so the item/symbol can be redisplayed
-        void onEFLEditSymbolCompleted(long rowID);
+        // called after add is complete so the item/symbol can be redisplayed
+        void onAFLAddSymbolCompleted(long rowID);
 
     }
 
@@ -240,13 +236,13 @@ public class EditFragment extends Fragment {
     //
     // saves information to the database
     //
-    private void saveInformation() {
+    private void saveInformation(Bundle saveBundle) {
         Log.i(DEBUG_TAG, "in saveInformation()");
 
         // get DatabaseConnector to interact with the SQLite database
         DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
 
-        if (infoBundle == null) {
+        if (saveBundle == null) {
             // insert the contact information into the database
             rowID = databaseConnector.addTickerSymbol(
                     symbolEditText.getText().toString()
@@ -267,6 +263,7 @@ public class EditFragment extends Fragment {
                     lastTradeQuantityEditText.getText().toString(),
                     lastTradeDateTimeEditText.getText().toString()
             );
+
         }
     } // end method saveContact
 

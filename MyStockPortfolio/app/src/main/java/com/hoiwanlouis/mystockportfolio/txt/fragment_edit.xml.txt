@@ -276,7 +276,7 @@
             Save the data
          -->
         <Button
-            android:id="@+id/saveButton"
+            android:id="@+id/editSaveButton"
             android:layout_row="13"
             android:text="@string/saveItem"
             android:contentDescription="@string/saveItem"

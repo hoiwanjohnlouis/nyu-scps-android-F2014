@@ -39,7 +39,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hoiwanlouis.mystockportfolio.database.Database;
+import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseAbstractActivity;
 import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
 

@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -35,9 +36,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.hoiwanlouis.mystockportfolio.PrimoActivity;
+import com.hoiwanlouis.mystockportfolio.MainActivity;
 import com.hoiwanlouis.mystockportfolio.R;
-import com.hoiwanlouis.mystockportfolio.database.Database;
+import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
 
 /**
@@ -45,15 +46,31 @@ import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
  */
 public class DetailFragment extends Fragment {
 
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    //
+    // callback methods implemented by caller/invoker, usually Prototype
+    //
+    public interface DetailFragmentListener {
+
+        // called when fragment is done
+        void onDFLCompleted();
+
+    }
+
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
-
+    // for callback methods implemented by caller/invoker
+    private DetailFragmentListener detailFragmentListener;
     //
-    // for callback methods implemented by caller/invoker, usually Prototype
-    //
-    private DetailFragmentListener listener;
-
-
     private long rowID = -1; // selected contact's rowID
 
     // define the readonly TextView for display, must match the detail layout
@@ -86,12 +103,19 @@ public class DetailFragment extends Fragment {
 
 
     // set DetailFragmentListener when fragment attached
+    // @Override
+    // public void onAttach(Activity activity) {
+    //     Log.i(DEBUG_TAG, "in onAttach()");
+    //     super.onAttach(activity);
+    //     // init callback to interface implementation
+    //     detailFragmentListener = (DetailFragmentListener) activity;
+    // } // end method onAttach
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context context) {
         Log.i(DEBUG_TAG, "in onAttach()");
-        super.onAttach(activity);
+        super.onAttach(context);
         // init callback to interface implementation
-        listener = (DetailFragmentListener) activity;
+        detailFragmentListener = (DetailFragmentListener) context;
     } // end method onAttach
 
 
@@ -101,7 +125,7 @@ public class DetailFragment extends Fragment {
         Log.i(DEBUG_TAG, "in onDetach()");
         super.onDetach();
         // clean up callback methods implemented by caller/invoker
-        listener = null;
+        detailFragmentListener = null;
     } // end method onDetach
 
 
@@ -109,7 +133,8 @@ public class DetailFragment extends Fragment {
     // called when DetailFragmentListener's view needs to be created
     //
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(DEBUG_TAG, "in onCreateView()");
         super.onCreateView(inflater, container, savedInstanceState);
@@ -118,14 +143,13 @@ public class DetailFragment extends Fragment {
 
         // if DetailFragment is being restored, get saved row ID
         if (savedInstanceState != null) {
-            rowID = savedInstanceState.getLong(PrimoActivity.ROW_ID);
+            rowID = savedInstanceState.getLong(MainActivity.ROW_ID);
         }
         else {
             // get Bundle of arguments then extract the contact's row ID
             Bundle arguments = getArguments();
-
             if (arguments != null) {
-                rowID = arguments.getLong(PrimoActivity.ROW_ID);
+                rowID = arguments.getLong(MainActivity.ROW_ID);
             }
         }
 
@@ -162,6 +186,7 @@ public class DetailFragment extends Fragment {
         new LoadTickerSymbolAsyncTask().execute(rowID);
     } // end method onResume()
 
+
     //
     // save currently displayed contact's row ID
     //
@@ -169,95 +194,8 @@ public class DetailFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         Log.i(DEBUG_TAG, "in onSaveInstanceState()");
         super.onSaveInstanceState(outState);
-        outState.putLong(PrimoActivity.ROW_ID, rowID);
+        outState.putLong(MainActivity.ROW_ID, rowID);
     } // end method onSaveInstanceState()
-
-
-    //
-    // display this fragment's menu items
-    //
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_details_menu, menu);
-    } // end method onCreateOptionsMenu()
-
-
-    //
-    // handle menu item selections
-    //
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(DEBUG_TAG, "in onOptionsItemSelected()");
-        switch (item.getItemId())
-        {
-            case R.id.action_edit:
-                // create Bundle containing contact data to edit
-                Bundle arguments = new Bundle();
-                arguments.putLong(PrimoActivity.ROW_ID, rowID);
-
-                arguments.putCharSequence(Database.Portfolio.SYMBOL, symbolTextView.getText());
-                arguments.putCharSequence(Database.Portfolio.OPENING_PRICE, openingPriceTextView.getText());
-                arguments.putCharSequence(Database.Portfolio.PREVIOUS_CLOSING_PRICE, previousClosingPriceTextView.getText());
-                arguments.putCharSequence(Database.Portfolio.BID_PRICE, bidPriceTextView.getText());
-                arguments.putCharSequence(Database.Portfolio.BID_SIZE, bidSizeTextView.getText());
-                arguments.putCharSequence(Database.Portfolio.ASK_PRICE, askPriceTextView.getText());
-                arguments.putCharSequence(Database.Portfolio.ASK_SIZE, askPriceTextView.getText());
-                arguments.putCharSequence(Database.Portfolio.LAST_TRADE_PRICE, lastTradePriceTextView.getText());
-                arguments.putCharSequence(Database.Portfolio.LAST_TRADE_QUANTITY, lastTradeQuantityTextView.getText());
-                arguments.putCharSequence(Database.Portfolio.LAST_TRADE_DATETIME, lastTradeDateTimeTextView.getText());
-                arguments.putCharSequence(Database.Portfolio.INSERT_DATETIME, insertDateTimeTextView.getText());
-                arguments.putCharSequence(Database.Portfolio.MODIFY_DATETIME, modifyDateTimeTextView.getText());
-
-                // pass Bundle to listener for processing
-                listener.onDFLEditSymbolSelected(arguments);
-                return true;
-
-            case R.id.action_delete:
-                deleteContact();
-                return true;
-
-            default:
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    } // end method onOptionsItemSelected
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    //
-    // callback methods implemented by caller/invoker, usually Prototype
-    //
-    public interface DetailFragmentListener {
-
-        // called when a item/symbol is deleted
-        void onDFLDeleteSymbolCompleted();
-
-        // called to pass Bundle of item/symbol's info for editing
-        void onDFLEditSymbolSelected(Bundle arguments);
-
-    }
-
-
-    //
-    // delete a contact
-    //
-    private void deleteContact() {
-        Log.i(DEBUG_TAG, "in deleteContact()");
-        // use FragmentManager to display the confirmDelete DialogFragment
-        confirmDelete.show(getFragmentManager(), "confirm delete");
-    } // end method deleteContact
 
 
     //
@@ -274,9 +212,8 @@ public class DetailFragment extends Fragment {
         @Override
         protected Cursor doInBackground(Long... params) {
             Log.i(DEBUG_TAG, "in doInBackground()");
-            databaseConnector.openForUpdate();
-
-            return databaseConnector.getTickerSymbolUsingId(params[0]);
+            databaseConnector.openForRead();
+            return databaseConnector.getOneStockUsingId(params[0]);
         } // end method doInBackground()
 
 
@@ -291,18 +228,18 @@ public class DetailFragment extends Fragment {
             result.moveToFirst();
 
             // get the column index for each data item
-            symbolIndex = result.getColumnIndex(Database.Portfolio.SYMBOL);
-            openingPriceIndex = result.getColumnIndex(Database.Portfolio.OPENING_PRICE);
-            previousClosingPriceIndex = result.getColumnIndex(Database.Portfolio.PREVIOUS_CLOSING_PRICE);
-            bidPriceIndex = result.getColumnIndex(Database.Portfolio.BID_PRICE);
-            bidSizeIndex = result.getColumnIndex(Database.Portfolio.BID_SIZE);
-            askPriceIndex = result.getColumnIndex(Database.Portfolio.ASK_PRICE);
-            askSizeIndex = result.getColumnIndex(Database.Portfolio.ASK_SIZE);
-            lastTradePriceIndex = result.getColumnIndex(Database.Portfolio.LAST_TRADE_PRICE);
-            lastTradeQuantityIndex = result.getColumnIndex(Database.Portfolio.LAST_TRADE_QUANTITY);
-            lastTradeDateTimeIndex = result.getColumnIndex(Database.Portfolio.LAST_TRADE_DATETIME);
-            insertDateTimeIndex = result.getColumnIndex(Database.Portfolio.INSERT_DATETIME);
-            modifyDateTimeIndex = result.getColumnIndex(Database.Portfolio.MODIFY_DATETIME);
+            symbolIndex = result.getColumnIndex(DatabaseColumns.Portfolio.SYMBOL);
+            openingPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.OPENING_PRICE);
+            previousClosingPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.PREVIOUS_CLOSING_PRICE);
+            bidPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.BID_PRICE);
+            bidSizeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.BID_SIZE);
+            askPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.ASK_PRICE);
+            askSizeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.ASK_SIZE);
+            lastTradePriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_PRICE);
+            lastTradeQuantityIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_QUANTITY);
+            lastTradeDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_DATETIME);
+            insertDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.INSERT_DATETIME);
+            modifyDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.MODIFY_DATETIME);
 
             // fill TextViews with the retrieved data
             symbolTextView.setText(result.getString(symbolIndex));
@@ -324,62 +261,5 @@ public class DetailFragment extends Fragment {
             databaseConnector.close();
         } // end method onPostExecute
     } // end class LoadTickerSymbolAsyncTask
-
-
-    //
-    // DialogFragment to confirm deletion of contact
-    //
-    private DialogFragment confirmDelete =
-            new DialogFragment() {
-                // create an AlertDialog and return it
-                @Override
-                public Dialog onCreateDialog(Bundle bundle) {
-                    Log.i(DEBUG_TAG, "in onCreateDialog()");
-                    // create a new AlertDialog Builder
-                    AlertDialog.Builder builder =
-                            new AlertDialog.Builder(getActivity());
-
-                    builder.setTitle(R.string.fragment_delete_title);
-                    builder.setMessage(R.string.fragment_delete_message);
-
-                    // provide an OK button that simply dismisses the dialog
-                    builder.setPositiveButton(R.string.fragment_delete_button_delete,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int button) {
-                                    final DatabaseConnector databaseConnector =
-                                            new DatabaseConnector(getActivity());
-
-                                    // AsyncTask deletes contact and notifies listener
-                                    AsyncTask<Long, Object, Object> deleteTask =
-                                            new AsyncTask<Long, Object, Object>() {
-                                                @Override
-                                                protected Object doInBackground(Long... params) {
-                                                    Log.i(DEBUG_TAG, "in doInBackground()");
-                                                    databaseConnector.deleteTickerSymbol(params[0], "some symbol");
-                                                    return null;
-                                                }
-
-                                                @Override
-                                                protected void onPostExecute(Object result) {
-                                                    Log.i(DEBUG_TAG, "in onPostExecute()");
-                                                    listener.onDFLDeleteSymbolCompleted();
-                                                }
-                                            }; // end new AsyncTask
-
-                                    // execute the AsyncTask to delete contact at rowID
-                                    deleteTask.execute(new Long[] { rowID });
-                                } // end method onClick
-                            } // end anonymous inner class
-                    ); // end call to method setPositiveButton
-
-                    // do nothing if cancel action
-                    builder.setNegativeButton(R.string.fragment_delete_button_cancel, null);
-
-                    // return the AlertDialog
-                    return builder.create();
-                }
-            }; // end DialogFragment anonymous inner class
-
 
 }

@@ -1,13 +1,13 @@
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/inventoryFragmentLayout"
+    android:id="@+id/addFragmentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/app_horizontal_margin"
     android:paddingRight="@dimen/app_horizontal_margin"
     android:paddingTop="@dimen/app_horizontal_margin"
     android:paddingBottom="@dimen/app_horizontal_margin"
-    tools:context=".InventoryFragment"
+    tools:context=".AddFragment"
     android:columnCount="1"
     >
 
@@ -31,7 +31,7 @@
             />
 
         <ImageButton
-            android:id="@+id/saveButton"
+            android:id="@+id/editSaveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/saveItem"
@@ -82,30 +82,8 @@
 
 
     <ListView
-        android:id="@+id/symbolList"
+        android:id="@+id/list"
         style="@style/symbolList"
         />
-
-
-    <LinearLayout
-        android:id="@+id/copyright_layout"
-        style="@style/copyright_layout"
-        android:background="@android:color/darker_gray">
-
-        <TextView
-            android:id="@+id/copyright_textView"
-            android:text="@string/copyright_textView"
-            style="@style/copyright_textView"
-            />
-
-    </LinearLayout>
-
-    <!-- android bug fix -->
-    <TextView android:id="@android:id/empty"
-        android:gravity="center"
-        android:layout_width="1px"
-        android:layout_height="1px"
-        />
-
 
 </GridLayout>

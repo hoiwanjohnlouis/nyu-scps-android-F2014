@@ -23,10 +23,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 
-import com.hoiwanlouis.mystockportfolio.database.Database.Company;
-import com.hoiwanlouis.mystockportfolio.database.Database.Exchange;
-import com.hoiwanlouis.mystockportfolio.database.Database.Catalogue;
-import com.hoiwanlouis.mystockportfolio.database.Database.Portfolio;
+import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns.Company;
+import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns.Exchange;
+import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns.Catalogue;
+import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns.Portfolio;
 
 //FYI: This is the same setup as PetTracker
 public class DatabaseCreator extends SQLiteOpenHelper {
