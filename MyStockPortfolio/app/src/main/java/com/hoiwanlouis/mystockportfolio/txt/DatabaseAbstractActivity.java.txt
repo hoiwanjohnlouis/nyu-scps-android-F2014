@@ -36,7 +36,7 @@ public abstract class DatabaseAbstractActivity extends Activity {
         mDatabaseHelper = new DatabaseHelper(
                 this.getApplicationContext(),
                 Database.DATABASE_NAME,
-                null,   // cursor factory
+                null,   // mCursor factory
                 Database.DATABASE_VERSION);
         mDB = mDatabaseHelper.getWritableDatabase();
     }
@@ -47,7 +47,7 @@ public abstract class DatabaseAbstractActivity extends Activity {
     protected void onDestroy() {
         Log.v(DEBUG_TAG, "in onDestroy");
         super.onDestroy();
-        // close cursor
+        // close mCursor
         if(mDB != null)
         {
             mDB.close();
@@ -73,7 +73,7 @@ public abstract class DatabaseAbstractActivity extends Activity {
     // close a database connection
     public void close() {
         Log.v(DEBUG_TAG, "in close");
-        // close cursor
+        // close mCursor
         if(mDB != null)
         {
             mDB.close();

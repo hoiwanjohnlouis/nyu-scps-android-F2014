@@ -38,16 +38,6 @@ public final class Gui2Database {
 
     private Gui2Database() {}
 
-    public static final int toRIds[] = {
-            R.id.TextView_symbol,
-            R.id.TextView_opening_price,
-            R.id.TextView_previous_closing_price,
-            R.id.TextView_bid_price,
-            R.id.TextView_ask_price,
-            R.id.TextView_last_trade_price,
-            R.id.TextView_last_trade_time
-    };
-
     // DefaultValues: remove if not be needed. also remove related entries from res/values/strings.xml
     public static final class DefaultValues {
         private DefaultValues() {}
@@ -60,6 +50,16 @@ public final class Gui2Database {
         public static final String defaultTradePrice = "" + R.string.default_trade_price;
         public static final String defaultTradeQuantity = "" + R.string.default_trade_quantity;
     }
+
+    public static final int toRIds[] = {
+            R.id.TextView_symbol,
+            R.id.TextView_opening_price,
+            R.id.TextView_previous_closing_price,
+            R.id.TextView_bid_price,
+            R.id.TextView_ask_price,
+            R.id.TextView_last_trade_price,
+            R.id.TextView_last_trade_time
+    };
 
     public static final String asColumnsToReturn[] = {
             DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME + "." + DatabaseColumns.Portfolio._ID,

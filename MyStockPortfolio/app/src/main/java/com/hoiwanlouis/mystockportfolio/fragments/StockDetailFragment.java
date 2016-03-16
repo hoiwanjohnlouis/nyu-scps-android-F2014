@@ -17,12 +17,7 @@
  ***************************************************************************/
 package com.hoiwanlouis.mystockportfolio.fragments;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -44,7 +39,7 @@ import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
 /**
  **
  */
-public class DetailFragment extends Fragment {
+public class StockDetailFragment extends Fragment {
 
     /**
      * This interface must be implemented by activities that contain this
@@ -59,17 +54,17 @@ public class DetailFragment extends Fragment {
     //
     // callback methods implemented by caller/invoker, usually Prototype
     //
-    public interface DetailFragmentListener {
+    public interface StockDetailFragmentListener {
 
         // called when fragment is done
-        void onDFLCompleted();
+        void onSDFLCompleted();
 
     }
 
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
     // for callback methods implemented by caller/invoker
-    private DetailFragmentListener detailFragmentListener;
+    private StockDetailFragmentListener stockDetailFragmentListener;
     //
     private long rowID = -1; // selected contact's rowID
 
@@ -102,35 +97,46 @@ public class DetailFragment extends Fragment {
     int modifyDateTimeIndex;
 
 
-    // set DetailFragmentListener when fragment attached
-    // @Override
-    // public void onAttach(Activity activity) {
-    //     Log.i(DEBUG_TAG, "in onAttach()");
-    //     super.onAttach(activity);
-    //     // init callback to interface implementation
-    //     detailFragmentListener = (DetailFragmentListener) activity;
-    // } // end method onAttach
+    public StockDetailFragment() {
+        Log.i(DEBUG_TAG, "in Required empty public constructor()");
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment AddStockFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static StockDetailFragment newInstance() {
+        StockDetailFragment fragment = new StockDetailFragment();
+//        Bundle args = new Bundle();
+//        fragment.setArguments(args);
+        return fragment;
+    }
+
+    // set StockDetailFragmentListener when fragment attached
     @Override
     public void onAttach(Context context) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(context);
         // init callback to interface implementation
-        detailFragmentListener = (DetailFragmentListener) context;
+        stockDetailFragmentListener = (StockDetailFragmentListener) context;
     } // end method onAttach
 
 
-    // remove DetailFragmentListener when fragment detached
+    // remove StockDetailFragmentListener when fragment detached
     @Override
     public void onDetach() {
         Log.i(DEBUG_TAG, "in onDetach()");
         super.onDetach();
         // clean up callback methods implemented by caller/invoker
-        detailFragmentListener = null;
+        stockDetailFragmentListener = null;
     } // end method onDetach
 
 
     //
-    // called when DetailFragmentListener's view needs to be created
+    // called when StockDetailFragmentListener's view needs to be created
     //
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -141,20 +147,20 @@ public class DetailFragment extends Fragment {
         // save fragment across config changes
         setRetainInstance(true);
 
-        // if DetailFragment is being restored, get saved row ID
+        // if StockDetailFragment is being restored, get saved row ID
         if (savedInstanceState != null) {
             rowID = savedInstanceState.getLong(MainActivity.ROW_ID);
         }
         else {
-            // get Bundle of arguments then extract the contact's row ID
+            // else extract the contact's row ID from the arguments bundle
             Bundle arguments = getArguments();
             if (arguments != null) {
                 rowID = arguments.getLong(MainActivity.ROW_ID);
             }
         }
 
-        // inflate DetailFragment's layout
-        View view = inflater.inflate(R.layout.fragment_detail, container, false);
+        // inflate StockDetailFragment's layout
+        View view = inflater.inflate(R.layout.fragment_stock_detail, container, false);
         // this fragment has menu items to display
         setHasOptionsMenu(true);
 
@@ -176,14 +182,14 @@ public class DetailFragment extends Fragment {
     } // end method onCreateView
 
     //
-    // called when the DetailFragment resumes
+    // called when the StockDetailFragment resumes
     //
     @Override
     public void onResume() {
         Log.i(DEBUG_TAG, "in onResume()");
         super.onResume();
         // load contact at rowID
-        new LoadTickerSymbolAsyncTask().execute(rowID);
+        new LoadStockDetailAsyncTask().execute(rowID);
     } // end method onResume()
 
 
@@ -198,11 +204,47 @@ public class DetailFragment extends Fragment {
     } // end method onSaveInstanceState()
 
 
+    // display this fragment's menu items
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_details_menu, menu);
+    } // end method onCreateOptionsMenu()
+
+
+    // handle menu item selections
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(DEBUG_TAG, "in onOptionsItemSelected()");
+        // create Bundle containing contact data to edit
+        Bundle arguments = new Bundle();
+        switch (item.getItemId())
+        {
+            case R.id.action_edit:
+                stockDetailFragmentListener.onSDFLCompleted();
+                return true;
+
+            case R.id.action_delete:
+                stockDetailFragmentListener.onSDFLCompleted();
+                return true;
+
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    } // end method onOptionsItemSelected
+
+
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
     //
     // *****************************************************
     // performs database query outside GUI thread
     // *****************************************************
-    private class LoadTickerSymbolAsyncTask extends AsyncTask<Long, Object, Cursor>
+    private class LoadStockDetailAsyncTask extends AsyncTask<Long, Object, Cursor>
     {
         DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
 
@@ -260,6 +302,6 @@ public class DetailFragment extends Fragment {
             // close database connection
             databaseConnector.close();
         } // end method onPostExecute
-    } // end class LoadTickerSymbolAsyncTask
+    } // end class LoadStockDetailAsyncTask
 
 }

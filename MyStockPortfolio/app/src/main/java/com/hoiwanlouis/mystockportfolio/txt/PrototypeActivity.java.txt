@@ -221,7 +221,7 @@ public class PrototypeActivity extends DatabaseAbstractActivity
         // SQL Query
         portfolioQB.setTables(Database.Portfolio.PORTFOLIO_TABLE_NAME);
 
-        // refresh cursor with current data
+        // refresh mCursor with current data
         mCursor = portfolioQB.query(
                 mDB,
                 Database.asColumnsToReturn,
@@ -241,7 +241,7 @@ public class PrototypeActivity extends DatabaseAbstractActivity
 
             // Use an adapter to bind the data to a ListView where the data will be displayed
 
-            // refresh the adapter with updated cursor information
+            // refresh the adapter with updated mCursor information
             adapter = new SimpleCursorAdapter(
                     getApplicationContext(),
                     R.layout.app_item,
@@ -279,7 +279,7 @@ public class PrototypeActivity extends DatabaseAbstractActivity
                                                             int which) {
                                             // Delete the Symbol
                                             deleteSymbol(symbolId, symbolName);
-                                            // a symbol was deleted, refresh the data in our cursor, therefore our List
+                                            // a symbol was deleted, refresh the data in our mCursor, therefore our List
                                             fillFromDatabase();
                                         }
                                     }).show();
@@ -310,7 +310,7 @@ public class PrototypeActivity extends DatabaseAbstractActivity
                                                             int which) {
                                             // Delete the Symbol
                                             deleteSymbol(symbolId, symbolName);
-                                            // a symbol was deleted, refresh the data in our cursor, therefore our List
+                                            // a symbol was deleted, refresh the data in our mCursor, therefore our List
                                             fillFromDatabase();
                                         }
                                     }).show();
