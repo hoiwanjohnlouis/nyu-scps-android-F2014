@@ -82,5 +82,8 @@ public final class Gui2Database {
             DatabaseColumns.Portfolio.LAST_TRADE_DATETIME
     };
 
+    // keys for storing row ID in Bundle passed to a fragment
+    public static final String BUNDLE_KEY = "row_id";
+
 
 }

@@ -91,7 +91,7 @@
     </style>
 
 
-    <style name="symbolList" parent="@android:style/TextAppearance.Small">
+    <style name="stockList" parent="@android:style/TextAppearance.Small">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>

@@ -1,38 +1,30 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_stock_fragment_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="fill_horizontal"
+    android:orientation="horizontal"
     tools:context="com.hoiwanlouis.mystockportfolio.fragments.AddStockFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:id="@+id/linearInput"
+    <EditText
+        android:id="@+id/add_stock_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_weight="1"
+        android:hint="@string/inputSymbolPrompt"
+        android:imeOptions="actionDone"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        />
+
+    <ImageButton
+        android:id="@+id/add_stock_save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="fill_horizontal"
-        android:orientation="horizontal"
-        >
+        android:contentDescription="@string/saveItem"
+        android:src="@android:drawable/ic_menu_save"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        />
 
-        <EditText
-            android:id="@+id/add_stock_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:hint="@string/inputSymbolPrompt"
-            android:imeOptions="actionDone"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            />
-
-        <ImageButton
-            android:id="@+id/add_stock_save_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/saveItem"
-            android:src="@android:drawable/ic_menu_save"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            />
-
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>

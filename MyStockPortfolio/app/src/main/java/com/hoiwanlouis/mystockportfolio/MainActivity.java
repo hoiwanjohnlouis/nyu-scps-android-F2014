@@ -18,19 +18,30 @@
 package com.hoiwanlouis.mystockportfolio;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 
+import android.view.MenuItem;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
 import com.hoiwanlouis.mystockportfolio.fragments.AddStockFragment;
 import com.hoiwanlouis.mystockportfolio.fragments.StockListFragment;
 import com.hoiwanlouis.mystockportfolio.fragments.StockDetailFragment;
 
 /***************************************************************************
  * Program Synopsis
- * <p/>
+ * <p>
  * Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- * <p/>
+ * <p>
  * Change History
  * ------Who----- ---When--- ---------------------What----------------------
  * H. Melville    1851.01.31 Wooden whales, or whales cut in profile out of
@@ -45,10 +56,18 @@ public class MainActivity extends Activity
 
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
-    // keys for storing row ID in Bundle passed to a fragment
-    public static final String ROW_ID = "row_id";
     // displays item/symbol list
+    private AddStockFragment addStockFragment;
     private StockListFragment stockListFragment;
+    private StockDetailFragment stockDetailFragment;
+    //
+    private FragmentManager mFM;
+    private FragmentTransaction mFT;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     //
     // display StockListFragment when Activity first loads
@@ -59,6 +78,9 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Access the FragmentManager.
+        mFM = getFragmentManager();
+
         // return if Activity is being restored, no need to recreate GUI
         if (savedInstanceState != null) {
             return;
@@ -68,17 +90,86 @@ public class MainActivity extends Activity
         // stockListFragment is always displayed, tablet devices will be initialized later in "onResume"
         if (isAPhoneDevice()) {
             // create ContactListFragment
-            stockListFragment = new StockListFragment();
+            addStockFragment = AddStockFragment.newInstance();
+            stockListFragment = StockListFragment.newInstance();
+            stockDetailFragment = StockDetailFragment.newInstance();
 
             // add the fragment to the FrameLayout
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.add(R.id.fragmentContainer, stockListFragment);
-            transaction.add(R.id.fragmentContainer, stockListFragment);
+            mFT = mFM.beginTransaction();
+            mFT.add(R.id.fragmentContainer, addStockFragment);
+            mFT.add(R.id.fragmentContainer, stockListFragment);
+//            mFT.add(R.id.fragmentContainer, stockDetailFragment);
+
             // causes ContactListFragment to display
-            transaction.commit();
+            mFT.commit();
         }
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     } // end method onCreate()
+
+
+    //
+    // display this fragment's menu items
+    //
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    } // end method onCreateOptionsMenu()
+
+
+    //
+    // Handle action bar item clicks here. The action bar will
+    // automatically handle clicks on the Home/Up button, so long
+    // as you specify a parent activity in AndroidManifest.xml.
+    //
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(DEBUG_TAG, "in onOptionsItemSelected()");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        AlertDialog dialog;
+
+        boolean selected;
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.main_activity_settings_id:
+                startActivity( new Intent(getApplicationContext(), SettingsActivity.class));
+                selected = true;
+                break;
+            case R.id.main_activity_help_id:
+                builder.setTitle(R.string.main_activity_help_title);
+                builder.setMessage(R.string.main_activity_help_data);
+                dialog = builder.create();
+                dialog.show();
+                selected = true;
+                break;
+            case R.id.main_activity_about_id:
+                builder.setTitle(R.string.main_activity_about_title);
+                builder.setMessage(R.string.main_activity_about_data);
+                dialog = builder.create();
+                dialog.show();
+                selected = true;
+                break;
+
+//            case R.id.action_add:;
+//                mListener.onSLFLStockDeleted();
+//                selected = true;
+//                break;
+
+            default:
+                ;
+                selected = super.onOptionsItemSelected(item);
+                break;
+        }
+
+        return selected;
+    } // end method onOptionsItemSelected()
 
 
     //
@@ -94,19 +185,66 @@ public class MainActivity extends Activity
         if (isAPhoneDevice()) {
             ;
         } else {
-            stockListFragment =
-                    (StockListFragment) getFragmentManager().findFragmentById(R.id.stockListFragment);
+            stockListFragment = (StockListFragment) mFM.findFragmentById(R.id.stockListFragment);
         }
     } // end method onResume
+
+    //
+    //
+    //
+    @Override
+    public void onStart() {
+        super.onStart();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.hoiwanlouis.mystockportfolio/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    //
+    //
+    //
+    @Override
+    public void onStop() {
+        super.onStop();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.hoiwanlouis.mystockportfolio/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.disconnect();
+    }
+
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
+
     /***************************************************************
-     *
      * Start of AddStockFragmentListener interfaces implementations
-     *
-     *      1. public void onASFLStockAdded();
-     *
+     * <p>
+     * 1. public void onASFLStockAdded();
      ***************************************************************/
     //
     // implementing AddStockFragmentListener interfaces
@@ -114,7 +252,7 @@ public class MainActivity extends Activity
     @Override
     public void onASFLStockAdded() {
         Log.i(DEBUG_TAG, "in onASFLCompleted()");
-        getFragmentManager().popBackStack(); // removes top of back stack
+        mFM.popBackStack(); // removes top of back stack
 
         if (isAPhoneDevice()) {
             ;
@@ -131,12 +269,11 @@ public class MainActivity extends Activity
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
+
     /***************************************************************
-     *
      * Start of StockDetailFragmentListener interfaces implementations
-     *
-     *      1. public void onSDFLCompleted();
-     *
+     * <p>
+     * 1. public void onSDFLCompleted();
      ***************************************************************/
     //
     // implementing StockDetailFragmentListener interfaces
@@ -162,29 +299,27 @@ public class MainActivity extends Activity
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
+
     /***************************************************************
-     *
      * Start of StockListFragmentListener interfaces implementations
-     *
-     *      1.  public void onSLFLStockSelected(long rowID)
-     *      2.  public void onSLFLStockDeleted();
-     *
+     * <p>
+     * 1.  public void onSLFLStockSelected(long rowID)
+     * 2.  public void onSLFLStockDeleted();
      ***************************************************************/
     //
     // implementing StockListFragmentListener interfaces
     // show the DetailsFragment for selected item/symbol
     //
     @Override
-    public void onSLFLStockSelected(long rowID) {
+    public void onSLFLStockSelected(Bundle arguments) {
         Log.i(DEBUG_TAG, "in onSLFLStockSelected()");
         if (isAPhoneDevice()) {
             // phone
-            showDetailFragment(rowID, R.id.fragmentContainer);
-        }
-        else {
+            showDetailFragment(R.id.fragmentContainer, arguments);
+        } else {
             // tablet
-            getFragmentManager().popBackStack(); // removes top of back stack
-            showDetailFragment(rowID, R.id.rightPaneContainer);
+            mFM.popBackStack(); // removes top of back stack
+            showDetailFragment(R.id.rightPaneContainer, arguments);
         }
     } // end method onSLFLStockSelected
 
@@ -198,8 +333,7 @@ public class MainActivity extends Activity
         Log.i(DEBUG_TAG, "in onSLFLStockDeleted()");
         if (isAPhoneDevice()) {
             showMainFragment(R.id.fragmentContainer, null);
-        }
-        else {
+        } else {
             showMainFragment(R.id.rightPaneContainer, null);
         }
     } // end method onSLFLStockDeleted
@@ -211,11 +345,10 @@ public class MainActivity extends Activity
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
+
     /***************************************************************
-     *
-     *  worker function:
-     *      public boolean isAPhoneDevice()
-     *
+     * worker function:
+     * public boolean isAPhoneDevice()
      ***************************************************************/
     public boolean isAPhoneDevice() {
         return (findViewById(R.id.fragmentContainer) != null);
@@ -223,57 +356,66 @@ public class MainActivity extends Activity
 
 
     /***************************************************************
-     *
-     *  worker function:
-     *      private void showMainFragment(int viewID, Bundle arguments)
-     *
-     *          display fragment after adding a new symbol
-     *
+     * worker function:
+     * private void showMainFragment(int viewID, Bundle arguments)
+     * <p>
+     * display fragment after adding a new symbol
      ***************************************************************/
     private void showMainFragment(int viewID, Bundle arguments) {
         Log.i(DEBUG_TAG, "in showMainFragment()");
 
         // set the bundled arguments into the DetailsFragment
-        StockListFragment fragment = new StockListFragment();
+        StockListFragment fragment = StockListFragment.newInstance();
         if (arguments != null) {
             // editing existing symbol?
             fragment.setArguments(arguments);
         }
 
         // use a FragmentTransaction to display the StockListFragment
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(viewID, fragment);
-        transaction.addToBackStack(null);
+        mFT = mFM.beginTransaction();
+        mFT.replace(viewID, fragment);
+        mFT.addToBackStack(null);
+
         // causes fragment to display
-        transaction.commit();
+        mFT.commit();
     } // end method showMainFragment
 
 
     /***************************************************************
-     *
-     *  worker function:
-     *      private void showDetailFragment(long rowID, int viewID)
-     *
-     *          display a item/symbol
-     *
+     * worker function:
+     * private void showDetailFragment(long rowID, int viewID)
+     * <p>
+     * display a item/symbol
      ***************************************************************/
-    private void showDetailFragment(long rowID, int viewID) {
+    private void showDetailFragment(int viewID, Bundle arguments) {
         Log.i(DEBUG_TAG, "in showDetailFragment()");
 
-        // save the rowID into a bundle for the DetailsFragment
-        Bundle arguments = new Bundle();
-        arguments.putLong(ROW_ID, rowID);
+        // set the bundle as arguments into the Fragment
+        StockDetailFragment fragment = StockDetailFragment.newInstance();
 
-        // set the bundle as arguments into the DetailsFragment
-        StockDetailFragment stockDetailFragment = new StockDetailFragment();
-        stockDetailFragment.setArguments(arguments);
+        StringBuilder sb = new StringBuilder();
+        if (arguments != null) {
+            sb.append("requesting StockDetailFragment for [");
+            sb.append(Gui2Database.BUNDLE_KEY);
+            sb.append("]=[");
+            sb.append(arguments.getLong(Gui2Database.BUNDLE_KEY));
+            sb.append("]");
+            Log.i(DEBUG_TAG, sb.toString());
+            fragment.setArguments(arguments);
+        } else {
+            sb.append("requesting StockDetailFragment for [");
+            sb.append(Gui2Database.BUNDLE_KEY);
+            sb.append("]=[NULL KEY VALUE]");
+            Log.i(DEBUG_TAG, sb.toString());
+        }
 
         // use a FragmentTransaction to display the DetailsFragment
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(viewID, stockDetailFragment);
-        transaction.addToBackStack(null);
+        mFT = mFM.beginTransaction();
+        mFT.replace(viewID, fragment);
+        mFT.addToBackStack(null);
+
         // causes DetailsFragment to display
-        transaction.commit();
+        mFT.commit();
     } // end method showDetailFragment
 
 ///////////////////////////////////////////////////////////////////////////////

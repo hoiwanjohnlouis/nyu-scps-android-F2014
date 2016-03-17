@@ -10,49 +10,10 @@
     tools:mContext=".StockListFragment"
     >
 
-    <LinearLayout
-        android:id="@+id/heading2_layout"
-        style="@style/heading2_layout"
-        android:background="@android:color/darker_gray">
-
-        <TextView
-            android:id="@+id/heading2_symbol_title"
-            android:text="@string/heading2_symbol_title"
-            style="@style/heading2_field"
-            />
-
-        <TextView
-            android:id="@+id/heading2_opening_price_title"
-            android:text="@string/heading2_opening_price_title"
-            style="@style/heading2_field"
-            />
-
-        <TextView
-            android:id="@+id/heading2_previous_closing_price_title"
-            android:text="@string/heading2_previous_closing_price_title"
-            style="@style/heading2_field"
-            />
-
-        <TextView
-            android:id="@+id/heading2_last_trade_price_title"
-            android:text="@string/heading2_last_trade_price_title"
-            style="@style/heading2_field"
-            />
-
-        <TextView
-            android:id="@+id/heading2_last_trade_time_title"
-            android:text="@string/heading2_last_trade_time_title"
-            style="@style/heading2_field"
-            />
-
-    </LinearLayout>
-
-
     <ListView
-        android:id="@+id/symbolList"
-        style="@style/symbolList"
+        android:id="@+id/list"
+        style="@style/stockList"
         />
-
 
     <!-- android bug fix -->
     <TextView android:id="@android:id/empty"
@@ -60,6 +21,5 @@
         android:layout_width="1px"
         android:layout_height="1px"
         />
-
 
 </ScrollView>

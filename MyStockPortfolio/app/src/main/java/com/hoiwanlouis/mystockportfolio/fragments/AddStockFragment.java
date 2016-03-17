@@ -1,8 +1,8 @@
 package com.hoiwanlouis.mystockportfolio.fragments;
 
-import android.content.Context;
+import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,24 +41,9 @@ public class AddStockFragment extends Fragment {
     private final String DEBUG_TAG = this.getClass().getSimpleName();
     //
     private OnAddStockFragmentListener mListener;
-    //
-    private ImageButton mSaveButton;
-
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-
 
     public AddStockFragment() {
-        Log.i(DEBUG_TAG, "in Required empty public constructor()");
+        Log.i(DEBUG_TAG, "in AddStockFragment(), required empty public constructor");
     }
 
     /**
@@ -79,50 +64,46 @@ public class AddStockFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(DEBUG_TAG, "in onCreate()");
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i(DEBUG_TAG, "in onCreateView()");
+        super.onCreateView(inflater, container, savedInstanceState);
+        // save fragment across config changes
+        setRetainInstance(true);
+
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_add_stock, container, false);
 
         // Save the stock to database;
+        ImageButton mSaveButton;
         mSaveButton = (ImageButton) v.findViewById(R.id.add_stock_save_button);
-        mSaveButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final EditText tickerSymbol = (EditText) v.findViewById(R.id.add_stock_edit_text);
-                        // get DatabaseConnector to interact with the SQLite database
-                        DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
-                        // insert the contact information into the database
-                        long rowID = databaseConnector.addOneStock(tickerSymbol.getText().toString());
-                        // reset form
-                        tickerSymbol.setText(null);
-                        // callback to main;
-                        onButtonPressed();
-                    }
-                }
-        );
+        mSaveButton.setOnClickListener(onClickListener);
 
         return v;
     }
 
-    // callback to main to redisplay screen;
-    public void onButtonPressed() {
-        Log.i(DEBUG_TAG, "in onButtonPressed()");
-        if (mListener != null) {
-            mListener.onASFLStockAdded();
-        }
-    }
+    private View.OnClickListener onClickListener =
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EditText tickerSymbol = (EditText) v.findViewById(R.id.add_stock_edit_text);
+                    // get DatabaseConnector to interact with the SQLite database
+                    DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
+                    // insert the contact information into the database
+                    long rowID = databaseConnector.addOneStock(tickerSymbol.getText().toString());
+                    // reset form
+                    tickerSymbol.setText(null);
+                    // callback to main;
+                    onButtonPressed();
+                }
+    };
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Activity context) {
         super.onAttach(context);
         Log.i(DEBUG_TAG, "in onAttach()");
         if (context instanceof OnAddStockFragmentListener) {
@@ -139,8 +120,16 @@ public class AddStockFragment extends Fragment {
         Log.i(DEBUG_TAG, "in onDetach()");
         mListener = null;
     }
+
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
+    // callback to main to redisplay screen;
+    public void onButtonPressed() {
+        Log.i(DEBUG_TAG, "in onButtonPressed()");
+        if (mListener != null) {
+            mListener.onASFLStockAdded();
+        }
+    }
 
 }

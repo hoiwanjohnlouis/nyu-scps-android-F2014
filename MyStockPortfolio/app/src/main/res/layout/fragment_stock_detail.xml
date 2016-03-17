@@ -21,7 +21,6 @@
         android:useDefaultMargins="true"
         >
 
-
         <!--
          -->
         <TextView
@@ -213,7 +212,7 @@
             />
 
         <TextView
-            android:id="@+id/lastTradeTimeTextView"
+            android:id="@+id/lastTradeDateTimeTextView"
             android:layout_column="1"
             android:layout_row="10"
             android:hint="@string/heading2_last_trade_time_title"

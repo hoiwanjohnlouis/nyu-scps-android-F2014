@@ -23,52 +23,40 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.hoiwanlouis.mystockportfolio.R;
+import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
 
 /***************************************************************************
  * Program Synopsis
  * <p>
- * Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+ * Lorem ipsum dolor sit amet, consectetur adipiscing elit.
  * <p>
  * Change History
  * ------Who----- ---When--- ---------------------What----------------------
- * H. Melville    1851.01.31 Wooden whales, or whales cut in profile out of 
+ * H. Melville    1851.01.31 Wooden whales, or whales cut in profile out of
  *
  ***************************************************************************/
-public class StockDetailCursorAdapter extends CursorAdapter {
+public class AddStockCursorAdapter extends CursorAdapter {
     private Context mContext;
     private Cursor mCursor;
     private int mFlags;
 
     // layout of display, field by field
     static class ViewHolder {
-        public TextView symbolTextView;
-        public TextView openingPriceTextView;
-        public TextView previousClosingPriceTextView;
-        public TextView bidPriceTextView;
-        public TextView bidSizeTextView;
-        public TextView askPriceTextView;
-        public TextView askSizeTextView;
-        public TextView lastTradePriceTextView;
-        public TextView lastTradeQuantityTextView;
-        public TextView lastTradeDateTimeTextView;
-        public TextView insertDateTimeTextView;
-        public TextView modifyDateTimeTextView;
+        public TextView text;
     }
 
-
-    //
-    public StockDetailCursorAdapter(Context context, Cursor c, int flags) {
+    public AddStockCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
         this.mContext = context;
         this.mCursor = c;
         this.mFlags = flags;
     }
 
-
-    //
     @Override
     public View newView(final Context context, Cursor cursor, ViewGroup parent) {
         LayoutInflater inflater =  (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -80,8 +68,6 @@ public class StockDetailCursorAdapter extends CursorAdapter {
         return v;
     }
 
-
-    //
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
 
