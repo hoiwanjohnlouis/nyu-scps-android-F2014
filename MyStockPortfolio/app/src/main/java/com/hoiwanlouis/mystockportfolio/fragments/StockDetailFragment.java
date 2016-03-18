@@ -179,17 +179,27 @@ public class StockDetailFragment extends Fragment {
         outState.putLong(Gui2Database.BUNDLE_KEY, rowID);
     } // end method onSaveInstanceState()
 
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    // callback to main to redisplay screen;
-    public void onButtonPressed() {
-        Log.i(DEBUG_TAG, "in onButtonPressed()");
-        if (mListener != null) {
-            mListener.onSDFLCompleted();
-        }
-    }
+    //
+    // when fragment starts
+    //
+    @Override
+    public void onStart() {
+        Log.i(DEBUG_TAG, "in onStart()");
+        super.onStart();
+    } // end method onStart()
 
+    //
+    // when fragment resumes, clean up
+    //
+    @Override
+    public void onStop() {
+        Log.i(DEBUG_TAG, "in onStop()");
+        super.onStop();
+    } // end method onStop()
+
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
     //
     // *****************************************************
     // performs database query outside GUI thread
@@ -256,5 +266,15 @@ public class StockDetailFragment extends Fragment {
             onButtonPressed();
         } // end method onPostExecute
     } // end class LoadStockDetailAsyncTask
+
+    //
+    // callback to main to redisplay screen;
+    //
+    public void onButtonPressed() {
+        Log.i(DEBUG_TAG, "in onButtonPressed()");
+        if (mListener != null) {
+            mListener.onSDFLCompleted();
+        }
+    }
 
 }

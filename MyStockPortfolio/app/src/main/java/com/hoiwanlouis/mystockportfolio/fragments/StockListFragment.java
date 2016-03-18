@@ -21,15 +21,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
@@ -37,7 +33,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hoiwanlouis.mystockportfolio.R;
-import com.hoiwanlouis.mystockportfolio.SettingsActivity;
 import com.hoiwanlouis.mystockportfolio.adapters.StockListCursorAdapter;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
 import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
@@ -78,8 +73,6 @@ public class StockListFragment extends ListFragment {
     private ListView mListView;
     // adapter for ListView
     private CursorAdapter mCursorAdapter;
-    //
-//    private ImageButton addStockSaveButton;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -115,8 +108,8 @@ public class StockListFragment extends ListFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         Log.i(DEBUG_TAG, "in onCreate()");
+        super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -170,7 +163,7 @@ public class StockListFragment extends ListFragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Log.i(DEBUG_TAG, "in onItemClickListener()");
-                    Bundle arguments = new Bundle();
+                    final Bundle arguments = new Bundle();
                     arguments.putLong(Gui2Database.BUNDLE_KEY, id);
                     // let the callback take care of this, normally for StockDetailFragment to handle
                     mListener.onSLFLStockSelected(arguments);
@@ -183,10 +176,10 @@ public class StockListFragment extends ListFragment {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                     Log.i(DEBUG_TAG, "in onItemLongClickListener()");
-                    final DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
+                    final DatabaseConnector dbconnector = new DatabaseConnector(getActivity());
                     // need tickerId and tickerSymbol for logging
                     final long tickerId = id;
-                    TextView nameView = (TextView) view.findViewById(R.id.TextView_symbol);
+                    final TextView nameView = (TextView) view.findViewById(R.id.TextView_symbol);
                     final String tickerSymbol = nameView.getText().toString();
                     // Use an Alert dialog to confirm delete operation
                     new AlertDialog.Builder(getActivity())
@@ -196,7 +189,7 @@ public class StockListFragment extends ListFragment {
                                         public void onClick(DialogInterface dialog,
                                                             int which) {
                                             // Delete the Symbol
-                                            databaseConnector.deleteOneStock(tickerId, tickerSymbol);
+                                            dbconnector.deleteOneStock(tickerId, tickerSymbol);
                                             // a symbol was deleted, refresh the data in our symbolList
                                             mListener.onSLFLStockDeleted();
                                         }
@@ -236,7 +229,16 @@ public class StockListFragment extends ListFragment {
     } // end method onResume()
 
     //
-    // when fragment resumes, use  GetContactsTask to load contacts
+    //
+    //
+    @Override
+    public void onStart() {
+        Log.i(DEBUG_TAG, "in onStart()");
+        super.onStart();
+    } // end method onStart()
+
+    //
+    // when fragment resumes, clean up
     //
     @Override
     public void onStop() {

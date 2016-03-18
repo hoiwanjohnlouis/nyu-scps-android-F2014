@@ -97,7 +97,7 @@ public class MainActivity extends Activity
             // add the fragment to the FrameLayout
             mFT = mFM.beginTransaction();
             mFT.add(R.id.fragmentContainer, addStockFragment);
-            mFT.add(R.id.fragmentContainer, stockListFragment);
+//            mFT.add(R.id.fragmentContainer, stockListFragment);
 //            mFT.add(R.id.fragmentContainer, stockDetailFragment);
 
             // causes ContactListFragment to display
@@ -194,6 +194,7 @@ public class MainActivity extends Activity
     //
     @Override
     public void onStart() {
+        Log.i(DEBUG_TAG, "in onStart()");
         super.onStart();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -218,6 +219,7 @@ public class MainActivity extends Activity
     //
     @Override
     public void onStop() {
+        Log.i(DEBUG_TAG, "in onStop()");
         super.onStop();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -311,7 +313,7 @@ public class MainActivity extends Activity
     // show the DetailsFragment for selected item/symbol
     //
     @Override
-    public void onSLFLStockSelected(Bundle arguments) {
+    public void onSLFLStockSelected(final Bundle arguments) {
         Log.i(DEBUG_TAG, "in onSLFLStockSelected()");
         if (isAPhoneDevice()) {
             // phone
@@ -351,6 +353,7 @@ public class MainActivity extends Activity
      * public boolean isAPhoneDevice()
      ***************************************************************/
     public boolean isAPhoneDevice() {
+        Log.i(DEBUG_TAG, "in isAPhoneDevice()");
         return (findViewById(R.id.fragmentContainer) != null);
     }
 
@@ -361,11 +364,11 @@ public class MainActivity extends Activity
      * <p>
      * display fragment after adding a new symbol
      ***************************************************************/
-    private void showMainFragment(int viewID, Bundle arguments) {
+    private void showMainFragment(final int viewID, final Bundle arguments) {
         Log.i(DEBUG_TAG, "in showMainFragment()");
 
         // set the bundled arguments into the DetailsFragment
-        StockListFragment fragment = StockListFragment.newInstance();
+        final StockListFragment fragment = StockListFragment.newInstance();
         if (arguments != null) {
             // editing existing symbol?
             fragment.setArguments(arguments);
@@ -387,13 +390,13 @@ public class MainActivity extends Activity
      * <p>
      * display a item/symbol
      ***************************************************************/
-    private void showDetailFragment(int viewID, Bundle arguments) {
+    private void showDetailFragment(final int viewID, final Bundle arguments) {
         Log.i(DEBUG_TAG, "in showDetailFragment()");
 
         // set the bundle as arguments into the Fragment
-        StockDetailFragment fragment = StockDetailFragment.newInstance();
+        final StockDetailFragment fragment = StockDetailFragment.newInstance();
 
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         if (arguments != null) {
             sb.append("requesting StockDetailFragment for [");
             sb.append(Gui2Database.BUNDLE_KEY);

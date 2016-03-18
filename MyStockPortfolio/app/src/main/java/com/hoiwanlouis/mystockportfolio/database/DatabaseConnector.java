@@ -94,7 +94,7 @@ public class DatabaseConnector {
     // **************************************************************
     // inserts a new item/symbol row into the database
     // **************************************************************
-    public long addOneStock(String tickerSymbol) {
+    public long addOneStock(final String tickerSymbol) {
         Log.i(DEBUG_TAG, "in addOneStock()");
 
         // create a content object
@@ -115,17 +115,17 @@ public class DatabaseConnector {
     // updates an existing item/symbol row in the database
     // **************************************************************
     public void updateOneStock(
-            long id,                        // 1 used to access the portfolio object from database
-            String tickerSymbol,
-            String openingPrice,
-            String closingPrice,
-            String bidPrice,                // 5
-            String bidSize,
-            String askPrice,
-            String askSize,
-            String tradePrice,
-            String tradeQuantity,           // 10
-            String tradeDateTime
+            final long id,                        // 1 used to access the portfolio object from database
+            final String tickerSymbol,
+            final String openingPrice,
+            final String closingPrice,
+            final String bidPrice,                // 5
+            final String bidSize,
+            final String askPrice,
+            final String askSize,
+            final String tradePrice,
+            final String tradeQuantity,           // 10
+            final String tradeDateTime
     ) {
         Log.i(DEBUG_TAG, "in updateOneStock()");
 
@@ -173,7 +173,7 @@ public class DatabaseConnector {
     // **************************************************************
     // return a Cursor containing specified item/symbol's information
     // **************************************************************
-    public Cursor getOneStockUsingId(long id) {
+    public Cursor getOneStockUsingId(final long id) {
         Log.i(DEBUG_TAG, "in getOneStockUsingId()");
 
         return sqLiteDatabase.query(
@@ -188,10 +188,10 @@ public class DatabaseConnector {
     // todo: remove this function if it's no longer needed
     // return a Cursor containing specified item/symbol's information
     // **************************************************************
-    public Cursor getOneStockUsingString(String searchSymbol) {
+    public Cursor getOneStockUsingString(final String searchSymbol) {
         Log.i(DEBUG_TAG, "in getOneStockUsingString()");
 
-        StringBuilder tmpSelection = new StringBuilder();
+        final StringBuilder tmpSelection = new StringBuilder();
         tmpSelection.append(DatabaseColumns.Portfolio.SYMBOL);
         tmpSelection.append("=");
         tmpSelection.append(searchSymbol);
@@ -206,15 +206,15 @@ public class DatabaseConnector {
     // **************************************************************
     // delete the specified ticker symbol using database _ID field
     // **************************************************************
-    public void deleteOneStock(Long id, String symbol) {
+    public void deleteOneStock(final Long id, final String symbol) {
         Log.i(DEBUG_TAG, "deleteOneStock[" + symbol + "], _ID[" + id.toString() + "] Starts...");
 
-        String deleteArgs[] = { id.toString() };
+        final String deleteArgs[] = { id.toString() };
         // todo: should add triggers to handle multiple tables
 
         // openForUpdate the database
         openForUpdate();
-        long rc = sqLiteDatabase.delete(
+        final long rc = sqLiteDatabase.delete(
                 DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME,
                 DatabaseColumns.Portfolio._ID + "=?",
                 deleteArgs

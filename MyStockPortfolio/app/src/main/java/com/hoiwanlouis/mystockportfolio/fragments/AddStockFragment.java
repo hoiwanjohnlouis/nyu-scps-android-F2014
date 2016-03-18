@@ -2,6 +2,7 @@ package com.hoiwanlouis.mystockportfolio.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.hoiwanlouis.mystockportfolio.R;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
@@ -62,8 +64,8 @@ public class AddStockFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         Log.i(DEBUG_TAG, "in onCreate()");
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -81,31 +83,43 @@ public class AddStockFragment extends Fragment {
         // Save the stock to database;
         ImageButton mSaveButton;
         mSaveButton = (ImageButton) v.findViewById(R.id.add_stock_save_button);
-        mSaveButton.setOnClickListener(onClickListener);
+        mSaveButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // todo: add check for no data in edittext field
+                        EditText tickerSymbol = (EditText) v.findViewById(R.id.add_stock_edit_text);
+                        if (editTextIsNull(tickerSymbol)) {
+                            // let's have a toast
+                            Toast.makeText(getActivity(), "Please enter a Stock Symbol.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // get DatabaseConnector to interact with the SQLite database
+                            DatabaseConnector dbConnector = new DatabaseConnector(getActivity());
+                            // insert the contact information into the database
+                            long rowID = dbConnector.addOneStock(tickerSymbol.getText().toString());
+                            // reset form
+                            tickerSymbol.setText(null);
+                        }
+                        // callback to main;
+                        onButtonPressed();
+                    }
+                }
+        );
 
         return v;
     }
 
-    private View.OnClickListener onClickListener =
-            new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EditText tickerSymbol = (EditText) v.findViewById(R.id.add_stock_edit_text);
-                    // get DatabaseConnector to interact with the SQLite database
-                    DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
-                    // insert the contact information into the database
-                    long rowID = databaseConnector.addOneStock(tickerSymbol.getText().toString());
-                    // reset form
-                    tickerSymbol.setText(null);
-                    // callback to main;
-                    onButtonPressed();
-                }
-    };
-
+    private boolean editTextIsNull(final EditText stock) {
+        boolean isNull = true;
+        if (stock != null) {
+            isNull = false;
+        }
+        return isNull;
+    }
     @Override
     public void onAttach(Activity context) {
-        super.onAttach(context);
         Log.i(DEBUG_TAG, "in onAttach()");
+        super.onAttach(context);
         if (context instanceof OnAddStockFragmentListener) {
             mListener = (OnAddStockFragmentListener) context;
         } else {
@@ -116,10 +130,28 @@ public class AddStockFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        super.onDetach();
         Log.i(DEBUG_TAG, "in onDetach()");
+        super.onDetach();
         mListener = null;
     }
+
+    //
+    // when fragment starts
+    //
+    @Override
+    public void onStart() {
+        Log.i(DEBUG_TAG, "in onStart()");
+        super.onStart();
+    } // end method onStart()
+
+    //
+    // when fragment resumes, clean up
+    //
+    @Override
+    public void onStop() {
+        Log.i(DEBUG_TAG, "in onStop()");
+        super.onStop();
+    } // end method onStop()
 
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
