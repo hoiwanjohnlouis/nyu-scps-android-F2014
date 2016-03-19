@@ -97,7 +97,7 @@ public class MainActivity extends Activity
             // add the fragment to the FrameLayout
             mFT = mFM.beginTransaction();
             mFT.add(R.id.fragmentContainer, addStockFragment);
-//            mFT.add(R.id.fragmentContainer, stockListFragment);
+            mFT.add(R.id.fragmentContainer, stockListFragment);
 //            mFT.add(R.id.fragmentContainer, stockDetailFragment);
 
             // causes ContactListFragment to display
@@ -246,13 +246,13 @@ public class MainActivity extends Activity
     /***************************************************************
      * Start of AddStockFragmentListener interfaces implementations
      * <p>
-     * 1. public void onASFLStockAdded();
+     * 1. public void onASFLStockAdded(final Bundle arguments);
      ***************************************************************/
     //
     // implementing AddStockFragmentListener interfaces
     //
     @Override
-    public void onASFLStockAdded() {
+    public void onASFLStockAdded(final Bundle arguments) {
         Log.i(DEBUG_TAG, "in onASFLCompleted()");
         mFM.popBackStack(); // removes top of back stack
 
@@ -305,7 +305,7 @@ public class MainActivity extends Activity
     /***************************************************************
      * Start of StockListFragmentListener interfaces implementations
      * <p>
-     * 1.  public void onSLFLStockSelected(long rowID)
+     * 1.  public void onSLFLStockSelected(final Bundle arguments)
      * 2.  public void onSLFLStockDeleted();
      ***************************************************************/
     //

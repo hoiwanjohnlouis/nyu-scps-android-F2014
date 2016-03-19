@@ -4,11 +4,11 @@
     <string name="hello_world">Hello World!</string>
     <string name="app_name">MyStockPortfolio</string>
     <string name="app_title">My Stock Portfolio</string>
-    <string name="title_activity_main">MyStockPortfolio</string>
 
     <string name="google_app_id">MyStockPortfolio</string>
 
-
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main">MainActivity</string>
 
     <!-- start: string values for the menu_main/help -->
     <string name="main_activity_help_title">Help</string>
@@ -61,10 +61,6 @@
     <string name="inputSymbolPrompt">Enter a Ticker Symbol</string>
     <!-- end: string values for the copyright footer -->
 
-    <!-- start: string values for save button functionality -->
-    <string name="saveItem">Save</string>
-    <!-- end: string values for save button functionality -->
-
     <!-- start: string values for fragment Add,Edit,and Delete functionality -->
     <string name="fragment_no_items">No Symbols</string>
     <string name="fragment_menuitem_add">Add</string>
@@ -76,9 +72,14 @@
     <string name="fragment_delete_button_cancel">Cancel</string>
     <string name="fragment_delete_button_delete">Delete</string>
 
-    <string name="error_saving_positive_button">OK</string>
-    <string name="error_saving_message">You must enter a stock symbol</string>
+    <string name="fragment_save_button">Save</string>
+    <string name="fragment_error_saving_button">Okay</string>
+    <string name="fragment_error_saving_message">Missing required data, error on save</string>
     <!-- end: string values for fragment Add,Edit, and Delete functionality -->
+
+    <!-- start: string values for save button functionality -->
+    <string name="saveItem">Save</string>
+    <!-- end: string values for save button functionality -->
 
     <!--
     See below URL for how to access finance.yahoo.com data

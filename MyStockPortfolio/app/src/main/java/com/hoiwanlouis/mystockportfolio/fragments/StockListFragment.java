@@ -26,7 +26,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
@@ -116,6 +118,17 @@ public class StockListFragment extends ListFragment {
         }
     }
 
+    // configures the QuizFragment when its View is created
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        Log.v(DEBUG_TAG, "in onCreateView()");
+        super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_stock_list, container, false);
+
+        return view; // returns the fragment's view for display
+    }
+
     //
     // called after StockListFragment is created
     //
@@ -124,12 +137,14 @@ public class StockListFragment extends ListFragment {
         Log.i(DEBUG_TAG, "in onViewCreated()");
         super.onViewCreated(view, savedInstanceState);
 
+        // save fragment across configuration changes
+        setRetainInstance(true);
         // set text to display when there is no data
         setEmptyText(getResources().getString(R.string.fragment_no_items));
 
         // get ListView reference and configure it (the ListView)
         mListView = getListView();
-//        mListView = (ListView) view.findViewById(R.id.list);
+        mListView = (ListView) view.findViewById(R.id.list);
         mListView.setOnItemClickListener(onItemClickListener);
         mListView.setOnItemLongClickListener(onItemLongClickListener);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -151,8 +166,8 @@ public class StockListFragment extends ListFragment {
 //                        0);
 
         // set adapter that supplies data
-//        mListView.setAdapter(mCursorAdapter);
-        setListAdapter(mCursorAdapter);
+        mListView.setAdapter(mCursorAdapter);
+//        setListAdapter(mCursorAdapter);
     } // end method onViewCreated()
 
     //

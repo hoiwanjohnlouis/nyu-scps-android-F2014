@@ -19,6 +19,7 @@ package com.hoiwanlouis.mystockportfolio.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,9 @@ public class StockListCursorAdapter extends CursorAdapter {
     private Context mContext;
     private Cursor mCursor;
     private int mFlags;
+
+    //
+    private final String DEBUG_TAG = this.getClass().getSimpleName();
 
     // layout of display, field by field
     static class ViewHolder {
@@ -70,8 +74,9 @@ public class StockListCursorAdapter extends CursorAdapter {
     //
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        Log.i(DEBUG_TAG, "in newView()");
         LayoutInflater inflater =  (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.fragment_stock_detail, parent, false);
+        View v = inflater.inflate(R.layout.fragment_stock_list, parent, false);
 
         //
         ViewHolder holder = new ViewHolder();
@@ -97,6 +102,7 @@ public class StockListCursorAdapter extends CursorAdapter {
     //
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        Log.i(DEBUG_TAG, "in bindView()");
 
         // resource Ids for readonly TextViews, must match detail layout
         // fetch the column indices for each data item

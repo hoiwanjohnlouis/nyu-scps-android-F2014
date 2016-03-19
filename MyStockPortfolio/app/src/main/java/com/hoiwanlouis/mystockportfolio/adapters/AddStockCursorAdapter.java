@@ -45,6 +45,9 @@ public class AddStockCursorAdapter extends CursorAdapter {
     private Cursor mCursor;
     private int mFlags;
 
+    //
+    private final String DEBUG_TAG = this.getClass().getSimpleName();
+
     // layout of display, field by field
     static class ViewHolder {
         public TextView text;
