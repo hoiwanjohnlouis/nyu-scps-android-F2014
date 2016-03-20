@@ -133,7 +133,7 @@ public class MyActivity extends ListActivity {
                     .hideSoftInputFromWindow(tagEditText.getWindowToken(), 0);
             }
             else {
-                // display message asking user to provide a query and a tag
+                // display message  asking user to provide a query and a tag
 
                 // create a new AlertDialog Builder
                 AlertDialog.Builder builder = new AlertDialog.Builder(MyActivity.this);
