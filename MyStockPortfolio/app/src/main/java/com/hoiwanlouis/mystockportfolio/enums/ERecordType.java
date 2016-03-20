@@ -28,12 +28,35 @@ package com.hoiwanlouis.mystockportfolio.enums;
  *
  ***************************************************************************/
 public enum ERecordType {
-    TRADE_RECORD;
+
+    TRADE_RECORD("8","Execution Report");
+
+    private final String recordTypeValue;
+    private final String recordTypeDescription;
+
+    ERecordType(String recordTypeValue, String recordTypeDescription) {
+        this.recordTypeValue = recordTypeValue;
+        this.recordTypeDescription = recordTypeDescription;
+    }
+
+    public String getRecordTypeValue() {
+        return recordTypeValue;
+    }
+
+    public String getRecordTypeDescription() {
+        return recordTypeDescription;
+    }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.name());
+        sb.append(":[");
+        sb.append(getRecordTypeValue());
+        sb.append("]");
+        sb.append(":[");
+        sb.append(getRecordTypeDescription());
+        sb.append("]");
         return sb.toString();
     }
 }

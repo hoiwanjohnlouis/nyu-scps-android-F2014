@@ -30,24 +30,38 @@ package com.hoiwanlouis.mystockportfolio.enums;
 // from FixProtocol.org website www.fixprotocol.org
 public enum EFieldType {
 
-    DEFAULT_COMPANY_NAME,
-    DEFAULT_TICKER_SYMBOL,
-    DEFAULT_PRICE,
-    DEFAULT_QUANTITY,
-    DEFAULT_DATE_TIME_STAMP,
+//    DEFAULT_COMPANY_NAME,
+//    DEFAULT_TICKER_SYMBOL,
+//    DEFAULT_PRICE,
+//    DEFAULT_QUANTITY,
+//    DEFAULT_DATE_TIME_STAMP,
 
-    COMPANY_NAME,
-    TICKER_SYMBOL,
-    OPENING_PRICE,
-    PREVIOUS_DAYS_CLOSING_PRICE,
-    TRADE_PRICE,
-    TRADE_QUANTITY,
-    TRADE_DATE_TIME_STAMP;
+    COMPANY_NAME("COMPANY_NAME"),
+    TICKER_SYMBOL("55"),
+    OPENING_PRICE("OPENING_PRICE"),
+    PREVIOUS_DAYS_CLOSING_PRICE("PREVIOUS_DAYS_CLOSING_PRICE"),
+    TRADE_PRICE("31"),
+    TRADE_QUANTITY("32"),
+    TRADE_DATE_TIME_STAMP("60");
+
+    private final String fieldTypeValue;
+
+    private EFieldType(final String fieldTypeValue) {
+        this.fieldTypeValue = fieldTypeValue;
+    }
+
+    public String getFieldTypeValue() {
+        return fieldTypeValue;
+    }
+
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.name());
+        sb.append(":[");
+        sb.append(getFieldTypeValue());
+        sb.append("]");
         return sb.toString();
     }
 }
