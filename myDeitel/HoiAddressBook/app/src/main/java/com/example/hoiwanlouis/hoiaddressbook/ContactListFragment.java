@@ -6,10 +6,12 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
@@ -51,13 +53,23 @@ public class ContactListFragment extends ListFragment {
         listener = (ContactListFragmentListener) activity;
     } // end method onAttach()
 
-    // remove ContactListFragmentListener when Fragment is detached
+    //
     @Override
-    public void onDetach() {
-        Log.i(DEBUG_TAG, "in onDetach()");
-        super.onDetach();
-        listener = null;
-    } // end method onDetach
+    public void onCreate(Bundle savedInstanceState) {
+        Log.i(DEBUG_TAG, "in onCreate()");
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
+    //
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.i(DEBUG_TAG, "in onCreateView()");
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
     // called after View is created
     @Override
@@ -91,15 +103,19 @@ public class ContactListFragment extends ListFragment {
         setListAdapter(contactAdapter);
     } // end method onViewCreated()
 
+    //
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        Log.i(DEBUG_TAG, "in onActivityCreated()");
+        super.onActivityCreated(savedInstanceState);
+    }
 
-    // respond to user touching a contact's name in the ListView
-    AdapterView.OnItemClickListener viewContactListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Log.i(DEBUG_TAG, "in viewContactListener()/onItemClick()");
-            listener.onContactSelected(id);
-        }
-    };
+    //
+    @Override
+    public void onStart() {
+        Log.i(DEBUG_TAG, "in onStart()");
+        super.onStart();
+    } // end method onStart()
 
     // when fragment resumes, use  GetContactsTask to load contacts
     @Override
@@ -108,6 +124,13 @@ public class ContactListFragment extends ListFragment {
         super.onResume();
         new GetContactsTask().execute((Object[]) null);
     } // end method onResume()
+
+    //
+    @Override
+    public void onPause() {
+        Log.i(DEBUG_TAG, "in onPause()");
+        super.onPause();
+    }
 
     // when fragment resumes, use  GetContactsTask to load contacts
     @Override
@@ -126,6 +149,28 @@ public class ContactListFragment extends ListFragment {
 
         super.onStop();
     } // end method onStop()
+
+    //
+    @Override
+    public void onDestroyView() {
+        Log.i(DEBUG_TAG, "in onDestroyView()");
+        super.onDestroyView();
+    }
+
+    //
+    @Override
+    public void onDestroy() {
+        Log.i(DEBUG_TAG, "in onDestroy()");
+        super.onDestroy();
+    }
+
+    // remove ContactListFragmentListener when Fragment is detached
+    @Override
+    public void onDetach() {
+        Log.i(DEBUG_TAG, "in onDetach()");
+        super.onDetach();
+        listener = null;
+    } // end method onDetach
 
     // display this fragment's menu items
     @Override
@@ -158,6 +203,19 @@ public class ContactListFragment extends ListFragment {
         return super.onOptionsItemSelected(item);
     } // end method onOptionsItemSelected()
 
+
+    // respond to user touching a contact's name in the ListView
+    AdapterView.OnItemClickListener viewContactListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.i(DEBUG_TAG, "in viewContactListener()/onItemClick()");
+            listener.onContactSelected(id);
+        }
+    };
+
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
     // update data set
     public void updateContactList() {
         Log.i(DEBUG_TAG, "in updateContactList()");
