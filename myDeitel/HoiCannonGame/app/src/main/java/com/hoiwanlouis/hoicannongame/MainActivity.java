@@ -16,6 +16,7 @@ public class MainActivity extends Activity
         Log.i(DEBUG_TAG, "in onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
     }
 
 
