@@ -17,7 +17,6 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-
 public class ContactListFragment extends ListFragment {
 
     private final String DEBUG_TAG = this.getClass().getSimpleName();
