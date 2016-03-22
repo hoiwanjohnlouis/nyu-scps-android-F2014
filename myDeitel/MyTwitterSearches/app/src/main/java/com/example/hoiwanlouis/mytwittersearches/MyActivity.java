@@ -40,6 +40,7 @@ public class MyActivity extends ListActivity {
     private ArrayList<String> tags;             // table of tags for saved searches
     private ArrayAdapter<String> adapter;       // used to bind tags to a ListView
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate Starting...");
