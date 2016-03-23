@@ -9,10 +9,9 @@
     <string name="google_app_id">MyStockPortfolio</string>
 
 
-
     <!-- start: string values for the menu_main/help -->
     <string name="main_activity_help_title">Help</string>
-    <string name="main_activity_help_data">        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="main_activity_help_data">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
     <!-- end: string values for the menu_main/help -->
 
     <!-- start: string values for the menu_main/setting -->
@@ -21,7 +20,7 @@
 
     <!-- start: string values for the menu_main/about -->
     <string name="main_activity_about_title">About MyStockPortfolio...</string>
-    <string name="main_activity_about_data">        final class project for android app development.
+    <string name="main_activity_about_data">final class project for android app development.
         1. save a list of stocks in SQLite.
         2. fetch current prices from finance.yahoo.com.
         3. save prices into SQLite for each stock.
@@ -66,7 +65,7 @@
     <!-- end: string values for save button functionality -->
 
     <!-- start: string values for fragment Add,Edit,and Delete functionality -->
-    <string name="fragment_no_items">No Symbols</string>
+    <string name="fragment_no_items">No Stocks</string>
     <string name="fragment_menuitem_add">Add</string>
     <string name="fragment_menuitem_edit">Edit</string>
     <string name="fragment_menuitem_delete">Delete</string>

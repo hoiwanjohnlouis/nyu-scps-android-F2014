@@ -24,9 +24,13 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hoiwanlouis.mystockportfolio.R;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns;
@@ -53,7 +57,7 @@ public class StockDetailFragment extends Fragment {
     //
     public interface StockDetailFragmentListener {
         // called when fragment is done
-        void onSDFLCompleted();
+        void onSDFLStockDetailComplete();
     }
 
     // for logging purposes
@@ -197,6 +201,49 @@ public class StockDetailFragment extends Fragment {
         super.onStop();
     } // end method onStop()
 
+    //
+    // display this fragment's menu items
+    //
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_stock_detail_menu, menu);
+    } // end method onCreateOptionsMenu()
+
+    //
+    // handle menu item selections
+    //
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(DEBUG_TAG, "in onOptionsItemSelected()");
+        Bundle arguments = new Bundle();
+        switch (item.getItemId())
+        {
+            case R.id.action_edit:
+                // create Bundle containing contact data to edit
+                arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
+                // pass Bundle to listener for processing
+                //listener.onEditContact(arguments);
+                Toast.makeText(getActivity(),"Detail Edit Stock is not supported!", Toast.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.action_delete:
+                // create Bundle containing contact data to edit
+                arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
+                Toast.makeText(getActivity(),"Detail Delete Stock is not supported at this time!", Toast.LENGTH_SHORT).show();
+                //deleteContact();
+                return true;
+
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    } // end method onOptionsItemSelected
+
+
+
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
@@ -230,18 +277,18 @@ public class StockDetailFragment extends Fragment {
             result.moveToFirst();
 
             // fetch the column indices for each data item to shorten code lines
-            int symbolIndex = result.getColumnIndex(DatabaseColumns.Portfolio.SYMBOL);
-            int openingPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.OPENING_PRICE);
-            int previousClosingPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.PREVIOUS_CLOSING_PRICE);
-            int bidPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.BID_PRICE);
-            int bidSizeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.BID_SIZE);
-            int askPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.ASK_PRICE);
-            int askSizeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.ASK_SIZE);
-            int lastTradePriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_PRICE);
-            int lastTradeQuantityIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_QUANTITY);
-            int lastTradeDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_DATETIME);
-            int insertDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.INSERT_DATETIME);
-            int modifyDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.MODIFY_DATETIME);
+            final int symbolIndex = result.getColumnIndex(DatabaseColumns.Portfolio.SYMBOL);
+            final int openingPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.OPENING_PRICE);
+            final int previousClosingPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.PREVIOUS_CLOSING_PRICE);
+            final int bidPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.BID_PRICE);
+            final int bidSizeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.BID_SIZE);
+            final int askPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.ASK_PRICE);
+            final int askSizeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.ASK_SIZE);
+            final int lastTradePriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_PRICE);
+            final int lastTradeQuantityIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_QUANTITY);
+            final int lastTradeDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_DATETIME);
+            final int insertDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.INSERT_DATETIME);
+            final int modifyDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.MODIFY_DATETIME);
 
             // fetch the data and load into the TextViews
             symbolTextView.setText(result.getString(symbolIndex));
@@ -273,7 +320,7 @@ public class StockDetailFragment extends Fragment {
     public void onButtonPressed() {
         Log.i(DEBUG_TAG, "in onButtonPressed()");
         if (mListener != null) {
-            mListener.onSDFLCompleted();
+            mListener.onSDFLStockDetailComplete();
         }
     }
 

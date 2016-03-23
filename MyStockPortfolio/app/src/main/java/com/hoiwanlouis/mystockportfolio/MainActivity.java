@@ -91,14 +91,14 @@ public class MainActivity extends Activity
         if (isAPhoneDevice()) {
             // create ContactListFragment
             addStockFragment = AddStockFragment.newInstance();
-            stockListFragment = StockListFragment.newInstance();
+//            mFT.add(R.id.fragmentContainer, addStockFragment);
             stockDetailFragment = StockDetailFragment.newInstance();
+//            mFT.add(R.id.fragmentContainer, stockDetailFragment);
 
             // add the fragment to the FrameLayout
+            stockListFragment = StockListFragment.newInstance();
             mFT = mFM.beginTransaction();
-            mFT.add(R.id.fragmentContainer, addStockFragment);
             mFT.add(R.id.fragmentContainer, stockListFragment);
-//            mFT.add(R.id.fragmentContainer, stockDetailFragment);
 
             // causes ContactListFragment to display
             mFT.commit();
@@ -111,68 +111,6 @@ public class MainActivity extends Activity
 
 
     //
-    // display this fragment's menu items
-    //
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    } // end method onCreateOptionsMenu()
-
-
-    //
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    //
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(DEBUG_TAG, "in onOptionsItemSelected()");
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-        AlertDialog dialog;
-
-        boolean selected;
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.main_activity_settings_id:
-                startActivity( new Intent(getApplicationContext(), SettingsActivity.class));
-                selected = true;
-                break;
-            case R.id.main_activity_help_id:
-                builder.setTitle(R.string.main_activity_help_title);
-                builder.setMessage(R.string.main_activity_help_data);
-                dialog = builder.create();
-                dialog.show();
-                selected = true;
-                break;
-            case R.id.main_activity_about_id:
-                builder.setTitle(R.string.main_activity_about_title);
-                builder.setMessage(R.string.main_activity_about_data);
-                dialog = builder.create();
-                dialog.show();
-                selected = true;
-                break;
-
-//            case R.id.action_add:;
-//                mListener.onSLFLStockDeleted();
-//                selected = true;
-//                break;
-
-            default:
-                ;
-                selected = super.onOptionsItemSelected(item);
-                break;
-        }
-
-        return selected;
-    } // end method onOptionsItemSelected()
-
-
-    //
     // called when Activity resumes
     //
     @Override
@@ -182,9 +120,7 @@ public class MainActivity extends Activity
 
         // if this is a tablet, then stockListFragment is not set yet. i.e. it is null,
         // so get reference from FragmentManager and set it.
-        if (isAPhoneDevice()) {
-            ;
-        } else {
+        if (stockListFragment == null) {
             stockListFragment = (StockListFragment) mFM.findFragmentById(R.id.stockListFragment);
         }
     } // end method onResume
@@ -246,20 +182,20 @@ public class MainActivity extends Activity
     /***************************************************************
      * Start of AddStockFragmentListener interfaces implementations
      * <p>
-     * 1. public void onASFLStockAdded(final Bundle arguments);
+     * 1. public void onASFLAddStockComplete(final Bundle arguments);
      ***************************************************************/
     //
     // implementing AddStockFragmentListener interfaces
     //
     @Override
-    public void onASFLStockAdded(final Bundle arguments) {
+    public void onASFLAddStockComplete(final Bundle arguments) {
         Log.i(DEBUG_TAG, "in onASFLCompleted()");
-        mFM.popBackStack(); // removes top of back stack
 
+        mFM.popBackStack(); // removes top of back stack
         if (isAPhoneDevice()) {
-            ;
+            stockListFragment.updateStocksListView();
         } else {
-            // must be a tablet
+            // tablet
             stockListFragment.updateStocksListView();
         }
     }
@@ -275,15 +211,15 @@ public class MainActivity extends Activity
     /***************************************************************
      * Start of StockDetailFragmentListener interfaces implementations
      * <p>
-     * 1. public void onSDFLCompleted();
+     * 1. public void onSDFLStockDetailComplete();
      ***************************************************************/
     //
     // implementing StockDetailFragmentListener interfaces
     // return to inventory when displayed item/symbol is deleted
     //
     @Override
-    public void onSDFLCompleted() {
-        Log.i(DEBUG_TAG, "in onSDFLCompleted()");
+    public void onSDFLStockDetailComplete() {
+        Log.i(DEBUG_TAG, "in onSDFLStockDetailComplete()");
         getFragmentManager().popBackStack(); // removes top of back stack
 
         if (isAPhoneDevice()) {
@@ -305,16 +241,47 @@ public class MainActivity extends Activity
     /***************************************************************
      * Start of StockListFragmentListener interfaces implementations
      * <p>
-     * 1.  public void onSLFLStockSelected(final Bundle arguments)
-     * 2.  public void onSLFLStockDeleted();
+     * 1.  public void onSLFLStockDetailRequest(final Bundle arguments)
+     * 2.  public void onSLFLAddStockRequest();
      ***************************************************************/
     //
     // implementing StockListFragmentListener interfaces
-    // show the DetailsFragment for selected item/symbol
+    // onSLFLAddStockRequest will add a new item/symbol
     //
     @Override
-    public void onSLFLStockSelected(final Bundle arguments) {
-        Log.i(DEBUG_TAG, "in onSLFLStockSelected()");
+    public void onSLFLAddStockRequest() {
+        Log.i(DEBUG_TAG, "in onSLFLAddStockRequest()");
+        if (isAPhoneDevice()) {
+            showMainFragment(R.id.fragmentContainer, null);
+        } else {
+            showMainFragment(R.id.rightPaneContainer, null);
+        }
+    } // end method onSLFLAddStockRequest
+
+    //
+    // implementing StockListFragmentListener interfaces
+    // onSLFLDeleteStockComplete, just redisplay the screen
+    //
+    @Override
+    public void onSLFLDeleteStockComplete(final Bundle arguments) {
+        Log.i(DEBUG_TAG, "in onSLFLDeleteStockComplete()");
+
+        mFM.popBackStack(); // removes top of back stack
+        if (isAPhoneDevice()) {
+            ;
+        } else {
+            // tablet
+            stockListFragment.updateStocksListView();
+        }
+    } // end method onSLFLDeleteStockComplete
+
+    //
+    // implementing StockListFragmentListener interfaces
+    // onSLFLStockDetailRequest will display the detail screen for selected stock
+    //
+    @Override
+    public void onSLFLStockDetailRequest(final Bundle arguments) {
+        Log.i(DEBUG_TAG, "in onSLFLStockDetailRequest()");
         if (isAPhoneDevice()) {
             // phone
             showDetailFragment(R.id.fragmentContainer, arguments);
@@ -323,22 +290,8 @@ public class MainActivity extends Activity
             mFM.popBackStack(); // removes top of back stack
             showDetailFragment(R.id.rightPaneContainer, arguments);
         }
-    } // end method onSLFLStockSelected
+    } // end method onSLFLStockDetailRequest
 
-
-    //
-    // implementing StockListFragmentListener interfaces
-    // showMainFragment to add a new item/symbol
-    //
-    @Override
-    public void onSLFLStockDeleted() {
-        Log.i(DEBUG_TAG, "in onSLFLStockDeleted()");
-        if (isAPhoneDevice()) {
-            showMainFragment(R.id.fragmentContainer, null);
-        } else {
-            showMainFragment(R.id.rightPaneContainer, null);
-        }
-    } // end method onSLFLStockDeleted
     /***************************************************************
      *
      * End of StockListFragmentListener interfaces implementations
@@ -356,7 +309,6 @@ public class MainActivity extends Activity
         Log.i(DEBUG_TAG, "in isAPhoneDevice()");
         return (findViewById(R.id.fragmentContainer) != null);
     }
-
 
     /***************************************************************
      * worker function:

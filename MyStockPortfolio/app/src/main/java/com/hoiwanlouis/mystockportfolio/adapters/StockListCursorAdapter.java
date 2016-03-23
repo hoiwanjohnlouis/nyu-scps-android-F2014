@@ -76,7 +76,7 @@ public class StockListCursorAdapter extends CursorAdapter {
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         Log.i(DEBUG_TAG, "in newView()");
         LayoutInflater inflater =  (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.fragment_stock_list, parent, false);
+        View v = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
 
         //
         ViewHolder holder = new ViewHolder();

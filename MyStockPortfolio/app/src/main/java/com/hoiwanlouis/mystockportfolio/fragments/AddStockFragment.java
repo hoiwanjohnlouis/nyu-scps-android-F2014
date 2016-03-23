@@ -42,7 +42,7 @@ public class AddStockFragment extends Fragment {
      */
     public interface OnAddStockFragmentListener {
         // TODO: Update argument type and name
-        void onASFLStockAdded(Bundle arguments);
+        void onASFLAddStockComplete(Bundle arguments);
     }
 
     //
@@ -220,7 +220,7 @@ public class AddStockFragment extends Fragment {
         if (mListener != null) {
             Bundle arguments = new Bundle();
             arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
-            mListener.onASFLStockAdded(arguments);
+            mListener.onASFLAddStockComplete(arguments);
         }
     }
 
