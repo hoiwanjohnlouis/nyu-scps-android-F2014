@@ -22,6 +22,7 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -89,13 +90,7 @@ public class MainActivity extends Activity
         // check whether layout contains fragmentContainer (phone layout);
         // stockListFragment is always displayed, tablet devices will be initialized later in "onResume"
         if (isAPhoneDevice()) {
-            // create ContactListFragment
-            addStockFragment = AddStockFragment.newInstance();
-//            mFT.add(R.id.fragmentContainer, addStockFragment);
-            stockDetailFragment = StockDetailFragment.newInstance();
-//            mFT.add(R.id.fragmentContainer, stockDetailFragment);
-
-            // add the fragment to the FrameLayout
+            // create StockListFragment and add the fragment to the FrameLayout
             stockListFragment = StockListFragment.newInstance();
             mFT = mFM.beginTransaction();
             mFT.add(R.id.fragmentContainer, stockListFragment);
@@ -175,6 +170,24 @@ public class MainActivity extends Activity
         client.disconnect();
     }
 
+    @Override
+    protected void onRestart() {
+        Log.i(DEBUG_TAG, "in onRestart()");
+        super.onRestart();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.i(DEBUG_TAG, "in onPause()");
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i(DEBUG_TAG, "in onDestroy()");
+        super.onDestroy();
+    }
+
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
@@ -191,12 +204,14 @@ public class MainActivity extends Activity
     public void onASFLAddStockComplete(final Bundle arguments) {
         Log.i(DEBUG_TAG, "in onASFLCompleted()");
 
-        mFM.popBackStack(); // removes top of back stack
+        mFM.popBackStack(); // removes the addFragment from top of back stack
         if (isAPhoneDevice()) {
-            stockListFragment.updateStocksListView();
+            ;
         } else {
             // tablet
+            mFM.popBackStack(); // ensure we have removed all back stack entries
             stockListFragment.updateStocksListView();
+            showDetailFragment(R.id.rightPaneContainer, arguments);
         }
     }
     /***************************************************************
@@ -241,8 +256,9 @@ public class MainActivity extends Activity
     /***************************************************************
      * Start of StockListFragmentListener interfaces implementations
      * <p>
-     * 1.  public void onSLFLStockDetailRequest(final Bundle arguments)
-     * 2.  public void onSLFLAddStockRequest();
+     * 1.  public void onSLFLAddStockRequest();
+     * 2.  public void onSLFLDeleteStockComplete(final Bundle arguments)
+     * 3.  public void onSLFLStockDetailRequest(final Bundle arguments)
      ***************************************************************/
     //
     // implementing StockListFragmentListener interfaces
@@ -286,8 +302,7 @@ public class MainActivity extends Activity
             // phone
             showDetailFragment(R.id.fragmentContainer, arguments);
         } else {
-            // tablet
-            mFM.popBackStack(); // removes top of back stack
+            mFM.popBackStack(); // ensure we have removed all back stack entries
             showDetailFragment(R.id.rightPaneContainer, arguments);
         }
     } // end method onSLFLStockDetailRequest

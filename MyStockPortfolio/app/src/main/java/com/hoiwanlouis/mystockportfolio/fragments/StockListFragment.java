@@ -74,11 +74,11 @@ public class StockListFragment extends ListFragment {
     //
     private final String DEBUG_TAG = this.getClass().getSimpleName();
     //
-    private StockListFragmentListener mListener;
+    private StockListFragmentListener listener;
     //
-    private ListView mListView;
+    private ListView listView;
     // adapter for ListView
-    private CursorAdapter mCursorAdapter;
+    private CursorAdapter cursorAdapter;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -87,8 +87,8 @@ public class StockListFragment extends ListFragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String param1;
+    private String param2;
 
 
     //
@@ -122,7 +122,7 @@ public class StockListFragment extends ListFragment {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(context);
         // init callback to interface implementation
-        mListener = (StockListFragmentListener) context;
+        listener = (StockListFragmentListener) context;
     } // end method onAttach
 
     //
@@ -133,8 +133,8 @@ public class StockListFragment extends ListFragment {
         Log.i(DEBUG_TAG, "in onCreate()");
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            param1 = getArguments().getString(ARG_PARAM1);
+            param2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -164,33 +164,33 @@ public class StockListFragment extends ListFragment {
         setEmptyText(getResources().getString(R.string.fragment_no_items));
 
         // get ListView reference and configure it (the ListView)
-        mListView = getListView();
-//        mListView = (ListView) view.findViewById(R.id.list);
-        mListView.setOnItemClickListener(onItemClickListener);
-        mListView.setOnItemLongClickListener(onItemLongClickListener);
-        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        mListView.addFooterView(view.findViewById(R.id.copyright_layout));
+        listView = getListView();
+//        listView = (ListView) view.findViewById(R.id.list);
+        listView.setOnItemClickListener(onItemClickListener);
+        listView.setOnItemLongClickListener(onItemLongClickListener);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+//        listView.addFooterView(view.findViewById(R.id.copyright_layout));
 
         // map each item/symbol to a TextView in the ListView layout
 /*
-        mCursorAdapter =
+        cursorAdapter =
                 new StockListCursorAdapter(
                         getActivity(),
                         null,
                         0);
          */
-        mCursorAdapter =
+        cursorAdapter =
                 new SimpleCursorAdapter(
                         getActivity(),
-                        R.layout.app_item,
+                        android.R.layout.simple_list_item_1,
                         null,
                         Gui2Database.fromDBColumns,
                         Gui2Database.toRIds,
                         0);
 
         // set adapter that supplies data
-        mListView.setAdapter(mCursorAdapter);
-//        setListAdapter(mCursorAdapter);
+//        listView.setAdapter(cursorAdapter);
+        setListAdapter(cursorAdapter);
     } // end method onViewCreated()
 
     //
@@ -237,9 +237,9 @@ public class StockListFragment extends ListFragment {
     public void onStop() {
         Log.i(DEBUG_TAG, "in onStop()");
         // get current database cursor
-        Cursor cursor = mCursorAdapter.getCursor();
+        Cursor cursor = cursorAdapter.getCursor();
         // adapter now has no cursor (basically housekeeping and cleanup
-        mCursorAdapter.changeCursor(null);
+        cursorAdapter.changeCursor(null);
         // release the cursor
         if (cursor != null) {
             cursor.close();
@@ -273,7 +273,7 @@ public class StockListFragment extends ListFragment {
         Log.i(DEBUG_TAG, "in onDetach()");
         super.onDetach();
         // clean up callback for interface implementation
-        mListener = null;
+        listener = null;
     } // end method onDetach
 
     // display this fragment's menu items
@@ -344,9 +344,9 @@ public class StockListFragment extends ListFragment {
     //
     public void onAddStockButtonPressed() {
         Log.i(DEBUG_TAG, "in onAddStockButtonPressed()");
-        if (mListener != null) {
+        if (listener != null) {
             // let the callback take care of this
-            mListener.onSLFLAddStockRequest();
+            listener.onSLFLAddStockRequest();
         }
     }
 
@@ -355,19 +355,16 @@ public class StockListFragment extends ListFragment {
     //
     public void onStockSelectedButtonPressed(long id) {
         Log.i(DEBUG_TAG, "in onDeleteStockButtonPressed()");
-        if (mListener != null) {
+        if (listener != null) {
             final Bundle arguments = new Bundle();
             arguments.putLong(Gui2Database.BUNDLE_KEY, id);
             // let the callback take care of this
-            mListener.onSLFLStockDetailRequest(arguments);
+            listener.onSLFLStockDetailRequest(arguments);
         }
     }
 
     public void onDeleteStockButtonPressed(AdapterView<?> parent, View view, int position, long id) {
         Log.i(DEBUG_TAG, "in onDeleteStockButtonPressed()");
-        if (mListener != null) {
-            mListener.onSLFLAddStockRequest();
-        }
         final DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
         // need tickerId and tickerSymbol for logging
         final long tickerId = id;
@@ -375,25 +372,27 @@ public class StockListFragment extends ListFragment {
         final String tickerSymbol = nameView.getText().toString();
         // Use an Alert dialog to confirm delete operation
         new AlertDialog.Builder(getActivity())
-                .setMessage("Delete Stock Record for Symbol [" + tickerSymbol + "]?")
-                .setPositiveButton("Delete",
+                .setTitle(R.string.fragment_delete_title)
+                .setMessage(R.string.fragment_delete_message)
+                .setPositiveButton(R.string.fragment_delete_button_delete,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
                                                 int which) {
                                 // Delete the Symbol
                                 databaseConnector.deleteOneStock(tickerId, tickerSymbol);
                                 // a symbol was deleted, refresh the data in our symbolList
-                                if (mListener != null) {
+                                if (listener != null) {
                                     final Bundle arguments = new Bundle();
                                     arguments.putLong(Gui2Database.BUNDLE_KEY, tickerId);
                                     // let the callback take care of this
-                                    mListener.onSLFLDeleteStockComplete(arguments);
+                                    if (listener != null) {
+                                        listener.onSLFLDeleteStockComplete(arguments);
+                                    }
                                 }
                             }
                         })
-                .setNegativeButton("Cancel",null)  // do nothing if cancel
+                .setNegativeButton(R.string.fragment_delete_button_cancel, null)  // do nothing if cancel
                 .show();
-
     }
 
     //
@@ -432,8 +431,8 @@ public class StockListFragment extends ListFragment {
             // move to the first item
             results.moveToFirst();
 
-            mCursorAdapter.changeCursor(results);
-//            setListAdapter(mCursorAdapter);
+            cursorAdapter.changeCursor(results);
+//            setListAdapter(cursorAdapter);
             databaseConnector.close();
         } // end method onPostExecute()
 

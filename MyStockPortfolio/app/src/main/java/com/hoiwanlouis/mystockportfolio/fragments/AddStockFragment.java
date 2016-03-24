@@ -48,9 +48,9 @@ public class AddStockFragment extends Fragment {
     //
     private final String DEBUG_TAG = this.getClass().getSimpleName();
     //
-    private OnAddStockFragmentListener mListener;
+    private OnAddStockFragmentListener listener;
     //
-    private ImageButton mSaveStockSymbolButton;
+    private ImageButton saveStockSymbolButton;
     //
     private EditText stockSymbol;
     // database row id of the current contact
@@ -74,12 +74,27 @@ public class AddStockFragment extends Fragment {
         return fragment;
     }
 
+    //
+    @Override
+    public void onAttach(Activity context) {
+        Log.i(DEBUG_TAG, "in onAttach()");
+        super.onAttach(context);
+        if (context instanceof OnAddStockFragmentListener) {
+            listener = (OnAddStockFragmentListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnAddStockFragmentListener");
+        }
+    }
+
+    //
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(DEBUG_TAG, "in onCreate()");
         super.onCreate(savedInstanceState);
     }
 
+    //
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
@@ -95,13 +110,81 @@ public class AddStockFragment extends Fragment {
         stockSymbol = (EditText) v.findViewById(R.id.add_stock_edit_text);
 
         // Save the stockSymbol to database;
-        mSaveStockSymbolButton = (ImageButton) v.findViewById(R.id.add_stock_save_button);
-        mSaveStockSymbolButton.setOnClickListener(saveStockSymbolButtonClicked);
+        saveStockSymbolButton = (ImageButton) v.findViewById(R.id.add_stock_save_button);
+        saveStockSymbolButton.setOnClickListener(saveStockSymbolButtonClicked);
 
         return v;
     }
 
+    // called after View is created
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        Log.i(DEBUG_TAG, "in onViewCreated()");
+        super.onViewCreated(view, savedInstanceState);
+    }
 
+    //
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        Log.i(DEBUG_TAG, "in onActivityCreated()");
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    //
+    // when fragment starts
+    //
+    @Override
+    public void onStart() {
+        Log.i(DEBUG_TAG, "in onStart()");
+        super.onStart();
+    } // end method onStart()
+
+    // when fragment resumes
+    @Override
+    public void onResume() {
+        Log.i(DEBUG_TAG, "in onResume()");
+        super.onResume();
+    } // end method onResume()
+
+    //
+    @Override
+    public void onPause() {
+        Log.i(DEBUG_TAG, "in onPause()");
+        super.onPause();
+    }
+
+    // when fragment resumes, clean up
+    @Override
+    public void onStop() {
+        Log.i(DEBUG_TAG, "in onStop()");
+        super.onStop();
+    } // end method onStop()
+
+    //
+    @Override
+    public void onDestroyView() {
+        Log.i(DEBUG_TAG, "in onDestroyView()");
+        super.onDestroyView();
+    }
+
+    //
+    @Override
+    public void onDestroy() {
+        Log.i(DEBUG_TAG, "in onDestroy()");
+        super.onDestroy();
+    }
+
+    //
+    @Override
+    public void onDetach() {
+        Log.i(DEBUG_TAG, "in onDetach()");
+        super.onDetach();
+        listener = null;
+    }
+
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
     //
     // responds to event generated when user saves a contact
     //
@@ -155,54 +238,6 @@ public class AddStockFragment extends Fragment {
     }; // end OnClickListener saveContactButtonClicked
 
     //
-    //
-    //
-    @Override
-    public void onAttach(Activity context) {
-        Log.i(DEBUG_TAG, "in onAttach()");
-        super.onAttach(context);
-        if (context instanceof OnAddStockFragmentListener) {
-            mListener = (OnAddStockFragmentListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnAddStockFragmentListener");
-        }
-    }
-
-    //
-    //
-    //
-    @Override
-    public void onDetach() {
-        Log.i(DEBUG_TAG, "in onDetach()");
-        super.onDetach();
-        mListener = null;
-    }
-
-    //
-    // when fragment starts
-    //
-    @Override
-    public void onStart() {
-        Log.i(DEBUG_TAG, "in onStart()");
-        super.onStart();
-    } // end method onStart()
-
-    //
-    // when fragment resumes, clean up
-    //
-    @Override
-    public void onStop() {
-        Log.i(DEBUG_TAG, "in onStop()");
-        super.onStop();
-    } // end method onStop()
-
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    //
-    //
-    //
     private boolean editTextHasData(final EditText stock) {
         boolean hasData = false;
         Log.i(DEBUG_TAG, "in editTextHasData()");
@@ -210,18 +245,6 @@ public class AddStockFragment extends Fragment {
             hasData = true;
         }
         return hasData;
-    }
-
-    //
-    // callback to main to redisplay screen;
-    //
-    public void onButtonPressed() {
-        Log.i(DEBUG_TAG, "in onButtonPressed()");
-        if (mListener != null) {
-            Bundle arguments = new Bundle();
-            arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
-            mListener.onASFLAddStockComplete(arguments);
-        }
     }
 
     //
@@ -233,6 +256,18 @@ public class AddStockFragment extends Fragment {
         DatabaseConnector dbConnector = new DatabaseConnector(getActivity());
         // insert the contact information into the database
         rowID = dbConnector.addOneStock(stockSymbol.getText().toString());
+    }
+
+    //
+    // callback to main to redisplay screen;
+    //
+    public void onButtonPressed() {
+        Log.i(DEBUG_TAG, "in onButtonPressed()");
+        if (listener != null) {
+            Bundle arguments = new Bundle();
+            arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
+            listener.onASFLAddStockComplete(arguments);
+        }
     }
 
 }

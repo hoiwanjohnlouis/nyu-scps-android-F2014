@@ -63,7 +63,7 @@ public class StockDetailFragment extends Fragment {
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
     // for callback methods implemented by caller/invoker
-    private StockDetailFragmentListener mListener;
+    private StockDetailFragmentListener listener;
     //
     private long rowID = 0; // selected contact's rowID
 
@@ -97,6 +97,22 @@ public class StockDetailFragment extends Fragment {
         return fragment;
     }
 
+
+    // set StockDetailFragmentListener when fragment attached
+    @Override
+    public void onAttach(Activity context) {
+        Log.i(DEBUG_TAG, "in onAttach()");
+        super.onAttach(context);
+        // init callback to interface implementation
+        listener = (StockDetailFragmentListener) context;
+    } // end method onAttach
+
+    //
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        Log.i(DEBUG_TAG, "in onCreate()");
+        super.onCreate(savedInstanceState);
+    }
 
     //
     // called when StockDetailFragmentListener's view needs to be created
@@ -144,23 +160,28 @@ public class StockDetailFragment extends Fragment {
         return v;
     } // end method onCreateView
 
-    // set StockDetailFragmentListener when fragment attached
+    // called after View is created
     @Override
-    public void onAttach(Activity context) {
-        Log.i(DEBUG_TAG, "in onAttach()");
-        super.onAttach(context);
-        // init callback to interface implementation
-        mListener = (StockDetailFragmentListener) context;
-    } // end method onAttach
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        Log.i(DEBUG_TAG, "in onViewCreated()");
+        super.onViewCreated(view, savedInstanceState);
+    }
 
-    // remove StockDetailFragmentListener when fragment detached
+    //
     @Override
-    public void onDetach() {
-        Log.i(DEBUG_TAG, "in onDetach()");
-        super.onDetach();
-        // clean up callback methods implemented by caller/invoker
-        mListener = null;
-    } // end method onDetach
+    public void onActivityCreated(Bundle savedInstanceState) {
+        Log.i(DEBUG_TAG, "in onActivityCreated()");
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    //
+    // when fragment starts
+    //
+    @Override
+    public void onStart() {
+        Log.i(DEBUG_TAG, "in onStart()");
+        super.onStart();
+    } // end method onStart()
 
     //
     // called when the StockDetailFragment resumes
@@ -174,23 +195,11 @@ public class StockDetailFragment extends Fragment {
     } // end method onResume()
 
     //
-    // save currently displayed contact's row ID
-    //
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Log.i(DEBUG_TAG, "in onSaveInstanceState()");
-        super.onSaveInstanceState(outState);
-        outState.putLong(Gui2Database.BUNDLE_KEY, rowID);
-    } // end method onSaveInstanceState()
-
-    //
-    // when fragment starts
-    //
-    @Override
-    public void onStart() {
-        Log.i(DEBUG_TAG, "in onStart()");
-        super.onStart();
-    } // end method onStart()
+    public void onPause() {
+        Log.i(DEBUG_TAG, "in onPause()");
+        super.onPause();
+    }
 
     //
     // when fragment resumes, clean up
@@ -200,6 +209,39 @@ public class StockDetailFragment extends Fragment {
         Log.i(DEBUG_TAG, "in onStop()");
         super.onStop();
     } // end method onStop()
+
+    //
+    @Override
+    public void onDestroyView() {
+        Log.i(DEBUG_TAG, "in onDestroyView()");
+        super.onDestroyView();
+    }
+
+    //
+    @Override
+    public void onDestroy() {
+        Log.i(DEBUG_TAG, "in onDestroy()");
+        super.onDestroy();
+    }
+
+    // remove StockDetailFragmentListener when fragment detached
+    @Override
+    public void onDetach() {
+        Log.i(DEBUG_TAG, "in onDetach()");
+        super.onDetach();
+        // clean up callback methods implemented by caller/invoker
+        listener = null;
+    } // end method onDetach
+
+    //
+    // save currently displayed contact's row ID
+    //
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.i(DEBUG_TAG, "in onSaveInstanceState()");
+        super.onSaveInstanceState(outState);
+        outState.putLong(Gui2Database.BUNDLE_KEY, rowID);
+    } // end method onSaveInstanceState()
 
     //
     // display this fragment's menu items
@@ -319,8 +361,8 @@ public class StockDetailFragment extends Fragment {
     //
     public void onButtonPressed() {
         Log.i(DEBUG_TAG, "in onButtonPressed()");
-        if (mListener != null) {
-            mListener.onSDFLStockDetailComplete();
+        if (listener != null) {
+            listener.onSDFLStockDetailComplete();
         }
     }
 

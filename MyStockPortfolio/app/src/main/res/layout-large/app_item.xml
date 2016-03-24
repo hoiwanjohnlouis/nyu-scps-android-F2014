@@ -55,9 +55,27 @@
         />
 
     <TextView
-        android:id="@+id/TextView_last_trade_time"
+        android:id="@+id/TextView_last_trade_quantity"
         style="@style/item_field"
         android:text="item-09"
+        />
+
+    <TextView
+        android:id="@+id/TextView_last_trade_datetime"
+        style="@style/item_field"
+        android:text="item-10"
+        />
+
+    <TextView
+        android:id="@+id/TextView_insert_datetime"
+        style="@style/item_field"
+        android:text="item-11"
+        />
+
+    <TextView
+        android:id="@+id/TextView_modify_datetime"
+        style="@style/item_field"
+        android:text="item-12"
         />
 
 </LinearLayout>
