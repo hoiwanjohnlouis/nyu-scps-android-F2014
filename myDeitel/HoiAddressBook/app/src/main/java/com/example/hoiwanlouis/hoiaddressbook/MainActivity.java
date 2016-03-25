@@ -63,8 +63,8 @@ public class MainActivity extends Activity
 
     // display DetailsFragment for selected contact
     @Override
-    public void onContactSelected(long rowID) {
-        Log.i(DEBUG_TAG, "in onContactSelected()");
+    public void onContactDetailRequest(long rowID) {
+        Log.i(DEBUG_TAG, "in onContactDetailRequest()");
         if (findViewById(R.id.fragmentContainer) != null) {
             // phone
             displayContact(rowID, R.id.fragmentContainer);
@@ -74,7 +74,7 @@ public class MainActivity extends Activity
             getFragmentManager().popBackStack(); // removes top of back stack
             displayContact(rowID, R.id.rightPaneContainer);
         }
-    } // end method onContactSelected
+    } // end method onContactDetailRequest
 
     // display a contact
     private void displayContact(long rowID, int viewID) {
@@ -96,15 +96,15 @@ public class MainActivity extends Activity
 
     // display the AddEditFragment to add a new contact
     @Override
-    public void onAddContact() {
-        Log.i(DEBUG_TAG, "in onAddContact()");
+    public void onAddContactRequest() {
+        Log.i(DEBUG_TAG, "in onAddContactRequest()");
         if (findViewById(R.id.fragmentContainer) != null) {
             displayAddEditFragment(R.id.fragmentContainer, null);
         }
         else {
             displayAddEditFragment(R.id.rightPaneContainer, null);
         }
-    } // end method onAddContact
+    } // end method onAddContactRequest
 
     // display fragment for adding a new or editing an existing contact
     private void displayAddEditFragment(int viewID, Bundle arguments) {
@@ -126,20 +126,20 @@ public class MainActivity extends Activity
 
     // return to contact list when displayed contact deleted
     @Override
-    public void onContactDeleted() {
-        Log.i(DEBUG_TAG, "in onContactDeleted()");
+    public void onDeleteContactComplete() {
+        Log.i(DEBUG_TAG, "in onDeleteContactComplete()");
         getFragmentManager().popBackStack(); // removes top of back stack
 
         if (findViewById(R.id.fragmentContainer) == null) {
             // tablet
             contactListFragment.updateContactList();
         }
-    } // end method onContactDeleted
+    } // end method onDeleteContactComplete
 
     // display the AddEditFragment to edit an existing contact
     @Override
-    public void onEditContact(Bundle arguments) {
-        Log.i(DEBUG_TAG, "in onEditContact()");
+    public void onEditContactRequest(Bundle arguments) {
+        Log.i(DEBUG_TAG, "in onEditContactRequest()");
         if (findViewById(R.id.fragmentContainer) != null) {
             // phone
             displayAddEditFragment(R.id.fragmentContainer, arguments);
@@ -148,12 +148,12 @@ public class MainActivity extends Activity
             // must be a tablet
             displayAddEditFragment(R.id.rightPaneContainer, arguments);
         }
-    } // end method onEditContact
+    } // end method onEditContactRequest
 
     // update GUI after new contact or updated contact saved
     @Override
-    public void onAddEditCompleted(long rowID) {
-        Log.i(DEBUG_TAG, "in onAddEditCompleted()");
+    public void onAddEditContactComplete(long rowID) {
+        Log.i(DEBUG_TAG, "in onAddEditContactComplete()");
         // removes top of back stack
         getFragmentManager().popBackStack();
 
@@ -167,7 +167,7 @@ public class MainActivity extends Activity
             // on tablet, display contact that was just added or edited
             displayContact(rowID, R.id.rightPaneContainer);
         }
-    } // end method onAddEditCompleted
+    } // end method onAddEditContactComplete
 }
 
 

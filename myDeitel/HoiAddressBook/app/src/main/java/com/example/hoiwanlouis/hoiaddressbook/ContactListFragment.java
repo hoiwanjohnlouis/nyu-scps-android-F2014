@@ -24,11 +24,11 @@ public class ContactListFragment extends ListFragment {
     // call back methods implemented by MainActivity
     public interface ContactListFragmentListener {
         // called when user selects a contact
-        public void onContactSelected(long rowID);
+        public void onContactDetailRequest(long rowID);
 
         // called when user adds a contact
-        public void onAddContact();
-    } // end interface onContactSelected()
+        public void onAddContactRequest();
+    } // end interface onContactDetailRequest()
 
     private ContactListFragmentListener listener;
 
@@ -193,7 +193,7 @@ public class ContactListFragment extends ListFragment {
         switch (id)
         {
             case R.id.action_add:
-                listener.onAddContact();
+                listener.onAddContactRequest();
                 return true;
             default:
                 break;
@@ -208,7 +208,7 @@ public class ContactListFragment extends ListFragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Log.i(DEBUG_TAG, "in viewContactListener()/onItemClick()");
-            listener.onContactSelected(id);
+            listener.onContactDetailRequest(id);
         }
     };
 

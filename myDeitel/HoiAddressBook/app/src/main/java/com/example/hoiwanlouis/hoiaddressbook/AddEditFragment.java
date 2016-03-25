@@ -25,7 +25,7 @@ public class AddEditFragment extends Fragment {
     // callback method
     public interface AddEditFragmentListener {
         // called after edit completed so contact can be redisplayed
-        public void onAddEditCompleted(long rowID);
+        public void onAddEditContactComplete(long rowID);
     }
 
     private AddEditFragmentListener listener;
@@ -163,7 +163,7 @@ public class AddEditFragment extends Fragment {
                                         getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 
-                                listener.onAddEditCompleted(rowID);
+                                listener.onAddEditContactComplete(rowID);
                             }
                         }; // end AsyncTask
 

@@ -27,10 +27,10 @@ public class DetailsFragment extends Fragment {
     // callback methods implemented by MainActivity
     public interface DetailsFragmentListener {
         // called when a contact is deleted
-        public void onContactDeleted();
+        public void onDeleteContactComplete();
 
         // called to pass Bundle of contact's info for editing
-        public void onEditContact(Bundle arguments);
+        public void onEditContactRequest(Bundle arguments);
     } // end interface DetailsFragmentListener
 
 
@@ -144,7 +144,7 @@ public class DetailsFragment extends Fragment {
                 arguments.putCharSequence("state", stateTextView.getText());
                 arguments.putCharSequence("zip", zipTextView.getText());
                 // pass Bundle to listener for processing
-                listener.onEditContact(arguments);
+                listener.onEditContactRequest(arguments);
                 return true;
 
             case R.id.action_delete:
@@ -249,7 +249,7 @@ public class DetailsFragment extends Fragment {
                                                 @Override
                                                 protected void onPostExecute(Object result) {
                                                     Log.i(DEBUG_TAG, "in onPostExecute()");
-                                                    listener.onContactDeleted();
+                                                    listener.onDeleteContactComplete();
                                                 }
                                             }; // end new AsyncTask
 
