@@ -14,8 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import com.hoiwanlouis.mystockportfolio.R;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
@@ -24,7 +24,7 @@ import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link OnAddStockFragmentListener} interface
+ * {@link AddStockFragmentListener} interface
  * to handle interaction events.
  * Use the {@link AddStockFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -40,17 +40,16 @@ public class AddStockFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnAddStockFragmentListener {
-        // TODO: Update argument type and name
+    public interface AddStockFragmentListener {
         void onASFLAddStockComplete(Bundle arguments);
     }
 
     //
     private final String DEBUG_TAG = this.getClass().getSimpleName();
     //
-    private OnAddStockFragmentListener listener;
+    private AddStockFragmentListener addStockFragmentListener;
     //
-    private ImageButton saveStockSymbolButton;
+    private Button saveStockButton;
     //
     private EditText stockSymbol;
     // database row id of the current contact
@@ -79,11 +78,11 @@ public class AddStockFragment extends Fragment {
     public void onAttach(Activity context) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(context);
-        if (context instanceof OnAddStockFragmentListener) {
-            listener = (OnAddStockFragmentListener) context;
+        if (context instanceof AddStockFragmentListener) {
+            addStockFragmentListener = (AddStockFragmentListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnAddStockFragmentListener");
+                    + " must implement AddStockFragmentListener");
         }
     }
 
@@ -110,8 +109,8 @@ public class AddStockFragment extends Fragment {
         stockSymbol = (EditText) v.findViewById(R.id.add_stock_edit_text);
 
         // Save the stockSymbol to database;
-        saveStockSymbolButton = (ImageButton) v.findViewById(R.id.add_stock_save_button);
-        saveStockSymbolButton.setOnClickListener(saveStockSymbolButtonClicked);
+        saveStockButton = (Button) v.findViewById(R.id.add_stock_save_button);
+        saveStockButton.setOnClickListener(saveStockSymbolButtonClicked);
 
         return v;
     }
@@ -179,7 +178,7 @@ public class AddStockFragment extends Fragment {
     public void onDetach() {
         Log.i(DEBUG_TAG, "in onDetach()");
         super.onDetach();
-        listener = null;
+        addStockFragmentListener = null;
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -192,7 +191,7 @@ public class AddStockFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (editTextHasData(stockSymbol)) {
-                // AsyncTask to save contact, then notify listener
+                // AsyncTask to save contact, then notify addStockFragmentListener
                 AsyncTask<Object, Object, Object> saveStockSymbolAsyncTask =
                         new AsyncTask<Object, Object, Object>() {
                             @Override
@@ -263,10 +262,10 @@ public class AddStockFragment extends Fragment {
     //
     public void onButtonPressed() {
         Log.i(DEBUG_TAG, "in onButtonPressed()");
-        if (listener != null) {
+        if (addStockFragmentListener != null) {
             Bundle arguments = new Bundle();
             arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
-            listener.onASFLAddStockComplete(arguments);
+            addStockFragmentListener.onASFLAddStockComplete(arguments);
         }
     }
 

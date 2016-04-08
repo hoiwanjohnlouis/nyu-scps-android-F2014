@@ -67,19 +67,19 @@ public final class Gui2Database {
     };
 
     public static final String asColumnsToReturn[] = {
-            DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME + "." + DatabaseColumns.Portfolio._ID,
-            DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME + "." + DatabaseColumns.Portfolio.SYMBOL,
-            DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME + "." + DatabaseColumns.Portfolio.OPENING_PRICE,
-            DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME + "." + DatabaseColumns.Portfolio.PREVIOUS_CLOSING_PRICE,
-            DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME + "." + DatabaseColumns.Portfolio.BID_PRICE,
-            DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME + "." + DatabaseColumns.Portfolio.BID_SIZE,
-            DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME + "." + DatabaseColumns.Portfolio.ASK_PRICE,
-            DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME + "." + DatabaseColumns.Portfolio.ASK_SIZE,
-            DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME + "." + DatabaseColumns.Portfolio.LAST_TRADE_PRICE,
-            DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME + "." + DatabaseColumns.Portfolio.LAST_TRADE_QUANTITY,
-            DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME + "." + DatabaseColumns.Portfolio.LAST_TRADE_DATETIME,
-            DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME + "." + DatabaseColumns.Portfolio.INSERT_DATETIME,
-            DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME + "." + DatabaseColumns.Portfolio.MODIFY_DATETIME
+            DatabaseColumns.Portfolio._ID,
+            DatabaseColumns.Portfolio.SYMBOL,
+            DatabaseColumns.Portfolio.OPENING_PRICE,
+            DatabaseColumns.Portfolio.PREVIOUS_CLOSING_PRICE,
+            DatabaseColumns.Portfolio.BID_PRICE,
+            DatabaseColumns.Portfolio.BID_SIZE,
+            DatabaseColumns.Portfolio.ASK_PRICE,
+            DatabaseColumns.Portfolio.ASK_SIZE,
+            DatabaseColumns.Portfolio.LAST_TRADE_PRICE,
+            DatabaseColumns.Portfolio.LAST_TRADE_QUANTITY,
+            DatabaseColumns.Portfolio.LAST_TRADE_DATETIME,
+            DatabaseColumns.Portfolio.INSERT_DATETIME,
+            DatabaseColumns.Portfolio.MODIFY_DATETIME
     };
 
     public static final String fromDBColumns[] =  {

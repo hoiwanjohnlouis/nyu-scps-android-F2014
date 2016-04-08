@@ -196,7 +196,7 @@
         <TextView
             android:id="@+id/lastTradeDateTimeTextView"
             android:layout_column="1"
-            android:layout_row="10"
+            android:layout_row="9"
             android:hint="@string/heading2_last_trade_time_title"
             style="@style/FragmentTextView"
             />
@@ -206,7 +206,7 @@
         <TextView
             android:id="@+id/heading2_insert_datetime_title"
             android:layout_column="0"
-            android:layout_row="11"
+            android:layout_row="10"
             android:text="@string/heading2_insert_datetime_title"
             style="@style/FragmentLabelTextView"
             />
@@ -214,7 +214,7 @@
         <TextView
             android:id="@+id/insertDateTimeTextView"
             android:layout_column="1"
-            android:layout_row="11"
+            android:layout_row="10"
             android:hint="@string/heading2_insert_datetime_title"
             style="@style/FragmentTextView"
             />
@@ -224,7 +224,7 @@
         <TextView
             android:id="@+id/heading2_modify_datetime_title"
             android:layout_column="0"
-            android:layout_row="12"
+            android:layout_row="11"
             android:text="@string/heading2_modify_datetime_title"
             style="@style/FragmentLabelTextView"
             />
@@ -232,7 +232,7 @@
         <TextView
             android:id="@+id/modifyDateTimeTextView"
             android:layout_column="1"
-            android:layout_row="12"
+            android:layout_row="11"
             android:hint="@string/heading2_modify_datetime_title"
             style="@style/FragmentTextView"
             />

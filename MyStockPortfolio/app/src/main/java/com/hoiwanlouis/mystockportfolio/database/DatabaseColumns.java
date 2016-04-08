@@ -27,7 +27,7 @@ public final class DatabaseColumns {
     public static final String DATABASE_NAME = "portfolio.sqlite3";
     public static final int DATABASE_VERSION = 1;
 
-    // todo: Company table: contains Company data
+    //
     public static final class Company implements BaseColumns {
         private Company() {}
         public static final String COMPANY_TABLE_NAME = "company_table";
@@ -39,7 +39,7 @@ public final class DatabaseColumns {
     }
 
 
-    // todo: Exchange table: contains Exchange data
+    //
     public static final class Exchange implements BaseColumns {
         private Exchange() {}
         public static final String EXCHANGE_TABLE_NAME = "exchange_table";

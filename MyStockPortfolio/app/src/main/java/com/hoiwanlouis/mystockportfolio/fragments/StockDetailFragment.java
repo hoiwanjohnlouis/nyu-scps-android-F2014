@@ -63,11 +63,25 @@ public class StockDetailFragment extends Fragment {
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
     // for callback methods implemented by caller/invoker
-    private StockDetailFragmentListener listener;
+    private StockDetailFragmentListener stockDetailFragmentListener;
     //
     private long rowID = 0; // selected contact's rowID
 
     // define the readonly TextView for display, must match the detail layout
+    // fetch the column indices for each data item to shorten code lines
+    private int symbolIndex;
+    private int openingPriceIndex;
+    private int previousClosingPriceIndex;
+    private int bidPriceIndex;
+    private int bidSizeIndex;
+    private int askPriceIndex;
+    private int askSizeIndex;
+    private int lastTradePriceIndex;
+    private int lastTradeQuantityIndex;
+    private int lastTradeDateTimeIndex;
+    private int insertDateTimeIndex;
+    private int modifyDateTimeIndex;
+
     private TextView symbolTextView;
     private TextView openingPriceTextView;
     private TextView previousClosingPriceTextView;
@@ -91,7 +105,6 @@ public class StockDetailFragment extends Fragment {
      *
      * @return A new instance of fragment AddStockFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static StockDetailFragment newInstance() {
         StockDetailFragment fragment = new StockDetailFragment();
         return fragment;
@@ -104,7 +117,7 @@ public class StockDetailFragment extends Fragment {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(context);
         // init callback to interface implementation
-        listener = (StockDetailFragmentListener) context;
+        stockDetailFragmentListener = (StockDetailFragmentListener) context;
     } // end method onAttach
 
     //
@@ -230,7 +243,7 @@ public class StockDetailFragment extends Fragment {
         Log.i(DEBUG_TAG, "in onDetach()");
         super.onDetach();
         // clean up callback methods implemented by caller/invoker
-        listener = null;
+        stockDetailFragmentListener = null;
     } // end method onDetach
 
     //
@@ -265,8 +278,8 @@ public class StockDetailFragment extends Fragment {
             case R.id.action_edit:
                 // create Bundle containing contact data to edit
                 arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
-                // pass Bundle to listener for processing
-                //listener.onEditContact(arguments);
+                // pass Bundle to stockDetailFragmentListener for processing
+                //stockDetailFragmentListener.onEditContact(arguments);
                 Toast.makeText(getActivity(),"Detail Edit Stock is not supported!", Toast.LENGTH_SHORT).show();
                 return true;
 
@@ -319,18 +332,18 @@ public class StockDetailFragment extends Fragment {
             result.moveToFirst();
 
             // fetch the column indices for each data item to shorten code lines
-            final int symbolIndex = result.getColumnIndex(DatabaseColumns.Portfolio.SYMBOL);
-            final int openingPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.OPENING_PRICE);
-            final int previousClosingPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.PREVIOUS_CLOSING_PRICE);
-            final int bidPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.BID_PRICE);
-            final int bidSizeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.BID_SIZE);
-            final int askPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.ASK_PRICE);
-            final int askSizeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.ASK_SIZE);
-            final int lastTradePriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_PRICE);
-            final int lastTradeQuantityIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_QUANTITY);
-            final int lastTradeDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_DATETIME);
-            final int insertDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.INSERT_DATETIME);
-            final int modifyDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.MODIFY_DATETIME);
+            symbolIndex = result.getColumnIndex(DatabaseColumns.Portfolio.SYMBOL);
+            openingPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.OPENING_PRICE);
+            previousClosingPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.PREVIOUS_CLOSING_PRICE);
+            bidPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.BID_PRICE);
+            bidSizeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.BID_SIZE);
+            askPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.ASK_PRICE);
+            askSizeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.ASK_SIZE);
+            lastTradePriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_PRICE);
+            lastTradeQuantityIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_QUANTITY);
+            lastTradeDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.LAST_TRADE_DATETIME);
+            insertDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.INSERT_DATETIME);
+            modifyDateTimeIndex = result.getColumnIndex(DatabaseColumns.Portfolio.MODIFY_DATETIME);
 
             // fetch the data and load into the TextViews
             symbolTextView.setText(result.getString(symbolIndex));
@@ -361,8 +374,8 @@ public class StockDetailFragment extends Fragment {
     //
     public void onButtonPressed() {
         Log.i(DEBUG_TAG, "in onButtonPressed()");
-        if (listener != null) {
-            listener.onSDFLStockDetailComplete();
+        if (stockDetailFragmentListener != null) {
+            stockDetailFragmentListener.onSDFLStockDetailComplete();
         }
     }
 

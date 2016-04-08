@@ -206,12 +206,11 @@ public class DatabaseConnector {
     // **************************************************************
     // delete the specified ticker symbol using database _ID field
     // **************************************************************
-    public void deleteOneStock(final Long id, final String symbol) {
-        Log.i(DEBUG_TAG, "deleteOneStock[" + symbol + "], _ID[" + id.toString() + "] Starts...");
+    public void deleteOneStock(final Long id) {
+        Log.i(DEBUG_TAG, "deleteOneStock()");
 
         final String deleteArgs[] = { id.toString() };
         // todo: should add triggers to handle multiple tables
-
         // openForUpdate the database
         openForUpdate();
         final long rc = sqLiteDatabase.delete(
@@ -220,8 +219,7 @@ public class DatabaseConnector {
                 deleteArgs
         );
         close();  // always free resources when done. this is not batch processing.
-
-        Log.i(DEBUG_TAG, "deleteOneStock[" + symbol + "], _ID[" + id.toString() + "], delete_code[" + rc + "] Ends");
+        Log.i(DEBUG_TAG, "deleteOneStock _ID[" + id.toString() + "], delete_code[" + rc + "] Ends");
     }
 
 }

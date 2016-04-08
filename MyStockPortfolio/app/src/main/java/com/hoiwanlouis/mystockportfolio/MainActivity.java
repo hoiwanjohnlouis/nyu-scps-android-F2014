@@ -18,21 +18,12 @@
 package com.hoiwanlouis.mystockportfolio;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 
-import android.view.MenuItem;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
 import com.hoiwanlouis.mystockportfolio.fragments.AddStockFragment;
 import com.hoiwanlouis.mystockportfolio.fragments.StockListFragment;
@@ -51,7 +42,7 @@ import com.hoiwanlouis.mystockportfolio.fragments.StockDetailFragment;
  ***************************************************************************/
 public class MainActivity extends Activity
         implements
-        AddStockFragment.OnAddStockFragmentListener,
+        AddStockFragment.AddStockFragmentListener,
         StockListFragment.StockListFragmentListener,
         StockDetailFragment.StockDetailFragmentListener {
 
@@ -64,11 +55,6 @@ public class MainActivity extends Activity
     //
     private FragmentManager mFM;
     private FragmentTransaction mFT;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
     //
     // display StockListFragment when Activity first loads
@@ -99,9 +85,6 @@ public class MainActivity extends Activity
             mFT.commit();
         }
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     } // end method onCreate()
 
 
@@ -127,22 +110,6 @@ public class MainActivity extends Activity
     public void onStart() {
         Log.i(DEBUG_TAG, "in onStart()");
         super.onStart();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.hoiwanlouis.mystockportfolio/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
     }
 
     //
@@ -152,22 +119,6 @@ public class MainActivity extends Activity
     public void onStop() {
         Log.i(DEBUG_TAG, "in onStop()");
         super.onStop();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.hoiwanlouis.mystockportfolio/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.disconnect();
     }
 
     @Override
@@ -268,9 +219,9 @@ public class MainActivity extends Activity
     public void onSLFLAddStockRequest() {
         Log.i(DEBUG_TAG, "in onSLFLAddStockRequest()");
         if (isAPhoneDevice()) {
-            showMainFragment(R.id.fragmentContainer, null);
+            showAddFragment(R.id.fragmentContainer, null);
         } else {
-            showMainFragment(R.id.rightPaneContainer, null);
+            showAddFragment(R.id.rightPaneContainer, null);
         }
     } // end method onSLFLAddStockRequest
 
@@ -327,28 +278,39 @@ public class MainActivity extends Activity
 
     /***************************************************************
      * worker function:
-     * private void showMainFragment(int viewID, Bundle arguments)
+     * private void showAddFragment(int viewID, Bundle arguments)
      * <p>
      * display fragment after adding a new symbol
      ***************************************************************/
-    private void showMainFragment(final int viewID, final Bundle arguments) {
-        Log.i(DEBUG_TAG, "in showMainFragment()");
+    private void showAddFragment(final int viewID, final Bundle arguments) {
+        Log.i(DEBUG_TAG, "in showAddFragment()");
 
         // set the bundled arguments into the DetailsFragment
-        final StockListFragment fragment = StockListFragment.newInstance();
+        final AddStockFragment fragment = AddStockFragment.newInstance();
+        final StringBuilder sb = new StringBuilder();
+        // Bundle arguments is normally null
         if (arguments != null) {
+            sb.append("requesting AddStockFragment for [");
+            sb.append(Gui2Database.BUNDLE_KEY);
+            sb.append("]=[");
+            sb.append(arguments.getLong(Gui2Database.BUNDLE_KEY));
+            sb.append("]");
             // editing existing symbol?
             fragment.setArguments(arguments);
+        } else {
+            sb.append("requesting AddStockFragment for [");
+            sb.append(Gui2Database.BUNDLE_KEY);
+            sb.append("]=[NULL KEY VALUE]");
         }
+        Log.i(DEBUG_TAG, sb.toString());
 
-        // use a FragmentTransaction to display the StockListFragment
+        // use a FragmentTransaction to display the fragment
         mFT = mFM.beginTransaction();
         mFT.replace(viewID, fragment);
         mFT.addToBackStack(null);
-
         // causes fragment to display
         mFT.commit();
-    } // end method showMainFragment
+    } // end method showAddFragment
 
 
     /***************************************************************
@@ -362,7 +324,6 @@ public class MainActivity extends Activity
 
         // set the bundle as arguments into the Fragment
         final StockDetailFragment fragment = StockDetailFragment.newInstance();
-
         final StringBuilder sb = new StringBuilder();
         if (arguments != null) {
             sb.append("requesting StockDetailFragment for [");
@@ -370,20 +331,18 @@ public class MainActivity extends Activity
             sb.append("]=[");
             sb.append(arguments.getLong(Gui2Database.BUNDLE_KEY));
             sb.append("]");
-            Log.i(DEBUG_TAG, sb.toString());
             fragment.setArguments(arguments);
         } else {
             sb.append("requesting StockDetailFragment for [");
             sb.append(Gui2Database.BUNDLE_KEY);
             sb.append("]=[NULL KEY VALUE]");
-            Log.i(DEBUG_TAG, sb.toString());
         }
+        Log.i(DEBUG_TAG, sb.toString());
 
         // use a FragmentTransaction to display the DetailsFragment
         mFT = mFM.beginTransaction();
         mFT.replace(viewID, fragment);
         mFT.addToBackStack(null);
-
         // causes DetailsFragment to display
         mFT.commit();
     } // end method showDetailFragment

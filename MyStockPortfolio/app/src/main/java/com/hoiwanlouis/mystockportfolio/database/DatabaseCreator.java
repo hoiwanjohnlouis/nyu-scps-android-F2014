@@ -49,7 +49,7 @@ public class DatabaseCreator extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         // Create the CompanyImpl table
-        // todo: add support in code to use the CompanyImpl table
+        // todo: add support in code to use the Company table
         Log.v(DEBUG_TAG, "creating " + Company.COMPANY_TABLE_NAME + "...");
         StringBuilder sbCreateCompanyTable = new StringBuilder();
         sbCreateCompanyTable.append("CREATE TABLE ");

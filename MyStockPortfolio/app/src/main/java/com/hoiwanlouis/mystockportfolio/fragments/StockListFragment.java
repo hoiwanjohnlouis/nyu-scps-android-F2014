@@ -19,6 +19,8 @@ package com.hoiwanlouis.mystockportfolio.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -53,7 +55,7 @@ public class StockListFragment extends ListFragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -64,21 +66,23 @@ public class StockListFragment extends ListFragment {
     public interface StockListFragmentListener {
         // called when user deletes a Stock
         void onSLFLAddStockRequest();
+
+        // called when user selects a Stock for delete
+        void onSLFLDeleteStockComplete(Bundle arguments);
+
         // called when user selects a Stock for detail display
         void onSLFLStockDetailRequest(Bundle arguments);
-        // called when user selects a Stock for detail display
-        void onSLFLDeleteStockComplete(Bundle arguments);
     }
 
 
     //
     private final String DEBUG_TAG = this.getClass().getSimpleName();
     //
-    private StockListFragmentListener listener;
+    private StockListFragmentListener stockListFragmentListener;
     //
-    private ListView listView;
+    private ListView stockListView;
     // adapter for ListView
-    private CursorAdapter cursorAdapter;
+    private CursorAdapter stockCursorAdapter;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -122,7 +126,7 @@ public class StockListFragment extends ListFragment {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(context);
         // init callback to interface implementation
-        listener = (StockListFragmentListener) context;
+        stockListFragmentListener = (StockListFragmentListener) context;
     } // end method onAttach
 
     //
@@ -143,9 +147,7 @@ public class StockListFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.v(DEBUG_TAG, "in onCreateView()");
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-//        View view = inflater.inflate(R.layout.fragment_stock_list, container, false);
-        return view; // returns the fragment's view for display
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     //
@@ -164,22 +166,22 @@ public class StockListFragment extends ListFragment {
         setEmptyText(getResources().getString(R.string.fragment_no_items));
 
         // get ListView reference and configure it (the ListView)
-        listView = getListView();
-//        listView = (ListView) view.findViewById(R.id.list);
-        listView.setOnItemClickListener(onItemClickListener);
-        listView.setOnItemLongClickListener(onItemLongClickListener);
-        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-//        listView.addFooterView(view.findViewById(R.id.copyright_layout));
+        stockListView = getListView();
+//        stockListView = (ListView) view.findViewById(R.id.list);
+        stockListView.setOnItemClickListener(onItemClickListener);
+        stockListView.setOnItemLongClickListener(onItemLongClickListener);
+        stockListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+//        stockListView.addFooterView(view.findViewById(R.id.copyright_layout));
 
         // map each item/symbol to a TextView in the ListView layout
 /*
-        cursorAdapter =
+        stockCursorAdapter =
                 new StockListCursorAdapter(
                         getActivity(),
                         null,
                         0);
          */
-        cursorAdapter =
+        stockCursorAdapter =
                 new SimpleCursorAdapter(
                         getActivity(),
                         android.R.layout.simple_list_item_1,
@@ -189,8 +191,8 @@ public class StockListFragment extends ListFragment {
                         0);
 
         // set adapter that supplies data
-//        listView.setAdapter(cursorAdapter);
-        setListAdapter(cursorAdapter);
+//        stockListView.setAdapter(stockCursorAdapter);
+        setListAdapter(stockCursorAdapter);
     } // end method onViewCreated()
 
     //
@@ -236,10 +238,9 @@ public class StockListFragment extends ListFragment {
     @Override
     public void onStop() {
         Log.i(DEBUG_TAG, "in onStop()");
-        // get current database cursor
-        Cursor cursor = cursorAdapter.getCursor();
-        // adapter now has no cursor (basically housekeeping and cleanup
-        cursorAdapter.changeCursor(null);
+        // basically housekeeping and cleanup of cursor
+        Cursor cursor = stockCursorAdapter.getCursor();
+        stockCursorAdapter.changeCursor(null);
         // release the cursor
         if (cursor != null) {
             cursor.close();
@@ -273,7 +274,7 @@ public class StockListFragment extends ListFragment {
         Log.i(DEBUG_TAG, "in onDetach()");
         super.onDetach();
         // clean up callback for interface implementation
-        listener = null;
+        stockListFragmentListener = null;
     } // end method onDetach
 
     // display this fragment's menu items
@@ -295,11 +296,10 @@ public class StockListFragment extends ListFragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        switch (id)
-        {
-            case R.id.action_add:;
+        switch (id) {
+            case R.id.action_add:
                 // let the callback take care of this
-                onAddStockButtonPressed();
+                onAddStockRequest();
                 return true;
 
             default:
@@ -308,7 +308,6 @@ public class StockListFragment extends ListFragment {
 
         return super.onOptionsItemSelected(item);
     } // end method onOptionsItemSelected()
-
 
 
     //
@@ -320,7 +319,7 @@ public class StockListFragment extends ListFragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Log.i(DEBUG_TAG, "in onItemClickListener()");
                     // let the callback take care of this
-                    onStockSelectedButtonPressed(id);
+                    onStockDetailRequest(id);
                 }
             };
 
@@ -331,7 +330,7 @@ public class StockListFragment extends ListFragment {
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                     Log.i(DEBUG_TAG, "in onItemLongClickListener()");
                     // let the callback take care of this
-                    onDeleteStockButtonPressed(parent, view, position, id);
+                    onDeleteStockRequest(parent, view, position, id);
                     return false;
                 }
             };
@@ -342,57 +341,75 @@ public class StockListFragment extends ListFragment {
     //
     // callback to main to redisplay screen;
     //
-    public void onAddStockButtonPressed() {
-        Log.i(DEBUG_TAG, "in onAddStockButtonPressed()");
-        if (listener != null) {
+    public void onAddStockRequest() {
+        Log.i(DEBUG_TAG, "in onAddStockRequest()");
+        if (stockListFragmentListener != null) {
             // let the callback take care of this
-            listener.onSLFLAddStockRequest();
+            stockListFragmentListener.onSLFLAddStockRequest();
         }
     }
 
     //
     // callback to main to redisplay screen;
     //
-    public void onStockSelectedButtonPressed(long id) {
-        Log.i(DEBUG_TAG, "in onDeleteStockButtonPressed()");
-        if (listener != null) {
+    public void onStockDetailRequest(long id) {
+        Log.i(DEBUG_TAG, "in onDeleteStockRequest()");
+        if (stockListFragmentListener != null) {
             final Bundle arguments = new Bundle();
             arguments.putLong(Gui2Database.BUNDLE_KEY, id);
             // let the callback take care of this
-            listener.onSLFLStockDetailRequest(arguments);
+            stockListFragmentListener.onSLFLStockDetailRequest(arguments);
         }
     }
 
-    public void onDeleteStockButtonPressed(AdapterView<?> parent, View view, int position, long id) {
-        Log.i(DEBUG_TAG, "in onDeleteStockButtonPressed()");
-        final DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
-        // need tickerId and tickerSymbol for logging
+    public void onDeleteStockRequest(AdapterView<?> parent, View view, int position, long id) {
+        Log.i(DEBUG_TAG, "in onDeleteStockRequest()");
         final long tickerId = id;
         final TextView nameView = (TextView) view.findViewById(R.id.TextView_symbol);
         final String tickerSymbol = nameView.getText().toString();
+
         // Use an Alert dialog to confirm delete operation
-        new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.fragment_delete_title)
-                .setMessage(R.string.fragment_delete_message)
-                .setPositiveButton(R.string.fragment_delete_button_delete,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                // Delete the Symbol
-                                databaseConnector.deleteOneStock(tickerId, tickerSymbol);
-                                // a symbol was deleted, refresh the data in our symbolList
-                                if (listener != null) {
-                                    final Bundle arguments = new Bundle();
-                                    arguments.putLong(Gui2Database.BUNDLE_KEY, tickerId);
-                                    // let the callback take care of this
-                                    if (listener != null) {
-                                        listener.onSLFLDeleteStockComplete(arguments);
-                                    }
-                                }
-                            }
-                        })
-                .setNegativeButton(R.string.fragment_delete_button_cancel, null)  // do nothing if cancel
-                .show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.fragment_delete_title);
+        builder.setMessage(R.string.fragment_delete_message);
+        builder.setPositiveButton(R.string.fragment_delete_button_delete,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        final DatabaseConnector databaseConnector =
+                                new DatabaseConnector(getActivity());
+
+                        // AsyncTask deletes contact and notifies listener
+                        AsyncTask<Long, Object, Object> deleteTask =
+                                new AsyncTask<Long, Object, Object>() {
+                                    @Override
+                                    protected Object doInBackground(Long... params) {
+                                        Log.i(DEBUG_TAG, "in doInBackground()");
+                                        // need tickerId and tickerSymbol for logging
+                                        // Delete the Symbol
+                                        databaseConnector.deleteOneStock(params[0]);
+                                        return null;
+                                    } // end doInBackground
+
+                                    @Override
+                                    protected void onPostExecute(Object result) {
+                                        Log.i(DEBUG_TAG, "in onPostExecute()");
+                                        // a symbol was deleted, refresh the data in our symbolList
+                                        final Bundle arguments = new Bundle();
+                                        arguments.putLong(Gui2Database.BUNDLE_KEY, (long) result);
+                                        // let the callback take care of this
+                                        stockListFragmentListener.onSLFLDeleteStockComplete(arguments);
+                                    } // end onPostExecute
+                                }; // end new AsyncTask definition
+
+                        // execute the AsyncTask to delete the stock
+                        deleteTask.execute(new Long[]{tickerId});
+                        Log.i(DEBUG_TAG, "tickerSymbol[" + tickerSymbol + "] deleted.");
+
+                    } // end method DialogInterface.OnClickListener.onClick
+                });
+        builder.setNegativeButton(R.string.fragment_delete_button_cancel, null); // do nothing if cancel
+        builder.show();
     }
 
     //
@@ -431,11 +448,9 @@ public class StockListFragment extends ListFragment {
             // move to the first item
             results.moveToFirst();
 
-            cursorAdapter.changeCursor(results);
-//            setListAdapter(cursorAdapter);
+            stockCursorAdapter.changeCursor(results);
             databaseConnector.close();
         } // end method onPostExecute()
-
     } // end inner class GetContactsTask()
 
 }
