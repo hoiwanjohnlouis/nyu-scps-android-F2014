@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.hoiwanlouis.mystockportfolio.R;
 
-import com.hoiwanlouis.mystockportfolio.enums.ERecordType;
+import com.hoiwanlouis.mystockportfolio.enums.RecordType;
 
 
 public class TestFactoriesActivity extends Activity {
@@ -25,7 +25,7 @@ public class TestFactoriesActivity extends Activity {
 
         //  testing ticker record construction
         RecordBuilding createTrade = new TradeBuilding();
-        Record record = createTrade.orderRecord(ERecordType.TRADE_RECORD);
+        Record record = createTrade.orderRecord(RecordType.TRADE_RECORD);
         System.out.println(record + "\n");
 
 

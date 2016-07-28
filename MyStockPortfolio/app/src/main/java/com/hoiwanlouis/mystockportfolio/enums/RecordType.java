@@ -27,36 +27,24 @@ package com.hoiwanlouis.mystockportfolio.enums;
  * H. Melville    1851.01.31 Wooden whales, or whales cut in profile out of
  *
  ***************************************************************************/
-// from FixProtocol.org website www.fixprotocol.org
-public enum EMsgType {
+public enum RecordType {
 
-    HEARTBEAT("0", "Heartbeat"),
-    TEST_REQUEST("1", "Test Request"),
-    RESEND_REQUEST("2", "Resend Request"),
-    REJECT("3", "Reject"),
-    SEQUENCE_RESET("4", "Sequence Reset"),
-    LOGOUT("5", "Logout"),
-    EXECUTION_REPORT("8", "Execution Report"),
-    ORDER_CANCEL_REJECT("9", "Order Cancel Reject"),
-    NEW_ORDER("D", "New Order - Single"),
-    ORDER_CANCEL_REQUEST("F", "Order Cancel Request"),
-    ORDER_MODIFICATION_REQUEST("G", "Order Cancel/Replace Request"),
-    ORDER_STATUS_REQUEST("H", "Order Status Request");
+    TRADE_RECORD("8","Execution Report");
 
-    private final String msgTypeValue;
-    private final String msgTypeDescription;
+    private final String recordTypeValue;
+    private final String recordTypeDescription;
 
-    private EMsgType(final String msgType, final String msgDescription) {
-        this.msgTypeValue = msgType;
-        this.msgTypeDescription = msgDescription;
+    RecordType(String recordTypeValue, String recordTypeDescription) {
+        this.recordTypeValue = recordTypeValue;
+        this.recordTypeDescription = recordTypeDescription;
     }
 
-    public String getMsgTypeValue() {
-        return msgTypeValue;
+    public String getRecordTypeValue() {
+        return recordTypeValue;
     }
 
-    public String getMsgTypeDescription() {
-        return msgTypeDescription;
+    public String getRecordTypeDescription() {
+        return recordTypeDescription;
     }
 
     @Override
@@ -64,12 +52,11 @@ public enum EMsgType {
         StringBuilder sb = new StringBuilder();
         sb.append(this.name());
         sb.append(":[");
-        sb.append(getMsgTypeValue());
+        sb.append(getRecordTypeValue());
         sb.append("]");
         sb.append(":[");
-        sb.append(getMsgTypeDescription());
+        sb.append(getRecordTypeDescription());
         sb.append("]");
         return sb.toString();
     }
-
 }

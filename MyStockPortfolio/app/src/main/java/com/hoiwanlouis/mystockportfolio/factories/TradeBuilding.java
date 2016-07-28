@@ -18,8 +18,8 @@ package com.hoiwanlouis.mystockportfolio.factories;
 
 import android.util.Log;
 
-import com.hoiwanlouis.mystockportfolio.enums.ERecordType;
-import com.hoiwanlouis.mystockportfolio.interfaces.IRecordFactory;
+import com.hoiwanlouis.mystockportfolio.enums.RecordType;
+import com.hoiwanlouis.mystockportfolio.interfaces.RecordFactory;
 
 
 public class TradeBuilding extends RecordBuilding {
@@ -27,12 +27,12 @@ public class TradeBuilding extends RecordBuilding {
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
 
-    public Record makeRecord(ERecordType recordType) {
+    public Record makeRecord(RecordType recordType) {
         Log.v(DEBUG_TAG, "in makeRecord:" + recordType);
 
         Record tradeRecord = (Trade) null;
 
-        IRecordFactory tradeRecordFactory = new TradeFactory();
+        RecordFactory tradeRecordFactory = new TradeFactoryImpl();
         tradeRecord = new Trade(tradeRecordFactory);
         tradeRecord.setRecordType(recordType);
 

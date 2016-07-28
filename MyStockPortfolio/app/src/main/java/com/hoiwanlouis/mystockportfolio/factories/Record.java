@@ -16,7 +16,7 @@ package com.hoiwanlouis.mystockportfolio.factories;
 */
 
 
-import com.hoiwanlouis.mystockportfolio.enums.ERecordType;
+import com.hoiwanlouis.mystockportfolio.enums.RecordType;
 import com.hoiwanlouis.mystockportfolio.fields.Company;
 import com.hoiwanlouis.mystockportfolio.fields.DateTimeStamp;
 import com.hoiwanlouis.mystockportfolio.fields.Price;
@@ -30,7 +30,7 @@ public abstract class Record {
     private final String DEBUG_TAG = this.getClass().getSimpleName();
 
 
-    private ERecordType recordType;
+    private RecordType recordType;
     private StringBuilder stringBuilder = new StringBuilder();
 
 
@@ -48,12 +48,12 @@ public abstract class Record {
 
 
     //
-    public ERecordType getRecordType() {
+    public RecordType getRecordType() {
         return recordType;
     }
 
     //
-    public void setRecordType(ERecordType recordType) {
+    public void setRecordType(RecordType recordType) {
         this.recordType = recordType;
     }
 

@@ -27,35 +27,40 @@ package com.hoiwanlouis.mystockportfolio.enums;
  * H. Melville    1851.01.31 Wooden whales, or whales cut in profile out of
  *
  ***************************************************************************/
-public enum ERecordType {
+// from FixProtocol.org website www.fixprotocol.org
+public enum FieldType {
 
-    TRADE_RECORD("8","Execution Report");
+//    DEFAULT_COMPANY_NAME,
+//    DEFAULT_TICKER_SYMBOL,
+//    DEFAULT_PRICE,
+//    DEFAULT_QUANTITY,
+//    DEFAULT_DATE_TIME_STAMP,
 
-    private final String recordTypeValue;
-    private final String recordTypeDescription;
+    COMPANY_NAME("COMPANY_NAME"),
+    TICKER_SYMBOL("55"),
+    OPENING_PRICE("OPENING_PRICE"),
+    PREVIOUS_DAYS_CLOSING_PRICE("PREVIOUS_DAYS_CLOSING_PRICE"),
+    TRADE_PRICE("31"),
+    TRADE_QUANTITY("32"),
+    TRADE_DATE_TIME_STAMP("60");
 
-    ERecordType(String recordTypeValue, String recordTypeDescription) {
-        this.recordTypeValue = recordTypeValue;
-        this.recordTypeDescription = recordTypeDescription;
+    private final String fieldTypeValue;
+
+    private FieldType(final String fieldTypeValue) {
+        this.fieldTypeValue = fieldTypeValue;
     }
 
-    public String getRecordTypeValue() {
-        return recordTypeValue;
+    public String getFieldTypeValue() {
+        return fieldTypeValue;
     }
 
-    public String getRecordTypeDescription() {
-        return recordTypeDescription;
-    }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.name());
         sb.append(":[");
-        sb.append(getRecordTypeValue());
-        sb.append("]");
-        sb.append(":[");
-        sb.append(getRecordTypeDescription());
+        sb.append(getFieldTypeValue());
         sb.append("]");
         return sb.toString();
     }

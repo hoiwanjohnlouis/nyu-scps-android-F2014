@@ -1,9 +1,7 @@
 package com.hoiwanlouis.mystockportfolio.observers;
 
 import android.app.Activity;
-
 import android.os.Bundle;
-
 
 import com.hoiwanlouis.mystockportfolio.R;
 

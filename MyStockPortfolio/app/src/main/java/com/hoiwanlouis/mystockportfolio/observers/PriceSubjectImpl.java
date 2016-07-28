@@ -20,27 +20,27 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-public class PriceSubject implements ISubject {
+public class PriceSubjectImpl implements Subject {
 
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
 
-    ArrayList<IObserver> observers;
+    ArrayList<Observer> observers;
 
 
-    public PriceSubject() {
-        Log.v(DEBUG_TAG, "in PriceSubject");
-        observers = new ArrayList<IObserver>();
+    public PriceSubjectImpl() {
+        Log.v(DEBUG_TAG, "in PriceSubjectImpl");
+        observers = new ArrayList<Observer>();
     }
 
     @Override
-    public void register(IObserver o) {
+    public void register(Observer o) {
         Log.v(DEBUG_TAG, "in register");
         observers.add(o);
     }
 
     @Override
-    public void unregister(IObserver o) {
+    public void unregister(Observer o) {
         Log.v(DEBUG_TAG, "in unregister");
 
         int observerIndex = observers.indexOf(o);
@@ -52,8 +52,8 @@ public class PriceSubject implements ISubject {
 
     @Override
     public void notifyObserver() {
-        // call update method for each IObserver
-        for (IObserver observer : observers) {
+        // call update method for each Observer
+        for (Observer observer : observers) {
             observer.update(0.1, 0.2, 0.3);
         }
     }

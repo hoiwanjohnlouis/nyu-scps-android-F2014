@@ -37,34 +37,15 @@ import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
 import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
 
-/**
- **
- */
 public class StockDetailFragment extends Fragment {
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    //
-    // callback methods implemented by caller/invoker, usually Prototype
-    //
     public interface StockDetailFragmentListener {
         // called when fragment is done
-        void onSDFLStockDetailComplete();
+        void onStockDetailComplete();
     }
 
-    // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
-    // for callback methods implemented by caller/invoker
     private StockDetailFragmentListener stockDetailFragmentListener;
-    //
     private long rowID = 0; // selected contact's rowID
 
     // define the readonly TextView for display, must match the detail layout
@@ -102,7 +83,6 @@ public class StockDetailFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
      * @return A new instance of fragment AddStockFragment.
      */
     public static StockDetailFragment newInstance() {
@@ -118,7 +98,7 @@ public class StockDetailFragment extends Fragment {
         super.onAttach(context);
         // init callback to interface implementation
         stockDetailFragmentListener = (StockDetailFragmentListener) context;
-    } // end method onAttach
+    }
 
     //
     @Override
@@ -127,9 +107,7 @@ public class StockDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    //
     // called when StockDetailFragmentListener's view needs to be created
-    //
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
@@ -173,29 +151,6 @@ public class StockDetailFragment extends Fragment {
         return v;
     } // end method onCreateView
 
-    // called after View is created
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        Log.i(DEBUG_TAG, "in onViewCreated()");
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    //
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        Log.i(DEBUG_TAG, "in onActivityCreated()");
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    //
-    // when fragment starts
-    //
-    @Override
-    public void onStart() {
-        Log.i(DEBUG_TAG, "in onStart()");
-        super.onStart();
-    } // end method onStart()
-
     //
     // called when the StockDetailFragment resumes
     //
@@ -203,106 +158,10 @@ public class StockDetailFragment extends Fragment {
     public void onResume() {
         Log.i(DEBUG_TAG, "in onResume()");
         super.onResume();
-        // load contact at rowID
+        // load contact for rowID
         new LoadStockDetailAsyncTask().execute(rowID);
     } // end method onResume()
 
-    //
-    @Override
-    public void onPause() {
-        Log.i(DEBUG_TAG, "in onPause()");
-        super.onPause();
-    }
-
-    //
-    // when fragment resumes, clean up
-    //
-    @Override
-    public void onStop() {
-        Log.i(DEBUG_TAG, "in onStop()");
-        super.onStop();
-    } // end method onStop()
-
-    //
-    @Override
-    public void onDestroyView() {
-        Log.i(DEBUG_TAG, "in onDestroyView()");
-        super.onDestroyView();
-    }
-
-    //
-    @Override
-    public void onDestroy() {
-        Log.i(DEBUG_TAG, "in onDestroy()");
-        super.onDestroy();
-    }
-
-    // remove StockDetailFragmentListener when fragment detached
-    @Override
-    public void onDetach() {
-        Log.i(DEBUG_TAG, "in onDetach()");
-        super.onDetach();
-        // clean up callback methods implemented by caller/invoker
-        stockDetailFragmentListener = null;
-    } // end method onDetach
-
-    //
-    // save currently displayed contact's row ID
-    //
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Log.i(DEBUG_TAG, "in onSaveInstanceState()");
-        super.onSaveInstanceState(outState);
-        outState.putLong(Gui2Database.BUNDLE_KEY, rowID);
-    } // end method onSaveInstanceState()
-
-    //
-    // display this fragment's menu items
-    //
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_stock_detail_menu, menu);
-    } // end method onCreateOptionsMenu()
-
-    //
-    // handle menu item selections
-    //
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(DEBUG_TAG, "in onOptionsItemSelected()");
-        Bundle arguments = new Bundle();
-        switch (item.getItemId())
-        {
-            case R.id.action_edit:
-                // create Bundle containing contact data to edit
-                arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
-                // pass Bundle to stockDetailFragmentListener for processing
-                //stockDetailFragmentListener.onEditContact(arguments);
-                Toast.makeText(getActivity(),"Detail Edit Stock is not supported!", Toast.LENGTH_SHORT).show();
-                return true;
-
-            case R.id.action_delete:
-                // create Bundle containing contact data to edit
-                arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
-                Toast.makeText(getActivity(),"Detail Delete Stock is not supported at this time!", Toast.LENGTH_SHORT).show();
-                //deleteContact();
-                return true;
-
-            default:
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    } // end method onOptionsItemSelected
-
-
-
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    //
     // *****************************************************
     // performs database query outside GUI thread
     // *****************************************************
@@ -373,10 +232,70 @@ public class StockDetailFragment extends Fragment {
     // callback to main to redisplay screen;
     //
     public void onButtonPressed() {
-        Log.i(DEBUG_TAG, "in onButtonPressed()");
+        Log.i(DEBUG_TAG, "in onAddStockCompleteCallback()");
         if (stockDetailFragmentListener != null) {
-            stockDetailFragmentListener.onSDFLStockDetailComplete();
+            stockDetailFragmentListener.onStockDetailComplete();
         }
     }
+
+    // remove StockDetailFragmentListener when fragment detached
+    @Override
+    public void onDetach() {
+        Log.i(DEBUG_TAG, "in onDetach()");
+        super.onDetach();
+        stockDetailFragmentListener = null;
+    }
+
+    //
+    // save currently displayed contact's row ID
+    //
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.i(DEBUG_TAG, "in onSaveInstanceState()");
+        super.onSaveInstanceState(outState);
+        outState.putLong(Gui2Database.BUNDLE_KEY, rowID);
+    } // end method onSaveInstanceState()
+
+    //
+    // display this fragment's menu items
+    //
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_stock_detail_menu, menu);
+    } // end method onCreateOptionsMenu()
+
+    //
+    // handle menu item selections
+    //
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(DEBUG_TAG, "in onOptionsItemSelected()");
+        Bundle arguments = new Bundle();
+        switch (item.getItemId())
+        {
+            case R.id.action_edit:
+                // create Bundle containing contact data to edit
+                arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
+                // pass Bundle to stockDetailFragmentListener for processing
+                //stockDetailFragmentListener.onEditContact(arguments);
+                Toast.makeText(getActivity(),"Detail Edit Stock is not supported!", Toast.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.action_delete:
+                // create Bundle containing contact data to edit
+                arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
+                Toast.makeText(getActivity(),"Detail Delete Stock is not supported at this time!", Toast.LENGTH_SHORT).show();
+                //deleteContact();
+                return true;
+
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    } // end method onOptionsItemSelected
+
 
 }

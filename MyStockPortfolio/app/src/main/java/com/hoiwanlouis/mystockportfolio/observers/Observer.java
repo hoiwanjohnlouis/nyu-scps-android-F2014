@@ -15,7 +15,7 @@ package com.hoiwanlouis.mystockportfolio.observers;
     limitations under the License.
 */
 
-public interface IObserver {
+public interface Observer {
 
     public void update(double ibmPrice, double aaplPrice, double googPrice);
 

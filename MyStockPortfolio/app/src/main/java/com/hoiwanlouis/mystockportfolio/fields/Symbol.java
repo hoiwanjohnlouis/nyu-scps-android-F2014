@@ -19,7 +19,7 @@ package com.hoiwanlouis.mystockportfolio.fields;
 
 import android.util.Log;
 
-import com.hoiwanlouis.mystockportfolio.enums.EFieldType;
+import com.hoiwanlouis.mystockportfolio.enums.FieldType;
 
 /***************************************************************************
  * Program Synopsis
@@ -33,10 +33,10 @@ import com.hoiwanlouis.mystockportfolio.enums.EFieldType;
  ***************************************************************************/
 public class Symbol {
     private final String DEBUG_TAG = this.getClass().getSimpleName();
-    private final EFieldType fieldType;
+    private final FieldType fieldType;
     private String symbol;
 
-    public Symbol(EFieldType fieldType, String symbol) {
+    public Symbol(FieldType fieldType, String symbol) {
         Log.v(DEBUG_TAG, "in constructor(..)");
         this.fieldType = fieldType;
         this.symbol = symbol;

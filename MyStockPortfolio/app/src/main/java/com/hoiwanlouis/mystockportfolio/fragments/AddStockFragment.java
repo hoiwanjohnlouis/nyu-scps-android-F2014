@@ -21,39 +21,17 @@ import com.hoiwanlouis.mystockportfolio.R;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
 import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AddStockFragmentListener} interface
- * to handle interaction events.
- * Use the {@link AddStockFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AddStockFragment extends Fragment {
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface AddStockFragmentListener {
-        void onASFLAddStockComplete(Bundle arguments);
+        void onAddStockComplete(Bundle arguments);
     }
 
-    //
     private final String DEBUG_TAG = this.getClass().getSimpleName();
-    //
     private AddStockFragmentListener addStockFragmentListener;
-    //
-    private Button saveStockButton;
-    //
+    private Button saveStockToDatabaseButton;
     private EditText stockSymbol;
-    // database row id of the current contact
-    private long rowID;
+    private long databaseRowID;
 
     public AddStockFragment() {
         Log.i(DEBUG_TAG, "in AddStockFragment(), required empty public constructor");
@@ -65,15 +43,13 @@ public class AddStockFragment extends Fragment {
      *
      * @return A new instance of fragment AddStockFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AddStockFragment newInstance() {
         AddStockFragment fragment = new AddStockFragment();
-        //Bundle args = new Bundle();
-        //fragment.setArguments(args);
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
         return fragment;
     }
 
-    //
     @Override
     public void onAttach(Activity context) {
         Log.i(DEBUG_TAG, "in onAttach()");
@@ -86,33 +62,90 @@ public class AddStockFragment extends Fragment {
         }
     }
 
-    //
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(DEBUG_TAG, "in onCreate()");
         super.onCreate(savedInstanceState);
     }
 
-    //
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(DEBUG_TAG, "in onCreateView()");
         super.onCreateView(inflater, container, savedInstanceState);
-        // save fragment across config changes
         setRetainInstance(true);
 
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_add_stock, container, false);
-        //
         stockSymbol = (EditText) v.findViewById(R.id.add_stock_edit_text);
-
-        // Save the stockSymbol to database;
-        saveStockButton = (Button) v.findViewById(R.id.add_stock_save_button);
-        saveStockButton.setOnClickListener(saveStockSymbolButtonClicked);
+        saveStockToDatabaseButton = (Button) v.findViewById(R.id.add_stock_save_button);
+        saveStockToDatabaseButton.setOnClickListener(saveStockSymbolButtonClicked);
 
         return v;
+    }
+
+    View.OnClickListener saveStockSymbolButtonClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (editTextHasData(stockSymbol)) {
+                // create AsyncTask to save contact on different thread
+                AsyncTask<Object, Object, Object> saveStockSymbolAsyncTask =
+                        new AsyncTask<Object, Object, Object>() {
+                            @Override
+                            protected Object doInBackground(Object... params) {
+                                saveStockSymbolToDatabase();
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Object result) {
+                                // clean up after the saveStockSymbolToDatabase() function
+                                InputMethodManager imm = (InputMethodManager)
+                                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                                stockSymbol.setText(null);
+                                onAddStockCompleteCallback();
+                            }
+                        }; // end AsyncTask definition
+                // save the contact to the database using a separate thread
+                saveStockSymbolAsyncTask.execute((Object[]) null);
+            }
+            else {
+                // define alert dialog since required stockSymbol field is blank
+                DialogFragment errorSaving =
+                        new DialogFragment() {
+                            @Override
+                            public Dialog onCreateDialog(Bundle savedInstanceState) {
+                                AlertDialog.Builder builder =
+                                        new AlertDialog.Builder(getActivity());
+                                builder.setMessage(R.string.error_saving_message);
+                                builder.setPositiveButton(R.string.error_saving_positive_button, null);
+                                return builder.create();
+                            }
+                        };
+                // invoke alert dialog
+                errorSaving.show(getFragmentManager(), "error saving contact");
+            }
+        } // end method onClick
+    }; // end OnClickListener saveContactButtonClicked
+
+    // callback to main to redisplay screen;
+    public void onAddStockCompleteCallback() {
+        Log.i(DEBUG_TAG, "in onAddStockCompleteCallback()");
+        Bundle arguments = new Bundle();
+        arguments.putLong(Gui2Database.BUNDLE_KEY, databaseRowID);
+        addStockFragmentListener.onAddStockComplete(arguments);
+    }
+
+    private boolean editTextHasData(final EditText stock) {
+        Log.i(DEBUG_TAG, "in editTextHasData()");
+        return ((stock != null) && (stock.getText().toString().trim().length() != 0));
+    }
+
+    private void saveStockSymbolToDatabase() {
+        Log.i(DEBUG_TAG, "in saveStockSymbolToDatabase()");
+        DatabaseConnector dbConnector = new DatabaseConnector(getActivity());
+        databaseRowID = dbConnector.addOneStock(stockSymbol.getText().toString());
     }
 
     // called after View is created
@@ -130,143 +163,11 @@ public class AddStockFragment extends Fragment {
     }
 
     //
-    // when fragment starts
-    //
-    @Override
-    public void onStart() {
-        Log.i(DEBUG_TAG, "in onStart()");
-        super.onStart();
-    } // end method onStart()
-
-    // when fragment resumes
-    @Override
-    public void onResume() {
-        Log.i(DEBUG_TAG, "in onResume()");
-        super.onResume();
-    } // end method onResume()
-
-    //
-    @Override
-    public void onPause() {
-        Log.i(DEBUG_TAG, "in onPause()");
-        super.onPause();
-    }
-
-    // when fragment resumes, clean up
-    @Override
-    public void onStop() {
-        Log.i(DEBUG_TAG, "in onStop()");
-        super.onStop();
-    } // end method onStop()
-
-    //
-    @Override
-    public void onDestroyView() {
-        Log.i(DEBUG_TAG, "in onDestroyView()");
-        super.onDestroyView();
-    }
-
-    //
-    @Override
-    public void onDestroy() {
-        Log.i(DEBUG_TAG, "in onDestroy()");
-        super.onDestroy();
-    }
-
-    //
     @Override
     public void onDetach() {
         Log.i(DEBUG_TAG, "in onDetach()");
         super.onDetach();
         addStockFragmentListener = null;
-    }
-
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    //
-    // responds to event generated when user saves a contact
-    //
-    View.OnClickListener saveStockSymbolButtonClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (editTextHasData(stockSymbol)) {
-                // AsyncTask to save contact, then notify addStockFragmentListener
-                AsyncTask<Object, Object, Object> saveStockSymbolAsyncTask =
-                        new AsyncTask<Object, Object, Object>() {
-                            @Override
-                            protected Object doInBackground(Object... params) {
-                                // save contact to the database
-                                saveStockSymbol();
-                                return null;
-                            }
-
-                            @Override
-                            protected void onPostExecute(Object result) {
-                                // hide soft keyboard
-                                InputMethodManager imm = (InputMethodManager)
-                                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                                // reset form
-                                stockSymbol.setText(null);
-                                // notify caller the stockSymbol was added
-                                onButtonPressed();
-                            }
-                        }; // end AsyncTask
-
-                // save the contact to the database using a separate thread
-                saveStockSymbolAsyncTask.execute((Object[]) null);
-            }
-            // required contact name is blank, so display error dialog
-            else {
-                DialogFragment errorSaving =
-                        new DialogFragment() {
-                            @Override
-                            public Dialog onCreateDialog(Bundle savedInstanceState) {
-                                AlertDialog.Builder builder =
-                                        new AlertDialog.Builder(getActivity());
-                                builder.setMessage(R.string.error_saving_message);
-                                builder.setPositiveButton(R.string.error_saving_positive_button, null);
-                                return builder.create();
-                            }
-                        };
-
-                errorSaving.show(getFragmentManager(), "error saving contact");
-            }
-        } // end method onClick
-    }; // end OnClickListener saveContactButtonClicked
-
-    //
-    private boolean editTextHasData(final EditText stock) {
-        boolean hasData = false;
-        Log.i(DEBUG_TAG, "in editTextHasData()");
-        if ((stock != null) && (stock.getText().toString().trim().length() != 0)) {
-            hasData = true;
-        }
-        return hasData;
-    }
-
-    //
-    // saves stockSymbol to the database
-    //
-    private void saveStockSymbol() {
-        Log.i(DEBUG_TAG, "in saveStockSymbol()");
-        // get DatabaseConnector to interact with the SQLite database
-        DatabaseConnector dbConnector = new DatabaseConnector(getActivity());
-        // insert the contact information into the database
-        rowID = dbConnector.addOneStock(stockSymbol.getText().toString());
-    }
-
-    //
-    // callback to main to redisplay screen;
-    //
-    public void onButtonPressed() {
-        Log.i(DEBUG_TAG, "in onButtonPressed()");
-        if (addStockFragmentListener != null) {
-            Bundle arguments = new Bundle();
-            arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
-            addStockFragmentListener.onASFLAddStockComplete(arguments);
-        }
     }
 
 }

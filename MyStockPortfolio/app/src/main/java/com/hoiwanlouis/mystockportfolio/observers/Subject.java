@@ -15,10 +15,10 @@ package com.hoiwanlouis.mystockportfolio.observers;
     limitations under the License.
 */
 
-public interface ISubject {
+public interface Subject {
 
-    public void register(IObserver o);
-    public void unregister(IObserver o);
+    public void register(Observer o);
+    public void unregister(Observer o);
     public void notifyObserver();
 
 }

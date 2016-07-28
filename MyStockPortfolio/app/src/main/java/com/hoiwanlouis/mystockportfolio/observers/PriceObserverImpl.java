@@ -16,15 +16,12 @@ package com.hoiwanlouis.mystockportfolio.observers;
     limitations under the License.
 */
 
-public class PriceObserver implements IObserver {
+public class PriceObserverImpl implements Observer {
 
-    // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
+    private Subject priceUpdate;
 
-    private ISubject priceUpdate;
-
-
-    public PriceObserver(ISubject priceUpdate) {
+    public PriceObserverImpl(Subject priceUpdate) {
         this.priceUpdate = priceUpdate;
         this.priceUpdate.register(this);
     }

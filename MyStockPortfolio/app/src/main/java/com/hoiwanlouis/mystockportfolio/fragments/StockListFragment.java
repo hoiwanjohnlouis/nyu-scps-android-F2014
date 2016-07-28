@@ -19,8 +19,6 @@ package com.hoiwanlouis.mystockportfolio.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -50,40 +48,17 @@ import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
  */
 public class StockListFragment extends ListFragment {
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    //
     // callback methods implemented by caller/invoker
-    //
     public interface StockListFragmentListener {
-        // called when user deletes a Stock
-        void onSLFLAddStockRequest();
-
-        // called when user selects a Stock for delete
-        void onSLFLDeleteStockComplete(Bundle arguments);
-
-        // called when user selects a Stock for detail display
-        void onSLFLStockDetailRequest(Bundle arguments);
+        void onAddStockToDatabaseRequest();
+        void onDeleteStockFromDatabaseComplete(Bundle arguments);
+        void onDisplayStockDetailRequest(Bundle arguments);
     }
 
-
-    //
     private final String DEBUG_TAG = this.getClass().getSimpleName();
-    //
     private StockListFragmentListener stockListFragmentListener;
-    //
     private ListView stockListView;
-    // adapter for ListView
     private CursorAdapter stockCursorAdapter;
-
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -94,10 +69,6 @@ public class StockListFragment extends ListFragment {
     private String param1;
     private String param2;
 
-
-    //
-    //
-    //
     public StockListFragment() {
         Log.i(DEBUG_TAG, "in StockListFragment(), required empty public constructor");
     } // end constructor StockListFragment()
@@ -108,30 +79,21 @@ public class StockListFragment extends ListFragment {
      *
      * @return A new instance of fragment AddStockFragment.
      */
-    //
-    // TODO: Rename and change types and number of parameters
-    //
     public static StockListFragment newInstance() {
         StockListFragment fragment = new StockListFragment();
-        //Bundle args = new Bundle();
-        //fragment.setArguments(args);
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
         return fragment;
     }
 
-    //
     // set StockListFragmentListener when Fragment is attached
-    //
     @Override
     public void onAttach(Activity context) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(context);
-        // init callback to interface implementation
         stockListFragmentListener = (StockListFragmentListener) context;
     } // end method onAttach
 
-    //
-    //
-    //
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(DEBUG_TAG, "in onCreate()");
@@ -158,11 +120,8 @@ public class StockListFragment extends ListFragment {
         Log.i(DEBUG_TAG, "in onViewCreated()");
         super.onViewCreated(view, savedInstanceState);
 
-        // save fragment across configuration changes
         setRetainInstance(true);
-        // this fragment has menu items to display
         setHasOptionsMenu(true);
-        // set text to display when there is no data
         setEmptyText(getResources().getString(R.string.fragment_no_items));
 
         // get ListView reference and configure it (the ListView)
@@ -173,8 +132,7 @@ public class StockListFragment extends ListFragment {
         stockListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 //        stockListView.addFooterView(view.findViewById(R.id.copyright_layout));
 
-        // map each item/symbol to a TextView in the ListView layout
-/*
+        /*
         stockCursorAdapter =
                 new StockListCursorAdapter(
                         getActivity(),
@@ -190,129 +148,11 @@ public class StockListFragment extends ListFragment {
                         Gui2Database.toRIds,
                         0);
 
-        // set adapter that supplies data
 //        stockListView.setAdapter(stockCursorAdapter);
         setListAdapter(stockCursorAdapter);
     } // end method onViewCreated()
 
-    //
-    //
-    //
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        Log.i(DEBUG_TAG, "in onActivityCreated()");
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    //
-    //
-    //
-    @Override
-    public void onStart() {
-        Log.i(DEBUG_TAG, "in onStart()");
-        super.onStart();
-    } // end method onStart()
-
-    //
-    // when fragment resumes, use  GetContactsTask to load contacts
-    //
-    @Override
-    public void onResume() {
-        Log.i(DEBUG_TAG, "in onResume()");
-        super.onResume();
-        updateStocksListView();  // calls new AsyncTask().execute((Object[]) null);
-    } // end method onResume()
-
-    //
-    //
-    //
-    @Override
-    public void onPause() {
-        Log.i(DEBUG_TAG, "in onPause()");
-        super.onPause();
-    }
-
-    //
-    // when fragment resumes, clean up
-    //
-    @Override
-    public void onStop() {
-        Log.i(DEBUG_TAG, "in onStop()");
-        // basically housekeeping and cleanup of cursor
-        Cursor cursor = stockCursorAdapter.getCursor();
-        stockCursorAdapter.changeCursor(null);
-        // release the cursor
-        if (cursor != null) {
-            cursor.close();
-        }
-        super.onStop();
-    } // end method onStop()
-
-    //
-    //
-    //
-    @Override
-    public void onDestroyView() {
-        Log.i(DEBUG_TAG, "in onDestroyView()");
-        super.onDestroyView();
-    }
-
-    //
-    //
-    //
-    @Override
-    public void onDestroy() {
-        Log.i(DEBUG_TAG, "in onDestroy()");
-        super.onDestroy();
-    }
-
-    //
-    // remove StockListFragmentListener when Fragment is detached
-    //
-    @Override
-    public void onDetach() {
-        Log.i(DEBUG_TAG, "in onDetach()");
-        super.onDetach();
-        // clean up callback for interface implementation
-        stockListFragmentListener = null;
-    } // end method onDetach
-
-    // display this fragment's menu items
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
-        // Inflate the menu; this adds items to the action bar if it is present.
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_stock_list_menu, menu);
-    } // end method onCreateOptionsMenu()
-
-    // handle choice from options menu
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(DEBUG_TAG, "in onOptionsItemSelected()");
-
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.action_add:
-                // let the callback take care of this
-                onAddStockRequest();
-                return true;
-
-            default:
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    } // end method onOptionsItemSelected()
-
-
-    //
     // respond to user touching an item/symbol in the ListView
-    //
     private AdapterView.OnItemClickListener onItemClickListener =
             new AdapterView.OnItemClickListener() {
                 @Override
@@ -335,33 +175,18 @@ public class StockListFragment extends ListFragment {
                 }
             };
 
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    //
     // callback to main to redisplay screen;
-    //
-    public void onAddStockRequest() {
-        Log.i(DEBUG_TAG, "in onAddStockRequest()");
-        if (stockListFragmentListener != null) {
-            // let the callback take care of this
-            stockListFragmentListener.onSLFLAddStockRequest();
-        }
-    }
-
-    //
-    // callback to main to redisplay screen;
-    //
     public void onStockDetailRequest(long id) {
         Log.i(DEBUG_TAG, "in onDeleteStockRequest()");
         if (stockListFragmentListener != null) {
             final Bundle arguments = new Bundle();
             arguments.putLong(Gui2Database.BUNDLE_KEY, id);
             // let the callback take care of this
-            stockListFragmentListener.onSLFLStockDetailRequest(arguments);
+            stockListFragmentListener.onDisplayStockDetailRequest(arguments);
         }
     }
 
+    //
     public void onDeleteStockRequest(AdapterView<?> parent, View view, int position, long id) {
         Log.i(DEBUG_TAG, "in onDeleteStockRequest()");
         final long tickerId = id;
@@ -379,27 +204,24 @@ public class StockListFragment extends ListFragment {
                         final DatabaseConnector databaseConnector =
                                 new DatabaseConnector(getActivity());
 
-                        // AsyncTask deletes contact and notifies listener
+                        // create an AsyncTask to delete a contact and notify listener
                         AsyncTask<Long, Object, Object> deleteTask =
                                 new AsyncTask<Long, Object, Object>() {
                                     @Override
                                     protected Object doInBackground(Long... params) {
                                         Log.i(DEBUG_TAG, "in doInBackground()");
-                                        // need tickerId and tickerSymbol for logging
-                                        // Delete the Symbol
                                         databaseConnector.deleteOneStock(params[0]);
                                         return null;
-                                    } // end doInBackground
+                                    }
 
                                     @Override
                                     protected void onPostExecute(Object result) {
                                         Log.i(DEBUG_TAG, "in onPostExecute()");
-                                        // a symbol was deleted, refresh the data in our symbolList
                                         final Bundle arguments = new Bundle();
                                         arguments.putLong(Gui2Database.BUNDLE_KEY, (long) result);
                                         // let the callback take care of this
-                                        stockListFragmentListener.onSLFLDeleteStockComplete(arguments);
-                                    } // end onPostExecute
+                                        stockListFragmentListener.onDeleteStockFromDatabaseComplete(arguments);
+                                    }
                                 }; // end new AsyncTask definition
 
                         // execute the AsyncTask to delete the stock
@@ -412,15 +234,19 @@ public class StockListFragment extends ListFragment {
         builder.show();
     }
 
-    //
-    // update data set
-    //
-    public void updateStocksListView() {
-        Log.i(DEBUG_TAG, "in updateStocksListView()");
-        new GetAllStocksAsyncTask().execute((Object[]) null);
-    } // end method updateStocksListView()
+    // when fragment resumes, reload contacts
+    @Override
+    public void onResume() {
+        Log.i(DEBUG_TAG, "in onResume()");
+        super.onResume();
+        updateStockListView();
+    }
 
-    //
+    public void updateStockListView() {
+        Log.i(DEBUG_TAG, "in updateStockListView()");
+        new GetAllStocksAsyncTask().execute((Object[]) null);
+    }
+
     // *****************************************************
     // perform database query outside the GUI thread
     // *****************************************************
@@ -428,29 +254,78 @@ public class StockListFragment extends ListFragment {
 
         DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
 
-        //
-        // openForUpdate DB and return a cursor for all contacts
-        //
+        // open DB and return a cursor to all contacts
         @Override
         protected Cursor doInBackground(Object... params) {
             Log.i(DEBUG_TAG, "in GetAllStocksAsyncTask()/doInBackground()");
             databaseConnector.openForRead();
             return databaseConnector.getAllStocks();
-        } // end method doInBackground()
+        }
 
-        //
-        // use cursor returned from the doInBackground method
-        //
+        // set cursor returned to adapter and close db
         @Override
         protected void onPostExecute(Cursor results) {
             Log.i(DEBUG_TAG, "in GetAllStocksAsyncTask()/onPostExecute()");
             super.onPostExecute(results);
-            // move to the first item
             results.moveToFirst();
-
             stockCursorAdapter.changeCursor(results);
             databaseConnector.close();
-        } // end method onPostExecute()
+        }
     } // end inner class GetContactsTask()
+
+    // clean up
+    @Override
+    public void onStop() {
+        Log.i(DEBUG_TAG, "in onStop()");
+        Cursor cursor = stockCursorAdapter.getCursor();
+        stockCursorAdapter.changeCursor(null);
+        if (cursor != null) {
+            cursor.close();
+        }
+        super.onStop();
+    }
+
+    // clean up StockListFragmentListener when Fragment is detached
+    @Override
+    public void onDetach() {
+        Log.i(DEBUG_TAG, "in onDetach()");
+        super.onDetach();
+        stockListFragmentListener = null;
+    }
+
+    // display this fragment's menu items
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_stock_list_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(DEBUG_TAG, "in onOptionsItemSelected()");
+
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_add:
+                // let the callback take care of this
+                onAddStockRequest();
+                return true;
+
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    } // end method onOptionsItemSelected()
+
+    // callback to main to redisplay screen;
+    public void onAddStockRequest() {
+        Log.i(DEBUG_TAG, "in onAddStockToDatabaseRequest()");
+        if (stockListFragmentListener != null) {
+            stockListFragmentListener.onAddStockToDatabaseRequest();
+        }
+    }
+
 
 }

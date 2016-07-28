@@ -20,7 +20,6 @@ package com.hoiwanlouis.mystockportfolio;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -103,56 +102,14 @@ public class MainActivity extends Activity
         }
     } // end method onResume
 
-    //
-    //
-    //
-    @Override
-    public void onStart() {
-        Log.i(DEBUG_TAG, "in onStart()");
-        super.onStart();
-    }
-
-    //
-    //
-    //
-    @Override
-    public void onStop() {
-        Log.i(DEBUG_TAG, "in onStop()");
-        super.onStop();
-    }
-
-    @Override
-    protected void onRestart() {
-        Log.i(DEBUG_TAG, "in onRestart()");
-        super.onRestart();
-    }
-
-    @Override
-    protected void onPause() {
-        Log.i(DEBUG_TAG, "in onPause()");
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.i(DEBUG_TAG, "in onDestroy()");
-        super.onDestroy();
-    }
-
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
 
     /***************************************************************
      * Start of AddStockFragmentListener interfaces implementations
      * <p>
-     * 1. public void onASFLAddStockComplete(final Bundle arguments);
+     * 1. public void onAddStockComplete(final Bundle arguments);
      ***************************************************************/
-    //
-    // implementing AddStockFragmentListener interfaces
-    //
     @Override
-    public void onASFLAddStockComplete(final Bundle arguments) {
+    public void onAddStockComplete(final Bundle arguments) {
         Log.i(DEBUG_TAG, "in onASFLCompleted()");
 
         mFM.popBackStack(); // removes the addFragment from top of back stack
@@ -161,7 +118,7 @@ public class MainActivity extends Activity
         } else {
             // tablet
             mFM.popBackStack(); // ensure we have removed all back stack entries
-            stockListFragment.updateStocksListView();
+            stockListFragment.updateStockListView();
             showDetailFragment(R.id.rightPaneContainer, arguments);
         }
     }
@@ -170,29 +127,22 @@ public class MainActivity extends Activity
      * End of AddStockFragmentListener interfaces implementations
      *
      ***************************************************************/
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
 
     /***************************************************************
      * Start of StockDetailFragmentListener interfaces implementations
      * <p>
-     * 1. public void onSDFLStockDetailComplete();
+     * 1. public void onStockDetailComplete();
      ***************************************************************/
-    //
-    // implementing StockDetailFragmentListener interfaces
-    // return to inventory when displayed item/symbol is deleted
-    //
     @Override
-    public void onSDFLStockDetailComplete() {
-        Log.i(DEBUG_TAG, "in onSDFLStockDetailComplete()");
+    public void onStockDetailComplete() {
+        Log.i(DEBUG_TAG, "in onStockDetailComplete()");
         getFragmentManager().popBackStack(); // removes top of back stack
 
         if (isAPhoneDevice()) {
             ;
         } else {
             // must be a tablet
-            stockListFragment.updateStocksListView();
+            stockListFragment.updateStockListView();
         }
     }
     /***************************************************************
@@ -200,55 +150,42 @@ public class MainActivity extends Activity
      * End of StockDetailFragmentListener interfaces implementations
      *
      ***************************************************************/
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
 
     /***************************************************************
      * Start of StockListFragmentListener interfaces implementations
      * <p>
-     * 1.  public void onSLFLAddStockRequest();
-     * 2.  public void onSLFLDeleteStockComplete(final Bundle arguments)
-     * 3.  public void onSLFLStockDetailRequest(final Bundle arguments)
+     * 1.  public void onAddStockToDatabaseRequest();
+     * 2.  public void onDeleteStockFromDatabaseComplete(final Bundle arguments)
+     * 3.  public void onDisplayStockDetailRequest(final Bundle arguments)
      ***************************************************************/
-    //
-    // implementing StockListFragmentListener interfaces
-    // onSLFLAddStockRequest will add a new item/symbol
-    //
+    // onAddStockToDatabaseRequest will add a new item/symbol
     @Override
-    public void onSLFLAddStockRequest() {
-        Log.i(DEBUG_TAG, "in onSLFLAddStockRequest()");
+    public void onAddStockToDatabaseRequest() {
+        Log.i(DEBUG_TAG, "in onAddStockToDatabaseRequest()");
         if (isAPhoneDevice()) {
             showAddFragment(R.id.fragmentContainer, null);
         } else {
             showAddFragment(R.id.rightPaneContainer, null);
         }
-    } // end method onSLFLAddStockRequest
+    } // end method onAddStockToDatabaseRequest
 
-    //
-    // implementing StockListFragmentListener interfaces
-    // onSLFLDeleteStockComplete, just redisplay the screen
-    //
+    // onDeleteStockFromDatabaseComplete, just redisplay the screen
     @Override
-    public void onSLFLDeleteStockComplete(final Bundle arguments) {
-        Log.i(DEBUG_TAG, "in onSLFLDeleteStockComplete()");
-
+    public void onDeleteStockFromDatabaseComplete(final Bundle arguments) {
+        Log.i(DEBUG_TAG, "in onDeleteStockFromDatabaseComplete()");
         mFM.popBackStack(); // removes top of back stack
         if (isAPhoneDevice()) {
             ;
         } else {
             // tablet
-            stockListFragment.updateStocksListView();
+            stockListFragment.updateStockListView();
         }
-    } // end method onSLFLDeleteStockComplete
+    } // end method onDeleteStockFromDatabaseComplete
 
-    //
-    // implementing StockListFragmentListener interfaces
-    // onSLFLStockDetailRequest will display the detail screen for selected stock
-    //
+    // onDisplayStockDetailRequest will display the detail screen for selected stock
     @Override
-    public void onSLFLStockDetailRequest(final Bundle arguments) {
-        Log.i(DEBUG_TAG, "in onSLFLStockDetailRequest()");
+    public void onDisplayStockDetailRequest(final Bundle arguments) {
+        Log.i(DEBUG_TAG, "in onDisplayStockDetailRequest()");
         if (isAPhoneDevice()) {
             // phone
             showDetailFragment(R.id.fragmentContainer, arguments);
@@ -256,16 +193,12 @@ public class MainActivity extends Activity
             mFM.popBackStack(); // ensure we have removed all back stack entries
             showDetailFragment(R.id.rightPaneContainer, arguments);
         }
-    } // end method onSLFLStockDetailRequest
-
+    } // end method onDisplayStockDetailRequest
     /***************************************************************
      *
      * End of StockListFragmentListener interfaces implementations
      *
      ***************************************************************/
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
 
     /***************************************************************
      * worker function:
@@ -282,13 +215,18 @@ public class MainActivity extends Activity
      * <p>
      * display fragment after adding a new symbol
      ***************************************************************/
-    private void showAddFragment(final int viewID, final Bundle arguments) {
+    private void showAddFragment(int viewID, Bundle arguments) {
         Log.i(DEBUG_TAG, "in showAddFragment()");
+        AddStockFragment fragment = AddStockFragment.newInstance();
+        addBundleToAddFragment(fragment, arguments);
+        mFT = mFM.beginTransaction();
+        mFT.replace(viewID, fragment);
+        mFT.addToBackStack(null);
+        mFT.commit();   // causes fragment to display
+    } // end method showAddFragment
 
-        // set the bundled arguments into the DetailsFragment
-        final AddStockFragment fragment = AddStockFragment.newInstance();
+    private void addBundleToAddFragment(AddStockFragment fragment, Bundle arguments) {
         final StringBuilder sb = new StringBuilder();
-        // Bundle arguments is normally null
         if (arguments != null) {
             sb.append("requesting AddStockFragment for [");
             sb.append(Gui2Database.BUNDLE_KEY);
@@ -303,28 +241,28 @@ public class MainActivity extends Activity
             sb.append("]=[NULL KEY VALUE]");
         }
         Log.i(DEBUG_TAG, sb.toString());
-
-        // use a FragmentTransaction to display the fragment
-        mFT = mFM.beginTransaction();
-        mFT.replace(viewID, fragment);
-        mFT.addToBackStack(null);
-        // causes fragment to display
-        mFT.commit();
-    } // end method showAddFragment
+    }
 
 
     /***************************************************************
      * worker function:
-     * private void showDetailFragment(long rowID, int viewID)
+     * private void showDetailFragment(int viewID, Bundle arguments)
      * <p>
      * display a item/symbol
      ***************************************************************/
-    private void showDetailFragment(final int viewID, final Bundle arguments) {
+    private void showDetailFragment(int viewID, Bundle arguments) {
         Log.i(DEBUG_TAG, "in showDetailFragment()");
+        StockDetailFragment fragment = StockDetailFragment.newInstance();
+        addBundleToStockDetailFragment(fragment, arguments);
+        mFT = mFM.beginTransaction();
+        mFT.replace(viewID, fragment);
+        mFT.addToBackStack(null);
+        mFT.commit();   // display fragment
+    } // end method showDetailFragment
 
-        // set the bundle as arguments into the Fragment
-        final StockDetailFragment fragment = StockDetailFragment.newInstance();
-        final StringBuilder sb = new StringBuilder();
+    private void addBundleToStockDetailFragment(StockDetailFragment fragment, Bundle arguments) {
+        Log.i(DEBUG_TAG, "in addBundleToStockDetailFragment()");
+        StringBuilder sb = new StringBuilder();
         if (arguments != null) {
             sb.append("requesting StockDetailFragment for [");
             sb.append(Gui2Database.BUNDLE_KEY);
@@ -338,14 +276,7 @@ public class MainActivity extends Activity
             sb.append("]=[NULL KEY VALUE]");
         }
         Log.i(DEBUG_TAG, sb.toString());
+    }
 
-        // use a FragmentTransaction to display the DetailsFragment
-        mFT = mFM.beginTransaction();
-        mFT.replace(viewID, fragment);
-        mFT.addToBackStack(null);
-        // causes DetailsFragment to display
-        mFT.commit();
-    } // end method showDetailFragment
 
-///////////////////////////////////////////////////////////////////////////////
 }

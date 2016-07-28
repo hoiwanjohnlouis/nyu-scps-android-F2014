@@ -28,33 +28,35 @@ package com.hoiwanlouis.mystockportfolio.enums;
  *
  ***************************************************************************/
 // from FixProtocol.org website www.fixprotocol.org
-public enum EOrderSide {
+public enum MessageType {
 
-    BUY ("1"),
-    SELL ("2"),
-    BUY_MINUS ("3"),
-    SELL_PLUS ("4"),
-    SELL_SHORT ("5"),
-    SELL_SHORT_EXEMPT ("6"),
-    UNDISCLOSED ("7"),
-    CROSS ("8"),
-    CROSS_SHORT ("9"),
-    CROSS_SHORT_EXEMPT ("A"),
-    AS_DEFINED ("B"),
-    OPPOSITE ("C"),
-    SUBSCRIBE ("D"),
-    REDEEM ("E"),
-    LEND_FINANCING ("F"),
-    BORROW_FINANCING ("G");
+    HEARTBEAT("0", "Heartbeat"),
+    TEST_REQUEST("1", "Test Request"),
+    RESEND_REQUEST("2", "Resend Request"),
+    REJECT("3", "Reject"),
+    SEQUENCE_RESET("4", "Sequence Reset"),
+    LOGOUT("5", "Logout"),
+    EXECUTION_REPORT("8", "Execution Report"),
+    ORDER_CANCEL_REJECT("9", "Order Cancel Reject"),
+    NEW_ORDER("D", "New Order - Single"),
+    ORDER_CANCEL_REQUEST("F", "Order Cancel Request"),
+    ORDER_MODIFICATION_REQUEST("G", "Order Cancel/Replace Request"),
+    ORDER_STATUS_REQUEST("H", "Order Status Request");
 
-    private final String orderSideValue;
+    private final String msgTypeValue;
+    private final String msgTypeDescription;
 
-    EOrderSide(final String side) {
-        this.orderSideValue = side;
+    private MessageType(final String msgType, final String msgDescription) {
+        this.msgTypeValue = msgType;
+        this.msgTypeDescription = msgDescription;
     }
 
-    public String getOrderSideValue() {
-        return orderSideValue;
+    public String getMsgTypeValue() {
+        return msgTypeValue;
+    }
+
+    public String getMsgTypeDescription() {
+        return msgTypeDescription;
     }
 
     @Override
@@ -62,7 +64,10 @@ public enum EOrderSide {
         StringBuilder sb = new StringBuilder();
         sb.append(this.name());
         sb.append(":[");
-        sb.append(getOrderSideValue());
+        sb.append(getMsgTypeValue());
+        sb.append("]");
+        sb.append(":[");
+        sb.append(getMsgTypeDescription());
         sb.append("]");
         return sb.toString();
     }

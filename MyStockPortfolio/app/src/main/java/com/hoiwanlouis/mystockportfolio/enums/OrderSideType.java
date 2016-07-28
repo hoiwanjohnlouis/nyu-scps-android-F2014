@@ -28,40 +28,43 @@ package com.hoiwanlouis.mystockportfolio.enums;
  *
  ***************************************************************************/
 // from FixProtocol.org website www.fixprotocol.org
-public enum EFieldType {
+public enum OrderSideType {
 
-//    DEFAULT_COMPANY_NAME,
-//    DEFAULT_TICKER_SYMBOL,
-//    DEFAULT_PRICE,
-//    DEFAULT_QUANTITY,
-//    DEFAULT_DATE_TIME_STAMP,
+    BUY ("1"),
+    SELL ("2"),
+    BUY_MINUS ("3"),
+    SELL_PLUS ("4"),
+    SELL_SHORT ("5"),
+    SELL_SHORT_EXEMPT ("6"),
+    UNDISCLOSED ("7"),
+    CROSS ("8"),
+    CROSS_SHORT ("9"),
+    CROSS_SHORT_EXEMPT ("A"),
+    AS_DEFINED ("B"),
+    OPPOSITE ("C"),
+    SUBSCRIBE ("D"),
+    REDEEM ("E"),
+    LEND_FINANCING ("F"),
+    BORROW_FINANCING ("G");
 
-    COMPANY_NAME("COMPANY_NAME"),
-    TICKER_SYMBOL("55"),
-    OPENING_PRICE("OPENING_PRICE"),
-    PREVIOUS_DAYS_CLOSING_PRICE("PREVIOUS_DAYS_CLOSING_PRICE"),
-    TRADE_PRICE("31"),
-    TRADE_QUANTITY("32"),
-    TRADE_DATE_TIME_STAMP("60");
+    private final String orderSideValue;
 
-    private final String fieldTypeValue;
-
-    private EFieldType(final String fieldTypeValue) {
-        this.fieldTypeValue = fieldTypeValue;
+    OrderSideType(final String side) {
+        this.orderSideValue = side;
     }
 
-    public String getFieldTypeValue() {
-        return fieldTypeValue;
+    public String getOrderSideValue() {
+        return orderSideValue;
     }
-
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.name());
         sb.append(":[");
-        sb.append(getFieldTypeValue());
+        sb.append(getOrderSideValue());
         sb.append("]");
         return sb.toString();
     }
+
 }

@@ -18,9 +18,8 @@ package com.hoiwanlouis.mystockportfolio.factories;
 
 import android.util.Log;
 
-import com.hoiwanlouis.mystockportfolio.enums.EFieldType;
-import com.hoiwanlouis.mystockportfolio.interfaces.IRecordFactory;
-
+import com.hoiwanlouis.mystockportfolio.enums.FieldType;
+import com.hoiwanlouis.mystockportfolio.interfaces.RecordFactory;
 
 public class Trade extends Record {
 
@@ -29,12 +28,12 @@ public class Trade extends Record {
 
     // We define the type of record we want to create
     // by stating the factory to build trades
-    IRecordFactory recordFactory;
+    RecordFactory recordFactory;
 
     // The trade factory is sent to this method.
     // The factory will specifies what fields to populate
 
-    public Trade(IRecordFactory recordFactory) {
+    public Trade(RecordFactory recordFactory) {
         Log.v(DEBUG_TAG, "in Trade constructor");
 
         this.recordFactory = recordFactory;
@@ -47,13 +46,13 @@ public class Trade extends Record {
         // The fields needed were passed in the factory
         // should use factory builder method.
 
-        company = recordFactory.addCompany(EFieldType.COMPANY_NAME, "");
-        symbol = recordFactory.addSymbol(EFieldType.TICKER_SYMBOL, "");
-        openingPrice = recordFactory.addOpeningPrice(EFieldType.OPENING_PRICE, 0.0);
-        previousDaysClosingPrice = recordFactory.addPreviousDaysClosingPrice(EFieldType.PREVIOUS_DAYS_CLOSING_PRICE, 0.0);
-        lastTradePrice = recordFactory.addTradePrice(EFieldType.TRADE_PRICE, 0.0);
-        lastTradeQuantity = recordFactory.addTradeQuantity(EFieldType.TRADE_QUANTITY, 0.0);
-        lastTradeDateTimeStamp = recordFactory.addTradeDateTimeStamp(EFieldType.TRADE_DATE_TIME_STAMP, "");
+        company = recordFactory.addCompany(FieldType.COMPANY_NAME, "");
+        symbol = recordFactory.addSymbol(FieldType.TICKER_SYMBOL, "");
+        openingPrice = recordFactory.addOpeningPrice(FieldType.OPENING_PRICE, 0.0);
+        previousDaysClosingPrice = recordFactory.addPreviousDaysClosingPrice(FieldType.PREVIOUS_DAYS_CLOSING_PRICE, 0.0);
+        lastTradePrice = recordFactory.addTradePrice(FieldType.TRADE_PRICE, 0.0);
+        lastTradeQuantity = recordFactory.addTradeQuantity(FieldType.TRADE_QUANTITY, 0.0);
+        lastTradeDateTimeStamp = recordFactory.addTradeDateTimeStamp(FieldType.TRADE_DATE_TIME_STAMP, "");
 
     }
 

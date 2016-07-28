@@ -19,7 +19,7 @@ package com.hoiwanlouis.mystockportfolio.factories;
 
 import android.util.Log;
 
-import com.hoiwanlouis.mystockportfolio.enums.ERecordType;
+import com.hoiwanlouis.mystockportfolio.enums.RecordType;
 
 
 public abstract class RecordBuilding {
@@ -31,14 +31,14 @@ public abstract class RecordBuilding {
     //
     //
     //
-    public abstract Record makeRecord(ERecordType recordType);
+    public abstract Record makeRecord(RecordType recordType);
 
 
 
     //
     // todo: orderRecord should receive an update record populated with trade data which will be passed to prepare
     //
-    public Record orderRecord(ERecordType recordType) {
+    public Record orderRecord(RecordType recordType) {
         Log.v(DEBUG_TAG, "in orderRecord");
 
 

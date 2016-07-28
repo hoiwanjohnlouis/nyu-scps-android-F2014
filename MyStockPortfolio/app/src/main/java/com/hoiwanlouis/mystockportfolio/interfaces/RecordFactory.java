@@ -16,21 +16,21 @@ package com.hoiwanlouis.mystockportfolio.interfaces;
     limitations under the License.
 */
 
-import com.hoiwanlouis.mystockportfolio.enums.EFieldType;
+import com.hoiwanlouis.mystockportfolio.enums.FieldType;
 import com.hoiwanlouis.mystockportfolio.fields.Company;
 import com.hoiwanlouis.mystockportfolio.fields.DateTimeStamp;
 import com.hoiwanlouis.mystockportfolio.fields.Price;
 import com.hoiwanlouis.mystockportfolio.fields.Quantity;
 import com.hoiwanlouis.mystockportfolio.fields.Symbol;
 
-public interface IRecordFactory {
+public interface RecordFactory {
 
-    public Company addCompany(EFieldType fieldType, String longName);
-    public Price addOpeningPrice(EFieldType fieldType, double price);
-    public Price addPreviousDaysClosingPrice(EFieldType fieldType, double price);
-    public Price addTradePrice(EFieldType fieldType, double price);
-    public Quantity addTradeQuantity(EFieldType fieldType, double quantity);
-    public Symbol addSymbol(EFieldType fieldType, String symbol);
-    public DateTimeStamp addTradeDateTimeStamp(EFieldType fieldType, String dateTimeStamp);
+    public Company addCompany(FieldType fieldType, String longName);
+    public Price addOpeningPrice(FieldType fieldType, double price);
+    public Price addPreviousDaysClosingPrice(FieldType fieldType, double price);
+    public Price addTradePrice(FieldType fieldType, double price);
+    public Quantity addTradeQuantity(FieldType fieldType, double quantity);
+    public Symbol addSymbol(FieldType fieldType, String symbol);
+    public DateTimeStamp addTradeDateTimeStamp(FieldType fieldType, String dateTimeStamp);
 
 }

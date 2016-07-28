@@ -18,57 +18,57 @@ package com.hoiwanlouis.mystockportfolio.factories;
 
 import android.util.Log;
 
-import com.hoiwanlouis.mystockportfolio.enums.EFieldType;
+import com.hoiwanlouis.mystockportfolio.enums.FieldType;
 import com.hoiwanlouis.mystockportfolio.fields.DateTimeStamp;
 import com.hoiwanlouis.mystockportfolio.fields.Company;
 import com.hoiwanlouis.mystockportfolio.fields.Price;
 import com.hoiwanlouis.mystockportfolio.fields.Quantity;
 import com.hoiwanlouis.mystockportfolio.fields.Symbol;
-import com.hoiwanlouis.mystockportfolio.interfaces.IRecordFactory;
+import com.hoiwanlouis.mystockportfolio.interfaces.RecordFactory;
 
 
-public class TradeFactory implements IRecordFactory {
+public class TradeFactoryImpl implements RecordFactory {
 
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
 
-    public Company addCompany(EFieldType fieldType, String longName) {
+    public Company addCompany(FieldType fieldType, String longName) {
         Log.v(DEBUG_TAG, "in addCompany");
         return new Company(fieldType, longName);
     }
 
     @Override
-    public Symbol addSymbol(EFieldType fieldType, String symbol) {
+    public Symbol addSymbol(FieldType fieldType, String symbol) {
         Log.v(DEBUG_TAG, "in addSymbol");
         return new Symbol(fieldType, symbol);
     }
 
     @Override
-    public Price addOpeningPrice(EFieldType fieldType, double price) {
+    public Price addOpeningPrice(FieldType fieldType, double price) {
         Log.v(DEBUG_TAG, "in addOpeningPrice");
         return new Price(fieldType, price);
     }
 
     @Override
-    public Price addPreviousDaysClosingPrice(EFieldType fieldType, double price) {
+    public Price addPreviousDaysClosingPrice(FieldType fieldType, double price) {
         Log.v(DEBUG_TAG, "in addPreviousDaysClosingPrice");
         return new Price(fieldType, price);
     }
 
     @Override
-    public Price addTradePrice(EFieldType fieldType, double price) {
+    public Price addTradePrice(FieldType fieldType, double price) {
         Log.v(DEBUG_TAG, "in addTradePrice");
         return new Price(fieldType, price);
     }
 
     @Override
-    public Quantity addTradeQuantity(EFieldType fieldType, double quantity) {
+    public Quantity addTradeQuantity(FieldType fieldType, double quantity) {
         Log.v(DEBUG_TAG, "in addTradeQuantity");
         return new Quantity(fieldType, quantity);
     }
 
     @Override
-    public DateTimeStamp addTradeDateTimeStamp(EFieldType fieldType, String dateTimeStamp) {
+    public DateTimeStamp addTradeDateTimeStamp(FieldType fieldType, String dateTimeStamp) {
         Log.v(DEBUG_TAG, "in addTradeDateTimeStamp");
         return new DateTimeStamp(fieldType, dateTimeStamp);
     }
