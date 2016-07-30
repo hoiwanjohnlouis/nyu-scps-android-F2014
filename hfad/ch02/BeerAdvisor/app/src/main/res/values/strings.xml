@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Beer Advisor</string>
+    <string name="find_beer">Find Beer</string>
+    <string name="brands"></string>
+
+    <string-array name="beer_colors">
+        <item>light</item>
+        <item>amber</item>
+        <item>brown</item>
+        <item>dark</item>
+    </string-array>
+
+    <string-array name="light">
+        <item>Miller Lite</item>
+    </string-array>
+
+    <string-array name="amber">
+        <item>Jack Amber</item>
+        <item>Red Moose</item>
+    </string-array>
+
+    <string-array name="brown">
+        <item>Ale</item>
+    </string-array>
+
+    <string-array name="dark">
+        <item>Guiness</item>
+    </string-array>
+
+</resources>
