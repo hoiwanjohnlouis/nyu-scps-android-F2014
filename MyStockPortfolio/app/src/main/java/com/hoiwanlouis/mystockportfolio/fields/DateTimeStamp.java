@@ -31,27 +31,48 @@ import com.hoiwanlouis.mystockportfolio.enums.FieldType;
  * H. Melville    1851.01.31 Wooden whales, or whales cut in profile out of
  *
  ***************************************************************************/
-public class DateTimeStamp {
+public class DateTimestamp {
     private final String DEBUG_TAG = this.getClass().getSimpleName();
     private final FieldType fieldType;
-    private final String dateTimeStamp;
+    private final String dateTimestamp;
 
-    public DateTimeStamp(FieldType fieldType, String dateTimeStamp) {
+    // work variables
+    private final String dateSegment;
+    private final String timestampSegment;
+    private final StringBuilder sb;
+
+    public DateTimestamp(FieldType fieldType, String dateTimestamp) {
         Log.v(DEBUG_TAG, "in constructor(..)");
         this.fieldType = fieldType;
-        this.dateTimeStamp = dateTimeStamp;
+        this.dateTimestamp = dateTimestamp;
+
+        // datetimestamps are stored as YYYY-MM-DD HH:MM:SS.SSS"
+        // split up the fields to facilitate display
+        String[] segment = dateTimestamp.split(" ");
+        this.dateSegment = segment[0];
+        this.timestampSegment = segment[1];
+
+        sb = new StringBuilder();
     }
 
-    public String getDateTimeStamp() {
-        return this.dateTimeStamp;
+    public String getDateTimestamp() {
+        return this.dateTimestamp;
+    }
+
+    public String getDateSegment() {
+        return this.dateSegment;
+    }
+
+    public String getTimestampSegment() {
+        return this.timestampSegment;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        sb.setLength(0);
         sb.append(fieldType.toString());
         sb.append(":[");
-        sb.append(getDateTimeStamp());
+        sb.append(getDateTimestamp());
         sb.append("]");
         return sb.toString();
     }

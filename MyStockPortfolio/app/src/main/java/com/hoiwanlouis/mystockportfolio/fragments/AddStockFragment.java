@@ -148,20 +148,6 @@ public class AddStockFragment extends Fragment {
         databaseRowID = dbConnector.addOneStock(stockSymbol.getText().toString());
     }
 
-    // called after View is created
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        Log.i(DEBUG_TAG, "in onViewCreated()");
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    //
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        Log.i(DEBUG_TAG, "in onActivityCreated()");
-        super.onActivityCreated(savedInstanceState);
-    }
-
     //
     @Override
     public void onDetach() {

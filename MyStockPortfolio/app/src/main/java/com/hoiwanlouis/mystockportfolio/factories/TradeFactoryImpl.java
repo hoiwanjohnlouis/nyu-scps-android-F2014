@@ -19,7 +19,7 @@ package com.hoiwanlouis.mystockportfolio.factories;
 import android.util.Log;
 
 import com.hoiwanlouis.mystockportfolio.enums.FieldType;
-import com.hoiwanlouis.mystockportfolio.fields.DateTimeStamp;
+import com.hoiwanlouis.mystockportfolio.fields.DateTimestamp;
 import com.hoiwanlouis.mystockportfolio.fields.Company;
 import com.hoiwanlouis.mystockportfolio.fields.Price;
 import com.hoiwanlouis.mystockportfolio.fields.Quantity;
@@ -68,9 +68,9 @@ public class TradeFactoryImpl implements RecordFactory {
     }
 
     @Override
-    public DateTimeStamp addTradeDateTimeStamp(FieldType fieldType, String dateTimeStamp) {
+    public DateTimestamp addTradeDateTimeStamp(FieldType fieldType, String dateTimeStamp) {
         Log.v(DEBUG_TAG, "in addTradeDateTimeStamp");
-        return new DateTimeStamp(fieldType, dateTimeStamp);
+        return new DateTimestamp(fieldType, dateTimeStamp);
     }
 
 }

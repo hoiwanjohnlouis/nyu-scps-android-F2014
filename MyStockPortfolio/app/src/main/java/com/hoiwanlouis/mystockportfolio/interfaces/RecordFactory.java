@@ -18,7 +18,7 @@ package com.hoiwanlouis.mystockportfolio.interfaces;
 
 import com.hoiwanlouis.mystockportfolio.enums.FieldType;
 import com.hoiwanlouis.mystockportfolio.fields.Company;
-import com.hoiwanlouis.mystockportfolio.fields.DateTimeStamp;
+import com.hoiwanlouis.mystockportfolio.fields.DateTimestamp;
 import com.hoiwanlouis.mystockportfolio.fields.Price;
 import com.hoiwanlouis.mystockportfolio.fields.Quantity;
 import com.hoiwanlouis.mystockportfolio.fields.Symbol;
@@ -31,6 +31,6 @@ public interface RecordFactory {
     public Price addTradePrice(FieldType fieldType, double price);
     public Quantity addTradeQuantity(FieldType fieldType, double quantity);
     public Symbol addSymbol(FieldType fieldType, String symbol);
-    public DateTimeStamp addTradeDateTimeStamp(FieldType fieldType, String dateTimeStamp);
+    public DateTimestamp addTradeDateTimeStamp(FieldType fieldType, String dateTimeStamp);
 
 }

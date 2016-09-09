@@ -52,7 +52,7 @@ public class Trade extends Record {
         previousDaysClosingPrice = recordFactory.addPreviousDaysClosingPrice(FieldType.PREVIOUS_DAYS_CLOSING_PRICE, 0.0);
         lastTradePrice = recordFactory.addTradePrice(FieldType.TRADE_PRICE, 0.0);
         lastTradeQuantity = recordFactory.addTradeQuantity(FieldType.TRADE_QUANTITY, 0.0);
-        lastTradeDateTimeStamp = recordFactory.addTradeDateTimeStamp(FieldType.TRADE_DATE_TIME_STAMP, "");
+        lastTradeDateTimestamp = recordFactory.addTradeDateTimeStamp(FieldType.TRADE_DATE_TIME_STAMP, "");
 
     }
 

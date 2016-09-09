@@ -33,11 +33,10 @@ public final class DatabaseColumns {
         public static final String COMPANY_TABLE_NAME = "company_table";
         public static final String COMPANY_NAME = "company_name"; // short name: IBM
         public static final String COMPANY_LONG_NAME = "company_long_name"; // long name: International Business Machines
-        public static final String INSERT_DATETIME = "insert_datetime";  // date of insertion
-        public static final String MODIFY_DATETIME = "modify_datetime";  // date of last modification
+        public static final String INSERT_DATETIME = "insert_datetime";     // datetime format YYYY-MM-DD HH:MM:SS.SSS
+        public static final String MODIFY_DATETIME = "modify_datetime";     // datetime format YYYY-MM-DD HH:MM:SS.SSS
         public static final String DEFAULT_SORT_ORDER = COMPANY_NAME + " ASC";
     }
-
 
     //
     public static final class Exchange implements BaseColumns {
@@ -45,8 +44,8 @@ public final class DatabaseColumns {
         public static final String EXCHANGE_TABLE_NAME = "exchange_table";
         public static final String EXCHANGE_CODE = "exchange_code"; // unique code id for exchange. eg: NYSE
         public static final String EXCHANGE_NAME = "exchange_name"; // name of exchange. eg: New York Stock Exchange
-        public static final String INSERT_DATETIME = "insert_datetime";  // date of insertion
-        public static final String MODIFY_DATETIME = "modify_datetime";  // date of last modification
+        public static final String INSERT_DATETIME = "insert_datetime";     // datetime format YYYY-MM-DD HH:MM:SS.SSS
+        public static final String MODIFY_DATETIME = "modify_datetime";     // datetime format YYYY-MM-DD HH:MM:SS.SSS
         public static final String DEFAULT_SORT_ORDER = EXCHANGE_NAME + " ASC";
     }
 
@@ -58,8 +57,8 @@ public final class DatabaseColumns {
         public static final String PORTFOLIO_ID = "portfolio_id";
         public static final String COMPANY_ID = "company_id";
         public static final String EXCHANGE_ID = "exchange_id";
-        public static final String INSERT_DATETIME = "insert_datetime";  // date of insertion
-        public static final String MODIFY_DATETIME = "modify_datetime";  // date of last modification
+        public static final String INSERT_DATETIME = "insert_datetime"; // datetime, YYYY-MM-DD HH:MM:SS.SSS
+        public static final String MODIFY_DATETIME = "modify_datetime"; // datetime, YYYY-MM-DD HH:MM:SS.SSS
         public static final String DEFAULT_SORT_ORDER = PORTFOLIO_ID + " ASC";
     }
 
@@ -77,9 +76,9 @@ public final class DatabaseColumns {
         public static final String ASK_SIZE = "ask_size";  // bid size of quote
         public static final String LAST_TRADE_PRICE = "last_trade_price";  // price of last trade
         public static final String LAST_TRADE_QUANTITY = "last_trade_quantity";  // share quantity of last trade
-        public static final String LAST_TRADE_DATETIME = "last_trade_datetime";  // datetime of last trade
-        public static final String INSERT_DATETIME = "insert_datetime";  // datetime of insertion
-        public static final String MODIFY_DATETIME = "modify_datetime";  // datetime of last modification
+        public static final String LAST_TRADE_DATETIME = "last_trade_datetime";  // datetime of last trade,YYYY-MM-DD HH:MM:SS.SSS
+        public static final String INSERT_DATETIME = "insert_datetime"; // datetime, YYYY-MM-DD HH:MM:SS.SSS
+        public static final String MODIFY_DATETIME = "modify_datetime"; // datetime, YYYY-MM-DD HH:MM:SS.SSS
         public static final String DEFAULT_SORT_ORDER = SYMBOL + " ASC";
     }
 

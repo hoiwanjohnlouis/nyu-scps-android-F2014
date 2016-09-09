@@ -18,7 +18,7 @@ package com.hoiwanlouis.mystockportfolio.factories;
 
 import com.hoiwanlouis.mystockportfolio.enums.RecordType;
 import com.hoiwanlouis.mystockportfolio.fields.Company;
-import com.hoiwanlouis.mystockportfolio.fields.DateTimeStamp;
+import com.hoiwanlouis.mystockportfolio.fields.DateTimestamp;
 import com.hoiwanlouis.mystockportfolio.fields.Price;
 import com.hoiwanlouis.mystockportfolio.fields.Quantity;
 import com.hoiwanlouis.mystockportfolio.fields.Symbol;
@@ -40,7 +40,7 @@ public abstract class Record {
     protected Price previousDaysClosingPrice;  // 4
     protected Price lastTradePrice;            // 5
     protected Quantity lastTradeQuantity;      // 6
-    protected DateTimeStamp lastTradeDateTimeStamp;    // 7
+    protected DateTimestamp lastTradeDateTimestamp;    // 7
 
 
     // concrete definition is by whom inherits this class
@@ -78,7 +78,7 @@ public abstract class Record {
         stringBuilder.append(",\n");
         stringBuilder.append(lastTradeQuantity.toString());
         stringBuilder.append(",\n");
-        stringBuilder.append(lastTradeDateTimeStamp.toString());
+        stringBuilder.append(lastTradeDateTimestamp.toString());
 
         return stringBuilder.toString();
 
