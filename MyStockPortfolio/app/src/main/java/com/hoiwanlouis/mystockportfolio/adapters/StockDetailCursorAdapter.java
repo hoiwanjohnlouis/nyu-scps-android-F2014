@@ -25,8 +25,6 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import com.hoiwanlouis.mystockportfolio.R;
-
 /***************************************************************************
  * Program Synopsis
  * <p>
@@ -38,9 +36,9 @@ import com.hoiwanlouis.mystockportfolio.R;
  *
  ***************************************************************************/
 public class StockDetailCursorAdapter extends CursorAdapter {
-    private Context mContext;
-    private Cursor mCursor;
-    private int mFlags;
+    private Context context;
+    private Cursor cursor;
+    private int flags;
 
     //
     private final String DEBUG_TAG = this.getClass().getSimpleName();
@@ -65,9 +63,9 @@ public class StockDetailCursorAdapter extends CursorAdapter {
     //
     public StockDetailCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
-        this.mContext = context;
-        this.mCursor = c;
-        this.mFlags = flags;
+        this.context = context;
+        this.cursor = c;
+        this.flags = flags;
     }
 
 

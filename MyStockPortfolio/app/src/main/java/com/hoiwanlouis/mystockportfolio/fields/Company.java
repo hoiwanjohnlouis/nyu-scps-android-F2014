@@ -36,7 +36,7 @@ public class Company {
     private final FieldType fieldType;
     private final String longName;
 
-    public Company(FieldType fieldType, String longName) {
+    public Company(final FieldType fieldType, final String longName) {
         Log.v(DEBUG_TAG, "in constructor(..)");
         this.fieldType = fieldType;
         this.longName = longName;

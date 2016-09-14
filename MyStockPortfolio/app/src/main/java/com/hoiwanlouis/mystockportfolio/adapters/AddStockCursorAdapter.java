@@ -23,12 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.hoiwanlouis.mystockportfolio.R;
-import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
 
 /***************************************************************************
  * Program Synopsis
@@ -41,9 +36,9 @@ import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
  *
  ***************************************************************************/
 public class AddStockCursorAdapter extends CursorAdapter {
-    private Context mContext;
-    private Cursor mCursor;
-    private int mFlags;
+    private Context context;
+    private Cursor cursor;
+    private int flags;
 
     //
     private final String DEBUG_TAG = this.getClass().getSimpleName();
@@ -55,9 +50,9 @@ public class AddStockCursorAdapter extends CursorAdapter {
 
     public AddStockCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
-        this.mContext = context;
-        this.mCursor = c;
-        this.mFlags = flags;
+        this.context = context;
+        this.cursor = c;
+        this.flags = flags;
     }
 
     @Override
@@ -65,7 +60,6 @@ public class AddStockCursorAdapter extends CursorAdapter {
         LayoutInflater inflater =  (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
 
-        //
         ViewHolder holder = new ViewHolder();
 
         return v;
@@ -74,7 +68,6 @@ public class AddStockCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
 
-        //
         ViewHolder holder = (ViewHolder) view.getTag();
 
     }

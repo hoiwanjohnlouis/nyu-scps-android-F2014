@@ -40,9 +40,9 @@ import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns;
  *
  ***************************************************************************/
 public class StockListCursorAdapter extends CursorAdapter {
-    private Context mContext;
-    private Cursor mCursor;
-    private int mFlags;
+    private Context context;
+    private Cursor cursor;
+    private int flags;
 
     //
     private final String DEBUG_TAG = this.getClass().getSimpleName();
@@ -64,11 +64,11 @@ public class StockListCursorAdapter extends CursorAdapter {
     }
 
     //
-    public StockListCursorAdapter(Context context, Cursor c, int flags) {
-        super(context, c, flags);
-        this.mContext = context;
-        this.mCursor = c;
-        this.mFlags = flags;
+    public StockListCursorAdapter(Context context, Cursor cursor, int flags) {
+        super(context, cursor, flags);
+        this.context = context;
+        this.cursor = cursor;
+        this.flags = flags;
     }
 
     //

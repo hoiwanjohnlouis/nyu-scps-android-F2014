@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -62,6 +61,14 @@ public class AddStockFragment extends Fragment {
         }
     }
 
+    //
+    @Override
+    public void onDetach() {
+        Log.i(DEBUG_TAG, "in onDetach()");
+        super.onDetach();
+        addStockFragmentListener = null;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(DEBUG_TAG, "in onCreate()");
@@ -75,12 +82,10 @@ public class AddStockFragment extends Fragment {
         Log.i(DEBUG_TAG, "in onCreateView()");
         super.onCreateView(inflater, container, savedInstanceState);
         setRetainInstance(true);
-
         View v = inflater.inflate(R.layout.fragment_add_stock, container, false);
         stockSymbol = (EditText) v.findViewById(R.id.add_stock_edit_text);
         saveStockToDatabaseButton = (Button) v.findViewById(R.id.add_stock_save_button);
         saveStockToDatabaseButton.setOnClickListener(saveStockSymbolButtonClicked);
-
         return v;
     }
 
@@ -103,7 +108,7 @@ public class AddStockFragment extends Fragment {
                                 InputMethodManager imm = (InputMethodManager)
                                         getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                                stockSymbol.setText(null);
+                                stockSymbol.setText("");
                                 onAddStockCompleteCallback();
                             }
                         }; // end AsyncTask definition
@@ -111,13 +116,12 @@ public class AddStockFragment extends Fragment {
                 saveStockSymbolAsyncTask.execute((Object[]) null);
             }
             else {
-                // define alert dialog since required stockSymbol field is blank
+                // notify user that the stockSymbol (required) field is blank
                 DialogFragment errorSaving =
                         new DialogFragment() {
                             @Override
                             public Dialog onCreateDialog(Bundle savedInstanceState) {
-                                AlertDialog.Builder builder =
-                                        new AlertDialog.Builder(getActivity());
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                                 builder.setMessage(R.string.error_saving_message);
                                 builder.setPositiveButton(R.string.error_saving_positive_button, null);
                                 return builder.create();
@@ -146,14 +150,6 @@ public class AddStockFragment extends Fragment {
         Log.i(DEBUG_TAG, "in saveStockSymbolToDatabase()");
         DatabaseConnector dbConnector = new DatabaseConnector(getActivity());
         databaseRowID = dbConnector.addOneStock(stockSymbol.getText().toString());
-    }
-
-    //
-    @Override
-    public void onDetach() {
-        Log.i(DEBUG_TAG, "in onDetach()");
-        super.onDetach();
-        addStockFragmentListener = null;
     }
 
 }

@@ -31,50 +31,41 @@ public class DatabaseConnector {
 
     // for interacting with the database
     protected SQLiteDatabase sqLiteDatabase;
+
     // creates the database
     protected DatabaseCreator databaseCreator;
 
     // public constructor for DatabaseConnector
     public DatabaseConnector(Context context) {
         Log.i(DEBUG_TAG, "in DatabaseConnector()");
-
-        // create a new DatabaseCreator
         databaseCreator = new DatabaseCreator(
                 context,
                 DatabaseColumns.DATABASE_NAME,
                 null,   // cursor factory
                 DatabaseColumns.DATABASE_VERSION);
-    } // end constructor DatabaseConnector
+    }
 
 
-    //
-    // openForRead the database connection
-    //
+    // openForRead : getReadableDatabase()
     public void openForRead() throws SQLException {
         Log.i(DEBUG_TAG, "in openForRead()");
-
-        // create or openForUpdate a mDB for reading/writing
         if(databaseCreator != null) {
             sqLiteDatabase = databaseCreator.getReadableDatabase();
         }
-    } // end method openForRead()
+    }
 
 
-    //
-    // openForUpdate the database connection
-    //
+    // openForUpdate : getWritableDatabase()
     public void openForUpdate() throws SQLException {
         Log.i(DEBUG_TAG, "in openForUpdate()");
-
-        // create or openForUpdate a mDB for reading/writing
         if(databaseCreator != null) {
             sqLiteDatabase = databaseCreator.getWritableDatabase();
         }
-    } // end method openForUpdate()
+    }
 
 
     // **************************************************************
-    // close the database connection
+    // we are done, so close the database connection
     // **************************************************************
     public void close() {
         Log.i(DEBUG_TAG, "in close()");
@@ -88,7 +79,7 @@ public class DatabaseConnector {
         if(databaseCreator != null) {
             databaseCreator.close();
         }
-    } // end method close()
+    }
 
 
     // **************************************************************
@@ -97,18 +88,21 @@ public class DatabaseConnector {
     public long addOneStock(final String tickerSymbol) {
         Log.i(DEBUG_TAG, "in addOneStock()");
 
-        // create a content object
+        // load data and apply update
         ContentValues cv = new ContentValues();
-        cv.put(DatabaseColumns.Portfolio.SYMBOL,                       tickerSymbol);  // 1
+        cv.put(DatabaseColumns.Portfolio.SYMBOL, tickerSymbol);
 
-        // openForUpdate the database
         openForUpdate();
-        long rowID = sqLiteDatabase.insert(DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME, DatabaseColumns.Portfolio.SYMBOL, cv);
+        long rowID = sqLiteDatabase.insert(
+                DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME,
+                DatabaseColumns.Portfolio.SYMBOL,
+                cv
+        );
+        close();
         Log.i(DEBUG_TAG, "sqLiteDatabase.insert: Symbol[" + tickerSymbol + "], portfolio rowID[" + rowID + "]");
-        close();  // always free resources when done. this is not batch processing.
 
         return rowID;
-    } // end method addOneStock
+    }
 
 
     // **************************************************************
@@ -129,31 +123,31 @@ public class DatabaseConnector {
     ) {
         Log.i(DEBUG_TAG, "in updateOneStock()");
 
-        // create a content object
+        // load data and apply update
         ContentValues cv = new ContentValues();
-        cv.put(DatabaseColumns.Portfolio._ID,                          id);            // 1
-        cv.put(DatabaseColumns.Portfolio.SYMBOL,                       tickerSymbol);
-        cv.put(DatabaseColumns.Portfolio.OPENING_PRICE,                openingPrice);
-        cv.put(DatabaseColumns.Portfolio.PREVIOUS_CLOSING_PRICE,       closingPrice);
-        cv.put(DatabaseColumns.Portfolio.BID_PRICE,                    bidPrice);      // 5
-        cv.put(DatabaseColumns.Portfolio.BID_SIZE,                     bidSize);
-        cv.put(DatabaseColumns.Portfolio.ASK_PRICE,                    askPrice);
-        cv.put(DatabaseColumns.Portfolio.ASK_SIZE,                     askSize);
-        cv.put(DatabaseColumns.Portfolio.LAST_TRADE_PRICE,             tradePrice);
-        cv.put(DatabaseColumns.Portfolio.LAST_TRADE_QUANTITY,          tradeQuantity); // 10
+        cv.put(DatabaseColumns.Portfolio._ID, id);                              // 1
+        cv.put(DatabaseColumns.Portfolio.SYMBOL, tickerSymbol);
+        cv.put(DatabaseColumns.Portfolio.OPENING_PRICE, openingPrice);
+        cv.put(DatabaseColumns.Portfolio.PREVIOUS_CLOSING_PRICE, closingPrice);
+        cv.put(DatabaseColumns.Portfolio.BID_PRICE, bidPrice);                  // 5
+        cv.put(DatabaseColumns.Portfolio.BID_SIZE, bidSize);
+        cv.put(DatabaseColumns.Portfolio.ASK_PRICE, askPrice);
+        cv.put(DatabaseColumns.Portfolio.ASK_SIZE, askSize);
+        cv.put(DatabaseColumns.Portfolio.LAST_TRADE_PRICE, tradePrice);
+        cv.put(DatabaseColumns.Portfolio.LAST_TRADE_QUANTITY, tradeQuantity);   // 10
         cv.put(DatabaseColumns.Portfolio.LAST_TRADE_DATETIME, tradeDateTime);
 
-        openForUpdate(); // openForUpdate the database
+        openForUpdate();
         long rowID = sqLiteDatabase.update(
                 DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME,
                 cv,
                 "_id=" + id,
                 null
         );
+        close();
         Log.i(DEBUG_TAG, "sqLiteDatabase.update: Symbol[" + tickerSymbol + "], portfolio rowID[" + rowID + "], id[" + id + "]");
-        close();  // always free resources when done. this is not batch processing.
 
-    } // end method updateOneStock
+    }
 
 
     // **************************************************************
@@ -167,7 +161,7 @@ public class DatabaseConnector {
                 Gui2Database.asColumnsToReturn,
                 null, null, null, null,
                 DatabaseColumns.Portfolio.DEFAULT_SORT_ORDER);
-    } // end method getAllContacts
+    }
 
 
     // **************************************************************
@@ -181,7 +175,7 @@ public class DatabaseConnector {
                 Gui2Database.asColumnsToReturn,
                 "_id=" + id, null, null, null,
                 null);
-    } // end method getOneStockUsingId
+    }
 
 
     // **************************************************************
@@ -200,7 +194,7 @@ public class DatabaseConnector {
                 Gui2Database.asColumnsToReturn,
                 tmpSelection.toString(), null, null, null,
                 null);
-    } // end method getOneStockUsingString
+    }
 
 
     // **************************************************************

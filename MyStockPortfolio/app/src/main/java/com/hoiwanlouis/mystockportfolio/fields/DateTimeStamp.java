@@ -35,23 +35,12 @@ public class DateTimestamp {
     private final String DEBUG_TAG = this.getClass().getSimpleName();
     private final FieldType fieldType;
     private final String dateTimestamp;
-
-    // work variables
-    private final String dateSegment;
-    private final String timestampSegment;
     private final StringBuilder sb;
 
-    public DateTimestamp(FieldType fieldType, String dateTimestamp) {
+    public DateTimestamp(final FieldType fieldType, final String dateTimestamp) {
         Log.v(DEBUG_TAG, "in constructor(..)");
         this.fieldType = fieldType;
         this.dateTimestamp = dateTimestamp;
-
-        // datetimestamps are stored as YYYY-MM-DD HH:MM:SS.SSS"
-        // split up the fields to facilitate display
-        String[] segment = dateTimestamp.split(" ");
-        this.dateSegment = segment[0];
-        this.timestampSegment = segment[1];
-
         sb = new StringBuilder();
     }
 
@@ -59,12 +48,18 @@ public class DateTimestamp {
         return this.dateTimestamp;
     }
 
-    public String getDateSegment() {
-        return this.dateSegment;
+    public static final String extractDateSegment(final String dateTimestamp) {
+        // dateTimestamps are stored as YYYY-MM-DD HH:MM:SS.SSS"
+        // split up the fields to facilitate display
+        String[] segment = dateTimestamp.split(" ");
+        return segment[0];
     }
 
-    public String getTimestampSegment() {
-        return this.timestampSegment;
+    public static final String extractTimestampSegment(final String dateTimestamp) {
+        // dateTimestamps are stored as YYYY-MM-DD HH:MM:SS.SSS"
+        // split up the fields to facilitate display
+        String[] segment = dateTimestamp.split(" ");
+        return segment[1];
     }
 
     @Override

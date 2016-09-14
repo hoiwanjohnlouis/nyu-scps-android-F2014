@@ -34,7 +34,7 @@ import com.hoiwanlouis.mystockportfolio.enums.FieldType;
 public class Symbol {
     private final String DEBUG_TAG = this.getClass().getSimpleName();
     private final FieldType fieldType;
-    private String symbol;
+    private final String symbol;
 
     public Symbol(FieldType fieldType, String symbol) {
         Log.v(DEBUG_TAG, "in constructor(..)");

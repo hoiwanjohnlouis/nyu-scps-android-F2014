@@ -36,7 +36,7 @@ public class Price {
     private final FieldType fieldType;
     private double price;
 
-    public Price(FieldType fieldType, double price) {
+    public Price(final FieldType fieldType, final double price) {
         Log.v(DEBUG_TAG, "in constructor(..)");
         this.fieldType = fieldType;
         this.price = price;

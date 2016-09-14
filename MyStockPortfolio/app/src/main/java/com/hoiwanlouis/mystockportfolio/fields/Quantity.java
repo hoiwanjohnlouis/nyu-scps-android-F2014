@@ -36,7 +36,7 @@ public class Quantity {
     private final FieldType fieldType;
     private double quantity;
 
-    public Quantity(FieldType fieldType, double quantity) {
+    public Quantity(final FieldType fieldType, final double quantity) {
         Log.v(DEBUG_TAG, "in constructor(..)");
         this.fieldType = fieldType;
         this.quantity = quantity;
