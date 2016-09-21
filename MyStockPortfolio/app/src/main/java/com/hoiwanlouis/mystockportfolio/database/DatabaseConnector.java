@@ -33,12 +33,12 @@ public class DatabaseConnector {
     protected SQLiteDatabase sqLiteDatabase;
 
     // creates the database
-    protected DatabaseCreator databaseCreator;
+    protected StockOpenHelper stockOpenHelper;
 
     // public constructor for DatabaseConnector
     public DatabaseConnector(Context context) {
         Log.i(DEBUG_TAG, "in DatabaseConnector()");
-        databaseCreator = new DatabaseCreator(
+        stockOpenHelper = new StockOpenHelper(
                 context,
                 DatabaseColumns.DATABASE_NAME,
                 null,   // cursor factory
@@ -49,8 +49,8 @@ public class DatabaseConnector {
     // openForRead : getReadableDatabase()
     public void openForRead() throws SQLException {
         Log.i(DEBUG_TAG, "in openForRead()");
-        if(databaseCreator != null) {
-            sqLiteDatabase = databaseCreator.getReadableDatabase();
+        if(stockOpenHelper != null) {
+            sqLiteDatabase = stockOpenHelper.getReadableDatabase();
         }
     }
 
@@ -58,8 +58,8 @@ public class DatabaseConnector {
     // openForUpdate : getWritableDatabase()
     public void openForUpdate() throws SQLException {
         Log.i(DEBUG_TAG, "in openForUpdate()");
-        if(databaseCreator != null) {
-            sqLiteDatabase = databaseCreator.getWritableDatabase();
+        if(stockOpenHelper != null) {
+            sqLiteDatabase = stockOpenHelper.getWritableDatabase();
         }
     }
 
@@ -75,9 +75,9 @@ public class DatabaseConnector {
             sqLiteDatabase.close();
         }
 
-        // todo: may not be necessary to close the databaseCreator. if problems remove this close.
-        if(databaseCreator != null) {
-            databaseCreator.close();
+        // todo: may not be necessary to close the stockOpenHelper. if problems remove this close.
+        if(stockOpenHelper != null) {
+            stockOpenHelper.close();
         }
     }
 

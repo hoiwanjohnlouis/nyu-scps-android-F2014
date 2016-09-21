@@ -33,7 +33,7 @@ public class AddStockFragment extends Fragment {
     private long databaseRowID;
 
     public AddStockFragment() {
-        Log.i(DEBUG_TAG, "in AddStockFragment(), required empty public constructor");
+        Log.i(DEBUG_TAG, "in AddStockFragment()");
     }
 
     /**
@@ -50,7 +50,7 @@ public class AddStockFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity context) {
+    public void onAttach(Context context) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(context);
         if (context instanceof AddStockFragmentListener) {
@@ -69,11 +69,26 @@ public class AddStockFragment extends Fragment {
         addStockFragmentListener = null;
     }
 
+    // when fragment resumes, reload contacts
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Log.i(DEBUG_TAG, "in onCreate()");
-        super.onCreate(savedInstanceState);
+    public void onResume() {
+        Log.i(DEBUG_TAG, "in onResume()");
+        super.onResume();
     }
+
+    @Override
+    public void onStart() {
+        Log.i(DEBUG_TAG, "in onStart()");
+        super.onStart();
+    }
+
+    // clean up
+    @Override
+    public void onStop() {
+        Log.i(DEBUG_TAG, "in onStop()");
+        super.onStop();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -131,7 +146,7 @@ public class AddStockFragment extends Fragment {
                 errorSaving.show(getFragmentManager(), "error saving contact");
             }
         } // end method onClick
-    }; // end OnClickListener saveContactButtonClicked
+    };
 
     // callback to main to redisplay screen;
     public void onAddStockCompleteCallback() {

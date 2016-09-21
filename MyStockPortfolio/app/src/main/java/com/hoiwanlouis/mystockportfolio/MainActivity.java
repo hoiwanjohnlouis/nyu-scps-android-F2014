@@ -1,14 +1,14 @@
 /***************************************************************************
  * Copyright March, 2016 HW Tech Services, LLC
- * <p/>
+ * <p>
  * Login   HW Tech Services, LLC
- * <p/>
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p/>
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,9 +51,7 @@ public class MainActivity extends Activity
     private AddStockFragment addStockFragment;
     private StockListFragment stockListFragment;
     private StockDetailFragment stockDetailFragment;
-    //
-    private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
+
 
     //
     // display StockListFragment when Activity first loads
@@ -64,28 +62,16 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Access the FragmentManager.
-        fragmentManager = getFragmentManager();
-
         // return if Activity is being restored, no need to recreate GUI
         if (savedInstanceState != null) {
             return;
         }
 
-        // check whether layout contains fragmentContainer (phone layout);
-        // stockListFragment is always displayed, tablet devices will be initialized later in "onResume"
-        if (isAPhoneDevice()) {
-            addStockFragment = AddStockFragment.newInstance();
-            stockDetailFragment = StockDetailFragment.newInstance();
-
-            // create StockListFragment and add the fragment to the FrameLayout
-            stockListFragment = StockListFragment.newInstance();
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.fragmentContainer, stockListFragment);
-
-            // causes ContactListFragment to display
-            fragmentTransaction.commit();
-        }
+        // create StockListFragment, add the fragment to the FrameLayout
+        stockListFragment = StockListFragment.newInstance();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fragmentContainer, stockListFragment);
+        fragmentTransaction.commit();
 
     } // end method onCreate()
 
@@ -97,11 +83,10 @@ public class MainActivity extends Activity
     protected void onResume() {
         Log.i(DEBUG_TAG, "in onResume()");
         super.onResume();
-
         // if this is a tablet, then stockListFragment is not set yet. i.e. it is null,
         // so get reference from FragmentManager and set it.
         if (stockListFragment == null) {
-            stockListFragment = (StockListFragment) fragmentManager.findFragmentById(R.id.stockListFragment);
+            stockListFragment = (StockListFragment) getFragmentManager().findFragmentById(R.id.stockListFragment);
         }
     } // end method onResume
 
@@ -114,13 +99,10 @@ public class MainActivity extends Activity
     @Override
     public void onAddStockComplete(final Bundle arguments) {
         Log.i(DEBUG_TAG, "in onASFLCompleted()");
-
-        fragmentManager.popBackStack(); // removes the addFragment from top of back stack
         if (isAPhoneDevice()) {
-            ;
+            getFragmentManager().popBackStack(); // removes the fragment from top of back stack
         } else {
             // tablet
-            fragmentManager.popBackStack(); // ensure we have removed all back stack entries
             stockListFragment.updateStockListView();
             showDetailFragment(R.id.rightPaneContainer, arguments);
         }
@@ -137,10 +119,8 @@ public class MainActivity extends Activity
     @Override
     public void onStockDetailComplete() {
         Log.i(DEBUG_TAG, "in onStockDetailComplete()");
-        getFragmentManager().popBackStack(); // removes top of back stack
-
         if (isAPhoneDevice()) {
-            ;
+            getFragmentManager().popBackStack(); // removes the fragment from top of back stack
         } else {
             // must be a tablet
             stockListFragment.updateStockListView();
@@ -170,9 +150,8 @@ public class MainActivity extends Activity
     @Override
     public void onDeleteStockFromDatabaseComplete(final Bundle arguments) {
         Log.i(DEBUG_TAG, "in onDeleteStockFromDatabaseComplete()");
-        fragmentManager.popBackStack(); // removes top of back stack
         if (isAPhoneDevice()) {
-            ;
+            getFragmentManager().popBackStack(); // removes top of back stack
         } else {
             // tablet
             stockListFragment.updateStockListView();
@@ -183,10 +162,10 @@ public class MainActivity extends Activity
     public void onDisplayStockDetailRequest(final Bundle arguments) {
         Log.i(DEBUG_TAG, "in onDisplayStockDetailRequest()");
         if (isAPhoneDevice()) {
-            // phone
             showDetailFragment(R.id.fragmentContainer, arguments);
         } else {
-            fragmentManager.popBackStack(); // ensure we have removed all back stack entries
+            // tablet
+            getFragmentManager().popBackStack(); // ensure we have removed all back stack entries
             showDetailFragment(R.id.rightPaneContainer, arguments);
         }
     }
@@ -196,16 +175,7 @@ public class MainActivity extends Activity
 
     /***************************************************************
      * worker function:
-     * public boolean isAPhoneDevice()
-     ***************************************************************/
-    public boolean isAPhoneDevice() {
-        Log.i(DEBUG_TAG, "in isAPhoneDevice()");
-        return (findViewById(R.id.fragmentContainer) != null);
-    }
-
-    /***************************************************************
-     * worker function:
-     * private void showAddFragment(int viewID, Bundle arguments)
+     * showAddFragment(int viewID, Bundle arguments)
      * <p>
      * display fragment after adding a new symbol
      ***************************************************************/
@@ -213,12 +183,18 @@ public class MainActivity extends Activity
         Log.i(DEBUG_TAG, "in showAddFragment()");
         AddStockFragment fragment = AddStockFragment.newInstance();
         addBundleToAddFragment(fragment, arguments);
-        fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(viewID, fragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack("AddStockFragment");
         fragmentTransaction.commit();   // causes fragment to display
-    } // end method showAddFragment
+    }
 
+    /***************************************************************
+     * worker function:
+     * addBundleToAddFragment(final AddStockFragment fragment, final Bundle arguments)
+     * <p>
+     * load bundle into fragment and print log msg
+     ***************************************************************/
     private void addBundleToAddFragment(final AddStockFragment fragment, final Bundle arguments) {
         final StringBuilder sb = new StringBuilder();
         if (arguments != null) {
@@ -240,7 +216,7 @@ public class MainActivity extends Activity
 
     /***************************************************************
      * worker function:
-     * private void showDetailFragment(int viewID, Bundle arguments)
+     * showDetailFragment(int viewID, Bundle arguments)
      * <p>
      * display a item/symbol
      ***************************************************************/
@@ -248,12 +224,18 @@ public class MainActivity extends Activity
         Log.i(DEBUG_TAG, "in showDetailFragment()");
         StockDetailFragment fragment = StockDetailFragment.newInstance();
         addBundleToStockDetailFragment(fragment, arguments);
-        fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(viewID, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();   // display fragment
-    } // end method showDetailFragment
+    }
 
+    /***************************************************************
+     * worker function:
+     * addBundleToStockDetailFragment(final StockDetailFragment fragment, final Bundle arguments)
+     * <p>
+     * load bundle into fragment and print log msg
+     ***************************************************************/
     private void addBundleToStockDetailFragment(final StockDetailFragment fragment, final Bundle arguments) {
         Log.i(DEBUG_TAG, "in addBundleToStockDetailFragment()");
         StringBuilder sb = new StringBuilder();
@@ -270,6 +252,16 @@ public class MainActivity extends Activity
             sb.append("]=[NULL KEY VALUE]");
         }
         Log.i(DEBUG_TAG, sb.toString());
+    }
+
+
+    /***************************************************************
+     * worker function:
+     * private boolean isAPhoneDevice()
+     ***************************************************************/
+    private boolean isAPhoneDevice() {
+        Log.i(DEBUG_TAG, "in isAPhoneDevice()");
+        return (findViewById(R.id.fragmentContainer) != null);
     }
 
 }

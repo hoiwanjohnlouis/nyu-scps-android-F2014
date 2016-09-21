@@ -29,13 +29,12 @@ import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns.Catalogue;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns.Portfolio;
 
 //FYI: This is the same setup as PetTracker
-public class DatabaseCreator extends SQLiteOpenHelper {
+public class StockOpenHelper extends SQLiteOpenHelper {
 
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
 
-
-    public DatabaseCreator(
+    public StockOpenHelper(
             Context context,
             String databaseName,
             CursorFactory cursorFactory,
@@ -47,8 +46,76 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        upgradeMyDatabase(db, 0, DatabaseColumns.DATABASE_VERSION);
+    }
 
-        // Create the CompanyImpl table
+    //
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        Log.v(DEBUG_TAG, "in onOpen()");
+        super.onOpen(db);
+    }
+
+    //
+    @Override
+    public void close() {
+        Log.v(DEBUG_TAG, "in close()");
+        super.close();
+    }
+
+    //
+    @Override
+    public SQLiteDatabase getReadableDatabase() {
+        Log.v(DEBUG_TAG, "in getReadableDatabase()");
+        return super.getReadableDatabase();
+    }
+
+
+    //
+    @Override
+    public SQLiteDatabase getWritableDatabase() {
+        Log.v(DEBUG_TAG, "in getWritableDatabase()");
+        return super.getWritableDatabase();
+    }
+
+    // Housekeeping here. Implement how "move" your application data during an upgrade of schema versions
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.v(DEBUG_TAG, "in onUpgrade()");
+        upgradeMyDatabase(db, oldVersion, newVersion);
+    }
+
+
+    // Housekeeping here. Implement how "move" your application data during a downgrade of schema versions
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.v(DEBUG_TAG, "in onDowngrade()");
+        downgradeMyDatabase(db, oldVersion, newVersion);
+    }
+
+    public void upgradeMyDatabase(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (1 > oldVersion) {
+            Log.v(DEBUG_TAG, "upgradeMyDatabase to dbVersion: " + newVersion + " from " + oldVersion);
+            updateCompanyTable01(db);
+            updateExchangeTable01(db);
+            updateCatalogueTable01(db);
+            updatePortfolioTable01(db);
+        }
+    }
+
+
+    public void downgradeMyDatabase(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (2 == oldVersion) {
+            // todo: placeholder for downgrade from 2 when it is needed
+            Log.v(DEBUG_TAG, "downgradeMyDatabase to dbVersion: " + newVersion + " from " + oldVersion);
+        }
+
+    }
+
+
+    // worker function
+    private void updateCompanyTable01(SQLiteDatabase db) {
+        // Create the Company table
         // todo: add support in code to use the Company table
         Log.v(DEBUG_TAG, "creating " + Company.COMPANY_TABLE_NAME + "...");
         StringBuilder sbCreateCompanyTable = new StringBuilder();
@@ -69,31 +136,10 @@ public class DatabaseCreator extends SQLiteOpenHelper {
         Log.i(DEBUG_TAG, "executing SQL[" + sbCreateCompanyTable.toString() + "].");
         db.execSQL(sbCreateCompanyTable.toString());
         Log.v(DEBUG_TAG, Company.COMPANY_TABLE_NAME + " created.");
+    }
 
 
-        // Create the Exchange table
-        // todo: add support in code to use the Exchange table
-        Log.v(DEBUG_TAG, "creating " + Exchange.EXCHANGE_TABLE_NAME + "...");
-        StringBuilder sbCreateExchangeTable = new StringBuilder();
-        sbCreateExchangeTable.append("CREATE TABLE " );
-        sbCreateExchangeTable.append(Exchange.EXCHANGE_TABLE_NAME);
-        sbCreateExchangeTable.append(" (");
-        sbCreateExchangeTable.append(Exchange._ID);
-        sbCreateExchangeTable.append(" INTEGER PRIMARY KEY AUTOINCREMENT, ");
-        sbCreateExchangeTable.append(Exchange.EXCHANGE_CODE);
-        sbCreateExchangeTable.append(" TEXT NOT NULL UNIQUE, ");
-        sbCreateExchangeTable.append(Exchange.EXCHANGE_NAME );
-        sbCreateExchangeTable.append(" TEXT, ");
-        sbCreateExchangeTable.append(Exchange.INSERT_DATETIME);
-        sbCreateExchangeTable.append(" DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, ");
-        sbCreateExchangeTable.append(Exchange.MODIFY_DATETIME);
-        sbCreateExchangeTable.append(" DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL ");
-        sbCreateExchangeTable.append(");");
-        Log.i(DEBUG_TAG, "executing SQL[" + sbCreateExchangeTable.toString() + "].");
-        db.execSQL(sbCreateExchangeTable.toString());
-        Log.v(DEBUG_TAG, Exchange.EXCHANGE_TABLE_NAME + " created.");
-
-
+    private void updateCatalogueTable01(SQLiteDatabase db) {
         // Create the Catalogue table
         // todo: add support in code to use the Catalogue table
         Log.v(DEBUG_TAG, "creating " + Catalogue.CATALOGUE_TABLE_NAME + "...");
@@ -117,8 +163,35 @@ public class DatabaseCreator extends SQLiteOpenHelper {
         Log.i(DEBUG_TAG, "executing SQL[" + sbCreateCatalogueTable.toString() + "].");
         db.execSQL(sbCreateCatalogueTable.toString());
         Log.v(DEBUG_TAG, Catalogue.CATALOGUE_TABLE_NAME + " created.");
+    }
 
 
+    private void updateExchangeTable01(SQLiteDatabase db) {
+        // Create the Exchange table
+        // todo: add support in code to use the Exchange table
+        Log.v(DEBUG_TAG, "creating " + Exchange.EXCHANGE_TABLE_NAME + "...");
+        StringBuilder sbCreateExchangeTable = new StringBuilder();
+        sbCreateExchangeTable.append("CREATE TABLE " );
+        sbCreateExchangeTable.append(Exchange.EXCHANGE_TABLE_NAME);
+        sbCreateExchangeTable.append(" (");
+        sbCreateExchangeTable.append(Exchange._ID);
+        sbCreateExchangeTable.append(" INTEGER PRIMARY KEY AUTOINCREMENT, ");
+        sbCreateExchangeTable.append(Exchange.EXCHANGE_CODE);
+        sbCreateExchangeTable.append(" TEXT NOT NULL UNIQUE, ");
+        sbCreateExchangeTable.append(Exchange.EXCHANGE_NAME );
+        sbCreateExchangeTable.append(" TEXT, ");
+        sbCreateExchangeTable.append(Exchange.INSERT_DATETIME);
+        sbCreateExchangeTable.append(" DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, ");
+        sbCreateExchangeTable.append(Exchange.MODIFY_DATETIME);
+        sbCreateExchangeTable.append(" DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL ");
+        sbCreateExchangeTable.append(");");
+        Log.i(DEBUG_TAG, "executing SQL[" + sbCreateExchangeTable.toString() + "].");
+        db.execSQL(sbCreateExchangeTable.toString());
+        Log.v(DEBUG_TAG, Exchange.EXCHANGE_TABLE_NAME + " created.");
+    }
+
+
+    private void updatePortfolioTable01(SQLiteDatabase db) {
         // Create the Portfolio table
         // todo: add support to JOIN other tables for SYMBOL_ID, COMPANY_ID, EXCHANGE_ID, etc
         Log.v(DEBUG_TAG, "creating " + Portfolio.PORTFOLIO_TABLE_NAME + "...");
@@ -156,54 +229,6 @@ public class DatabaseCreator extends SQLiteOpenHelper {
         Log.i(DEBUG_TAG, "executing SQL[" + sbCreatePortfolioTable.toString() + "].");
         db.execSQL(sbCreatePortfolioTable.toString());
         Log.v(DEBUG_TAG, Portfolio.PORTFOLIO_TABLE_NAME + " created.");
-
-    }
-
-
-
-    // Housekeeping here. Implement how "move" your application data during an upgrade of schema versions
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.v(DEBUG_TAG, "in onUpgrade");
-    }
-
-
-    // Housekeeping here. Implement how "move" your application data during a downgrade of schema versions
-    @Override
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.v(DEBUG_TAG, "in onDowngrade");
-    }
-
-
-    //
-    @Override
-    public void onOpen(SQLiteDatabase db) {
-        Log.v(DEBUG_TAG, "in onOpen");
-        super.onOpen(db);
-    }
-
-
-    //
-    @Override
-    public SQLiteDatabase getReadableDatabase() {
-        Log.v(DEBUG_TAG, "in getReadableDatabase");
-        return super.getReadableDatabase();
-    }
-
-
-    //
-    @Override
-    public SQLiteDatabase getWritableDatabase() {
-        Log.v(DEBUG_TAG, "in getWritableDatabase");
-        return super.getWritableDatabase();
-    }
-
-
-    //
-    @Override
-    public void close() {
-        Log.v(DEBUG_TAG, "in onOpen");
-        super.close();
     }
 
 

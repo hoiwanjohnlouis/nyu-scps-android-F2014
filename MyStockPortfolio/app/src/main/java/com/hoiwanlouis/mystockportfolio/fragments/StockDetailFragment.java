@@ -18,6 +18,7 @@
 package com.hoiwanlouis.mystockportfolio.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -65,7 +66,7 @@ public class StockDetailFragment extends Fragment {
     private TextView modifyDateTimeTextView;
 
     public StockDetailFragment() {
-        Log.i(DEBUG_TAG, "in StockDetailFragment(), required empty public constructor");
+        Log.i(DEBUG_TAG, "in StockDetailFragment()");
     }
 
     /**
@@ -74,14 +75,13 @@ public class StockDetailFragment extends Fragment {
      * @return A new instance of fragment AddStockFragment.
      */
     public static StockDetailFragment newInstance() {
-        StockDetailFragment fragment = new StockDetailFragment();
-        return fragment;
+        return new StockDetailFragment();
     }
 
 
     // set StockDetailFragmentListener when fragment attached
     @Override
-    public void onAttach(Activity context) {
+    public void onAttach(Context context) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(context);
         // init callback to interface implementation
@@ -104,16 +104,73 @@ public class StockDetailFragment extends Fragment {
         new LoadOneStockDetailAsyncTask().execute(rowID);
     } // end method onResume()
 
-    //
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Log.i(DEBUG_TAG, "in onCreate()");
-        super.onCreate(savedInstanceState);
+    public void onStart() {
+        Log.i(DEBUG_TAG, "in onStart()");
+        super.onStart();
     }
 
-    //
+    // clean up
+    @Override
+    public void onStop() {
+        Log.i(DEBUG_TAG, "in onStop()");
+        super.onStop();
+    }
+
+    // save currently displayed contact's row ID
+    @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        Log.i(DEBUG_TAG, "in onSaveInstanceState()");
+        outState.putLong(Gui2Database.BUNDLE_KEY, rowID);
+        super.onSaveInstanceState(outState);
+    }
+
+    // called when StockDetailFragmentListener's view needs to be created
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
+        Log.i(DEBUG_TAG, "in onCreateView()");
+        // super.onCreateView(inflater, container, savedInstanceState);
+        setRetainInstance(true);        // save fragment across config changes
+        setHasOptionsMenu(true);        // this fragment has menu items to display
+
+        // if StockDetailFragment is being restored, get saved row ID
+        if (savedInstanceState != null) {
+            rowID = savedInstanceState.getLong(Gui2Database.BUNDLE_KEY);
+        }
+        else {
+            // else extract the contact's row ID from the arguments bundle
+            Bundle arguments = getArguments();
+            if (arguments != null) {
+                rowID = arguments.getLong(Gui2Database.BUNDLE_KEY);
+            }
+        }
+
+        // inflate StockDetailFragment's layout and bind the data: must match the detail layout
+        View v = inflater.inflate(R.layout.fragment_stock_detail, container, false);
+        bindTextViewsToLayout(v);
+
+        return v;
+    }
+
+    private void bindTextViewsToLayout(View v) {
+        Log.i(DEBUG_TAG, "in bindTextViewsToLayout()");
+        symbolTextView = (TextView) v.findViewById(R.id.symbolTextView);
+        openingPriceTextView = (TextView) v.findViewById(R.id.openingPriceTextView);
+        previousClosingPriceTextView = (TextView) v.findViewById(R.id.previousClosingPriceTextView);
+        bidPriceTextView = (TextView) v.findViewById(R.id.bidPriceTextView);
+        bidSizeTextView = (TextView) v.findViewById(R.id.bidSizeTextView);
+        askPriceTextView = (TextView) v.findViewById(R.id.askPriceTextView);
+        askSizeTextView = (TextView) v.findViewById(R.id.askSizeTextView);
+        lastTradePriceTextView = (TextView) v.findViewById(R.id.lastTradePriceTextView);
+        lastTradeQuantityTextView = (TextView) v.findViewById(R.id.lastTradeQuantityTextView);
+        lastTradeDateTimeTextView = (TextView) v.findViewById(R.id.lastTradeDateTimeTextView); // ONLY TIME IS DISPLAYED
+        insertDateTimeTextView = (TextView) v.findViewById(R.id.insertDateTimeTextView);
+        modifyDateTimeTextView = (TextView) v.findViewById(R.id.modifyDateTimeTextView);
+    }
+
     // display this fragment's menu items
-    //
     @Override
     public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
@@ -147,58 +204,6 @@ public class StockDetailFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     } // end method onOptionsItemSelected
 
-    // called when StockDetailFragmentListener's view needs to be created
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
-        Log.i(DEBUG_TAG, "in onCreateView()");
-        super.onCreateView(inflater, container, savedInstanceState);
-        setRetainInstance(true);        // save fragment across config changes
-        setHasOptionsMenu(true);        // this fragment has menu items to display
-
-        // if StockDetailFragment is being restored, get saved row ID
-        if (savedInstanceState != null) {
-            rowID = savedInstanceState.getLong(Gui2Database.BUNDLE_KEY);
-        }
-        else {
-            // else extract the contact's row ID from the arguments bundle
-            Bundle arguments = getArguments();
-            if (arguments != null) {
-                rowID = arguments.getLong(Gui2Database.BUNDLE_KEY);
-            }
-        }
-
-        // inflate StockDetailFragment's layout and bind the data: must match the detail layout
-        View v = inflater.inflate(R.layout.fragment_stock_detail, container, false);
-        bindTextViewsToLayout(v);
-
-        return v;
-    }
-
-    private void bindTextViewsToLayout(View v) {
-        symbolTextView = (TextView) v.findViewById(R.id.symbolTextView);
-        openingPriceTextView = (TextView) v.findViewById(R.id.openingPriceTextView);
-        previousClosingPriceTextView = (TextView) v.findViewById(R.id.previousClosingPriceTextView);
-        bidPriceTextView = (TextView) v.findViewById(R.id.bidPriceTextView);
-        bidSizeTextView = (TextView) v.findViewById(R.id.bidSizeTextView);
-        askPriceTextView = (TextView) v.findViewById(R.id.askPriceTextView);
-        askSizeTextView = (TextView) v.findViewById(R.id.askSizeTextView);
-        lastTradePriceTextView = (TextView) v.findViewById(R.id.lastTradePriceTextView);
-        lastTradeQuantityTextView = (TextView) v.findViewById(R.id.lastTradeQuantityTextView);
-        lastTradeDateTimeTextView = (TextView) v.findViewById(R.id.lastTradeDateTimeTextView); // ONLY TIME IS DISPLAYED
-        insertDateTimeTextView = (TextView) v.findViewById(R.id.insertDateTimeTextView);
-        modifyDateTimeTextView = (TextView) v.findViewById(R.id.modifyDateTimeTextView);
-    }
-
-    // save currently displayed contact's row ID
-    @Override
-    public void onSaveInstanceState(final Bundle outState) {
-        Log.i(DEBUG_TAG, "in onSaveInstanceState()");
-        super.onSaveInstanceState(outState);
-        outState.putLong(Gui2Database.BUNDLE_KEY, rowID);
-    }
-
     // *****************************************************
     // performs database query outside GUI thread
     // *****************************************************
@@ -229,6 +234,7 @@ public class StockDetailFragment extends Fragment {
 
     //
     private void loadTextViewsFromCursor(Cursor result) {
+        Log.i(DEBUG_TAG, "in loadTextViewsFromCursor()");
         // fetch the column indices for each data item to shorten code lines
         int symbolIndex = result.getColumnIndex(DatabaseColumns.Portfolio.SYMBOL);
         int openingPriceIndex = result.getColumnIndex(DatabaseColumns.Portfolio.OPENING_PRICE);

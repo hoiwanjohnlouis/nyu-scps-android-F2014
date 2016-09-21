@@ -22,10 +22,10 @@ import android.provider.BaseColumns;
 //FYI: This is the same setup as PetTracker, same schema
 public final class DatabaseColumns {
 
-    private DatabaseColumns() {}
-
     public static final String DATABASE_NAME = "portfolio.sqlite3";
     public static final int DATABASE_VERSION = 1;
+
+    private DatabaseColumns() {}
 
     //
     public static final class Company implements BaseColumns {

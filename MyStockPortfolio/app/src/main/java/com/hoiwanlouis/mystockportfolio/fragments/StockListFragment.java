@@ -20,6 +20,7 @@ package com.hoiwanlouis.mystockportfolio.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -60,17 +61,8 @@ public class StockListFragment extends ListFragment {
     private ListView stockListView;
     private CursorAdapter stockCursorAdapter;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String param1;
-    private String param2;
-
     public StockListFragment() {
-        Log.i(DEBUG_TAG, "in StockListFragment(), required empty public constructor");
+        Log.i(DEBUG_TAG, "in StockListFragment()");
     } // end constructor StockListFragment()
 
     /**
@@ -88,7 +80,7 @@ public class StockListFragment extends ListFragment {
 
     // set StockListFragmentListener when Fragment is attached
     @Override
-    public void onAttach(Activity context) {
+    public void onAttach(Context context) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(context);
         stockListFragmentListener = (StockListFragmentListener) context;
@@ -110,6 +102,12 @@ public class StockListFragment extends ListFragment {
         updateStockListView();
     }
 
+    @Override
+    public void onStart() {
+        Log.i(DEBUG_TAG, "in onStart()");
+        super.onStart();
+    }
+
     // clean up
     @Override
     public void onStop() {
@@ -126,41 +124,20 @@ public class StockListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         Log.i(DEBUG_TAG, "in onCreate()");
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            param1 = getArguments().getString(ARG_PARAM1);
-            param2 = getArguments().getString(ARG_PARAM2);
-        }
     }
-
-    // display this fragment's menu items
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_stock_list_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(DEBUG_TAG, "in onOptionsItemSelected()");
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_add:
-                // let the callback take care of this
-                onAddStockRequest();
-                return true;
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    } // end method onOptionsItemSelected()
 
     // configures the QuizFragment when its View is created
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.v(DEBUG_TAG, "in onCreateView()");
-        return super.onCreateView(inflater, container, savedInstanceState);
+
+        // inflate StockDetailFragment's layout and bind the data: must match the detail layout
+        // View v = inflater.inflate(R.layout.fragment_stock_list, container, false);
+        View v = super.onCreateView(inflater, container, savedInstanceState);
+        setRetainInstance(true);
+        setHasOptionsMenu(true);
+        return v;
     }
 
     //
@@ -171,8 +148,6 @@ public class StockListFragment extends ListFragment {
         Log.i(DEBUG_TAG, "in onViewCreated()");
         super.onViewCreated(view, savedInstanceState);
 
-        setRetainInstance(true);
-        setHasOptionsMenu(true);
         setEmptyText(getResources().getString(R.string.fragment_no_items));
 
         // get ListView reference and configure it (the ListView)
@@ -201,11 +176,6 @@ public class StockListFragment extends ListFragment {
 
 //        stockListView.setAdapter(stockCursorAdapter);
         setListAdapter(stockCursorAdapter);
-    } // end method onViewCreated()
-
-    @Override
-    public void onStart() {
-        super.onStart();
     }
 
     // respond to user touching an item/symbol in the ListView
@@ -250,7 +220,7 @@ public class StockListFragment extends ListFragment {
         final String tickerSymbol = nameView.getText().toString();
 
         // Use an Alert dialog to confirm delete operation
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());  // is getActivity() usage correct?
         builder.setTitle(R.string.fragment_delete_title);
         builder.setMessage(R.string.fragment_delete_message);
         builder.setPositiveButton(R.string.fragment_delete_button_delete,
@@ -279,13 +249,44 @@ public class StockListFragment extends ListFragment {
                                 }; // end new AsyncTask definition
 
                         // execute the AsyncTask to delete the stock
-                        deleteTask.execute(new Long[]{tickerId});
+                        deleteTask.execute(tickerId);
                         Log.i(DEBUG_TAG, "tickerSymbol[" + tickerSymbol + "] deleted.");
 
                     } // end method DialogInterface.OnClickListener.onClick
                 });
         builder.setNegativeButton(R.string.fragment_delete_button_cancel, null); // do nothing if cancel
         builder.show();
+    }
+
+    // display this fragment's menu items
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_stock_list_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(DEBUG_TAG, "in onOptionsItemSelected()");
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_add:
+                // let the callback take care of this
+                onAddStockRequest();
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    } // end method onOptionsItemSelected()
+
+    // callback to main to redisplay screen;
+    public void onAddStockRequest() {
+        Log.i(DEBUG_TAG, "in onAddStockRequest()");
+        if (stockListFragmentListener != null) {
+            stockListFragmentListener.onAddStockToDatabaseRequest();
+        }
     }
 
     public void updateStockListView() {
@@ -303,7 +304,7 @@ public class StockListFragment extends ListFragment {
         // open DB and return a cursor to all contacts
         @Override
         protected Cursor doInBackground(Object... params) {
-            Log.i(DEBUG_TAG, "in GetAllStocksAsyncTask()/doInBackground()");
+            Log.i(DEBUG_TAG, "in doInBackground()");
             databaseConnector.openForRead();
             return databaseConnector.getAllStocks();
         }
@@ -311,21 +312,13 @@ public class StockListFragment extends ListFragment {
         // set cursor returned to adapter and close db
         @Override
         protected void onPostExecute(Cursor results) {
-            Log.i(DEBUG_TAG, "in GetAllStocksAsyncTask()/onPostExecute()");
+            Log.i(DEBUG_TAG, "in onPostExecute()");
             super.onPostExecute(results);
             results.moveToFirst();
             stockCursorAdapter.changeCursor(results);
             databaseConnector.close();
         }
     } // end inner class GetContactsTask()
-
-    // callback to main to redisplay screen;
-    public void onAddStockRequest() {
-        Log.i(DEBUG_TAG, "in onAddStockToDatabaseRequest()");
-        if (stockListFragmentListener != null) {
-            stockListFragmentListener.onAddStockToDatabaseRequest();
-        }
-    }
 
 
 }
