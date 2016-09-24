@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "com.hwtechservicesllc.equityyostocks"
-        minSdkVersion 21
-        targetSdkVersion 21
+        minSdkVersion 23
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -20,11 +20,30 @@ android {
 }
 
 // todo: 20160921 com.iguanaui.controls.DataCharts no longer exists.  need to resolve this eventually
+// compile 'com.android.support:appcompat-v7:23.2.1'
+// compile 'com.iguanaui.controls:DataChart:+'
+// compile 'com.iguanaui.controls:Series:+'
+// compile 'com.iguanaui.controls.axes:CategoryAxis:+'
+// compile 'com.iguanaui.controls.axes:CategoryXAxis:+'
+// compile 'com.iguanaui.controls.axes:NumericAxis:+'
+// compile 'com.iguanaui.controls.axes:NumericYAxis:+'
+// compile 'com.iguanaui.controls.valuecategory:AreaSeries:+'
+// compile 'com.iguanaui.controls.valuecategory:ColumnSeries:+'
+// compile 'com.iguanaui.controls.valuecategory:ValueCategorySeries:+'
+// compile 'com.iguanaui.graphics:SolidColorBrush:+'
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:+'
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
     compile 'com.iguanaui.controls:DataChart:+'
+    compile 'com.iguanaui.controls:Series:+'
+    compile 'com.iguanaui.controls.axes:CategoryAxis:+'
+    compile 'com.iguanaui.controls.axes:CategoryXAxis:+'
+    compile 'com.iguanaui.controls.axes:NumericXAxis:+'
+    compile 'com.iguanaui.controls.axes:NumericYAxis:+'
+    compile 'com.iguanaui.controls.valuecategory:AreaSeries:+'
+    compile 'com.iguanaui.controls.valuecategory:ColumnSeries:+'
+    compile 'com.iguanaui.controls.valuecategory:ValueCategorySeries:+'
+    compile 'com.iguanaui.graphics:SolidColorBrush:+'
     testCompile 'junit:junit:4.12'
-
 }

@@ -1,6 +1,5 @@
 package com.hwtechservicesllc.equityyostocks;
 
-
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,12 +9,13 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.renderscript.Float2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.os.Bundle;
-import android.util.FloatMath;
+// deprecated import android.util.FloatMath;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -203,8 +203,10 @@ public class Fragment5AlsoViewedImageControl extends Fragment {
 					float fThisRadians = (float) Math.toRadians(fThisDegrees);
 					
 					//Rotate the canvas
-					fThisX = (float) (fXCoord * FloatMath.cos(fThisRadians));
-					fThisY = (float) (fXCoord * FloatMath.sin(fThisRadians));
+					// fThisX = (float) (fXCoord * FloatMath.cos(fThisRadians));
+					// fThisY = (float) (fXCoord * FloatMath.sin(fThisRadians));
+					fThisX = (float) (fXCoord * (float)Math.cos(fThisRadians));
+					fThisY = (float) (fXCoord * (float)Math.sin(fThisRadians));
 		
 					//Get the bounds of the this iteration's symbol 
 					oPT_TEXT.getTextBounds(sThisSymbol, 0, sThisSymbol.length(), oTextRect);
@@ -212,10 +214,10 @@ public class Fragment5AlsoViewedImageControl extends Fragment {
 					//Draw a line from the origin (0,0) to the center of this iteration's symbol.
 					//float fThisXOrigin = (float) ((float) oTextRect.width() * FloatMath.cos(fThisRadians));
 					//float fThisYOrigin = (float) ((float) oTextRect.height() * FloatMath.sin(fThisRadians));
-					float fThisXOrigin = (float) (fWWWWWWidth/2f * FloatMath.cos(fThisRadians));
-					float fThisYOrigin = (float) (fWWWWWWidth/2f * FloatMath.sin(fThisRadians));
-					float fThisXEnd = (float) (0.90f * fXCoord * FloatMath.cos(fThisRadians));
-					float fThisYEnd = (float) (0.90f * fXCoord * FloatMath.sin(fThisRadians));
+					float fThisXOrigin = (float) (fWWWWWWidth/2f * (float)Math.cos(fThisRadians));
+					float fThisYOrigin = (float) (fWWWWWWidth/2f * (float)Math.sin(fThisRadians));
+					float fThisXEnd = (float) (0.90f * fXCoord * (float)Math.cos(fThisRadians));
+					float fThisYEnd = (float) (0.90f * fXCoord * (float)Math.sin(fThisRadians));
 					
 					//Draw a line from the sSymbol to this iteration's symbol.
 					oCanvas.drawLine(fThisXOrigin, fThisYOrigin, fThisXEnd, fThisYEnd, oPT_LINE);

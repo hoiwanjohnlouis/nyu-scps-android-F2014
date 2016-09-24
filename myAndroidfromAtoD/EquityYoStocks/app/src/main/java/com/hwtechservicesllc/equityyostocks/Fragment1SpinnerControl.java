@@ -1,6 +1,5 @@
 package com.hwtechservicesllc.equityyostocks;
 
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.database.Cursor;

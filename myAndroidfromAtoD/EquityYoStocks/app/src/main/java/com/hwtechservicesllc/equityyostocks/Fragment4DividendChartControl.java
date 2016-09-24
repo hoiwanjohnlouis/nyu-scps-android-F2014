@@ -24,7 +24,6 @@ import com.iguanaui.controls.valuecategory.ColumnSeries;
 import com.iguanaui.controls.valuecategory.ValueCategorySeries;
 import com.iguanaui.graphics.SolidColorBrush;
 
-
 public class Fragment4DividendChartControl extends Fragment {
 
 	String sSymbol = "A"; //By default, the symbol for sector zero is A.

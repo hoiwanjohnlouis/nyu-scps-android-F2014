@@ -1,6 +1,5 @@
 package com.hwtechservicesllc.equityyostocks;
 
-
 import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -8,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+// deprecated as of SDK 22
+// import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,7 +26,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity implements Fragment1SpinnerControl.OnFragment1SpinnerChangedListener {
+public class MainActivity extends AppCompatActivity
+        implements Fragment1SpinnerControl.OnFragment1SpinnerChangedListener {
 
     ListView oSectorListView;
     Fragment1SpinnerControl oF1C_SP;
