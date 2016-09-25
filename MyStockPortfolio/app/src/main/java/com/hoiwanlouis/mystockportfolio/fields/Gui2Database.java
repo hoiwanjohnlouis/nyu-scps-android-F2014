@@ -51,7 +51,7 @@ public final class Gui2Database {
         public static final String defaultTradeQuantity = "" + R.string.default_trade_quantity;
     }
 
-    public static final int toRIds[] = {
+    public static final int toRIds[] = new int[] {
             R.id.TextView_symbol,
             R.id.TextView_opening_price,
             R.id.TextView_previous_closing_price,
@@ -66,7 +66,7 @@ public final class Gui2Database {
             R.id.TextView_modify_datetime
     };
 
-    public static final String asColumnsToReturn[] = {
+    public static final String asColumnsToReturn[] = new String[] {
             DatabaseColumns.Portfolio._ID,
             DatabaseColumns.Portfolio.SYMBOL,
             DatabaseColumns.Portfolio.OPENING_PRICE,
@@ -82,7 +82,7 @@ public final class Gui2Database {
             DatabaseColumns.Portfolio.MODIFY_DATETIME
     };
 
-    public static final String fromDBColumns[] =  {
+    public static final String fromDBColumns[] = new String[] {
             DatabaseColumns.Portfolio.SYMBOL,
             DatabaseColumns.Portfolio.OPENING_PRICE,
             DatabaseColumns.Portfolio.PREVIOUS_CLOSING_PRICE,

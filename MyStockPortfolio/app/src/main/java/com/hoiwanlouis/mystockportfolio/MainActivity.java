@@ -45,9 +45,8 @@ public class MainActivity extends Activity
         StockListFragment.StockListFragmentListener,
         StockDetailFragment.StockDetailFragmentListener {
 
-    // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
-    // displays item/symbol list
+
     private AddStockFragment addStockFragment;
     private StockListFragment stockListFragment;
     private StockDetailFragment stockDetailFragment;
@@ -68,10 +67,12 @@ public class MainActivity extends Activity
         }
 
         // create StockListFragment, add the fragment to the FrameLayout
-        stockListFragment = StockListFragment.newInstance();
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragmentContainer, stockListFragment);
-        fragmentTransaction.commit();
+        if (isAPhoneDevice()) {
+            stockListFragment = StockListFragment.newInstance();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.add(R.id.fragmentContainer, stockListFragment);
+            transaction.commit();
+        }
 
     } // end method onCreate()
 
@@ -83,13 +84,121 @@ public class MainActivity extends Activity
     protected void onResume() {
         Log.i(DEBUG_TAG, "in onResume()");
         super.onResume();
-        // if this is a tablet, then stockListFragment is not set yet. i.e. it is null,
-        // so get reference from FragmentManager and set it.
-        if (stockListFragment == null) {
+        if (isATabletDevice()) {
+            // if this is a tablet, then stockListFragment is not set yet. i.e. it is null,
+            // so get reference from FragmentManager and set it.
             stockListFragment = (StockListFragment) getFragmentManager().findFragmentById(R.id.stockListFragment);
         }
     } // end method onResume
 
+
+    /***************************************************************
+     * start of worker functions
+     ***************************************************************/
+
+    /***************************************************************
+     * worker function:
+     * private boolean isAPhoneDevice()
+     ***************************************************************/
+    private boolean isAPhoneDevice() {
+        Log.i(DEBUG_TAG, "in isAPhoneDevice()");
+        return (null != findViewById(R.id.fragmentContainer));
+    }
+
+    /***************************************************************
+     * worker function:
+     * private boolean isATabletDevice()
+     ***************************************************************/
+    private boolean isATabletDevice() {
+        Log.i(DEBUG_TAG, "in isATabletDevice()");
+        return (null == findViewById(R.id.fragmentContainer));
+    }
+
+    /***************************************************************
+     * worker function:
+     * showDetailFragment(int viewID, Bundle arguments)
+     * <p>
+     * display a item/symbol
+     ***************************************************************/
+    private void showDetailFragment(final int viewID, final Bundle arguments) {
+        Log.i(DEBUG_TAG, "in showDetailFragment()");
+        StockDetailFragment fragment = StockDetailFragment.newInstance();
+        addBundleToStockDetailFragment(fragment, arguments);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(viewID, fragment);
+        transaction.addToBackStack("showDetailFragment(final int viewID{" + viewID + "}, final Bundle arguments{" + arguments + "})");
+        transaction.commit();   // display fragment
+    }
+
+    /***************************************************************
+     * worker function:
+     * addBundleToStockDetailFragment(final StockDetailFragment fragment, final Bundle arguments)
+     * <p>
+     * load bundle into fragment and print log msg
+     ***************************************************************/
+    private void addBundleToStockDetailFragment(final StockDetailFragment fragment, final Bundle arguments) {
+        Log.i(DEBUG_TAG, "in addBundleToStockDetailFragment()");
+        StringBuilder logMessage = new StringBuilder();
+        if (arguments != null) {
+            logMessage.append("requesting StockDetailFragment for [");
+            logMessage.append(Gui2Database.BUNDLE_KEY);
+            logMessage.append("]=[");
+            logMessage.append(arguments.getLong(Gui2Database.BUNDLE_KEY));
+            logMessage.append("]");
+            fragment.setArguments(arguments);
+        } else {
+            logMessage.append("requesting StockDetailFragment for [");
+            logMessage.append(Gui2Database.BUNDLE_KEY);
+            logMessage.append("]=[NULL KEY VALUE]");
+        }
+        Log.i(DEBUG_TAG, logMessage.toString());
+    }
+
+    /***************************************************************
+     * worker function:
+     * showAddFragment(int viewID, Bundle arguments)
+     * <p>
+     * display fragment after adding a new symbol
+     ***************************************************************/
+    private void showAddFragment(final int viewID, final Bundle arguments) {
+        Log.i(DEBUG_TAG, "in showAddFragment()");
+        AddStockFragment fragment = AddStockFragment.newInstance();
+        addBundleToAddFragment(fragment, arguments);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(viewID, fragment);
+        transaction.addToBackStack("showAddFragment(final int viewID{" + viewID + "}, final Bundle arguments{" + arguments + "})");
+        transaction.commit();   // causes fragment to display
+    }
+
+    /***************************************************************
+     * worker function:
+     * addBundleToAddFragment(final AddStockFragment fragment, final Bundle arguments)
+     * <p>
+     * load bundle into fragment and print log msg
+     ***************************************************************/
+    private void addBundleToAddFragment(final AddStockFragment fragment, final Bundle arguments) {
+        final StringBuilder logMessage = new StringBuilder();
+        if (arguments != null) {
+            logMessage.append("requesting AddStockFragment for [");
+            logMessage.append(Gui2Database.BUNDLE_KEY);
+            logMessage.append("]=[");
+            logMessage.append(arguments.getLong(Gui2Database.BUNDLE_KEY));
+            logMessage.append("]");
+            // editing existing symbol?
+            fragment.setArguments(arguments);
+        } else {
+            logMessage.append("requesting AddStockFragment for [");
+            logMessage.append(Gui2Database.BUNDLE_KEY);
+            logMessage.append("]=[NULL KEY VALUE]");
+        }
+        Log.i(DEBUG_TAG, logMessage.toString());
+    }
+
+    /***************************************************************
+     * End of worker functions
+     ***************************************************************/
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
 
     /***************************************************************
      * Start of AddStockFragmentListener interfaces implementations
@@ -99,10 +208,9 @@ public class MainActivity extends Activity
     @Override
     public void onAddStockComplete(final Bundle arguments) {
         Log.i(DEBUG_TAG, "in onASFLCompleted()");
-        if (isAPhoneDevice()) {
+        getFragmentManager().popBackStack(); // removes the fragment from top of back stack
+        if (isATabletDevice()) {
             getFragmentManager().popBackStack(); // removes the fragment from top of back stack
-        } else {
-            // tablet
             stockListFragment.updateStockListView();
             showDetailFragment(R.id.rightPaneContainer, arguments);
         }
@@ -110,6 +218,9 @@ public class MainActivity extends Activity
     /***************************************************************
      * End of AddStockFragmentListener interfaces implementations
      ***************************************************************/
+
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
 
     /***************************************************************
      * Start of StockDetailFragmentListener interfaces implementations
@@ -129,6 +240,9 @@ public class MainActivity extends Activity
     /***************************************************************
      * End of StockDetailFragmentListener interfaces implementations
      ***************************************************************/
+
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
 
     /***************************************************************
      * Start of StockListFragmentListener interfaces implementations
@@ -150,10 +264,8 @@ public class MainActivity extends Activity
     @Override
     public void onDeleteStockFromDatabaseComplete(final Bundle arguments) {
         Log.i(DEBUG_TAG, "in onDeleteStockFromDatabaseComplete()");
-        if (isAPhoneDevice()) {
-            getFragmentManager().popBackStack(); // removes top of back stack
-        } else {
-            // tablet
+        getFragmentManager().popBackStack(); // removes top of back stack
+        if (isATabletDevice()) {
             stockListFragment.updateStockListView();
         }
     }
@@ -164,8 +276,6 @@ public class MainActivity extends Activity
         if (isAPhoneDevice()) {
             showDetailFragment(R.id.fragmentContainer, arguments);
         } else {
-            // tablet
-            getFragmentManager().popBackStack(); // ensure we have removed all back stack entries
             showDetailFragment(R.id.rightPaneContainer, arguments);
         }
     }
@@ -173,95 +283,7 @@ public class MainActivity extends Activity
      * End of StockListFragmentListener interfaces implementations
      ***************************************************************/
 
-    /***************************************************************
-     * worker function:
-     * showAddFragment(int viewID, Bundle arguments)
-     * <p>
-     * display fragment after adding a new symbol
-     ***************************************************************/
-    private void showAddFragment(final int viewID, final Bundle arguments) {
-        Log.i(DEBUG_TAG, "in showAddFragment()");
-        AddStockFragment fragment = AddStockFragment.newInstance();
-        addBundleToAddFragment(fragment, arguments);
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(viewID, fragment);
-        fragmentTransaction.addToBackStack("AddStockFragment");
-        fragmentTransaction.commit();   // causes fragment to display
-    }
-
-    /***************************************************************
-     * worker function:
-     * addBundleToAddFragment(final AddStockFragment fragment, final Bundle arguments)
-     * <p>
-     * load bundle into fragment and print log msg
-     ***************************************************************/
-    private void addBundleToAddFragment(final AddStockFragment fragment, final Bundle arguments) {
-        final StringBuilder sb = new StringBuilder();
-        if (arguments != null) {
-            sb.append("requesting AddStockFragment for [");
-            sb.append(Gui2Database.BUNDLE_KEY);
-            sb.append("]=[");
-            sb.append(arguments.getLong(Gui2Database.BUNDLE_KEY));
-            sb.append("]");
-            // editing existing symbol?
-            fragment.setArguments(arguments);
-        } else {
-            sb.append("requesting AddStockFragment for [");
-            sb.append(Gui2Database.BUNDLE_KEY);
-            sb.append("]=[NULL KEY VALUE]");
-        }
-        Log.i(DEBUG_TAG, sb.toString());
-    }
-
-
-    /***************************************************************
-     * worker function:
-     * showDetailFragment(int viewID, Bundle arguments)
-     * <p>
-     * display a item/symbol
-     ***************************************************************/
-    private void showDetailFragment(final int viewID, final Bundle arguments) {
-        Log.i(DEBUG_TAG, "in showDetailFragment()");
-        StockDetailFragment fragment = StockDetailFragment.newInstance();
-        addBundleToStockDetailFragment(fragment, arguments);
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(viewID, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();   // display fragment
-    }
-
-    /***************************************************************
-     * worker function:
-     * addBundleToStockDetailFragment(final StockDetailFragment fragment, final Bundle arguments)
-     * <p>
-     * load bundle into fragment and print log msg
-     ***************************************************************/
-    private void addBundleToStockDetailFragment(final StockDetailFragment fragment, final Bundle arguments) {
-        Log.i(DEBUG_TAG, "in addBundleToStockDetailFragment()");
-        StringBuilder sb = new StringBuilder();
-        if (arguments != null) {
-            sb.append("requesting StockDetailFragment for [");
-            sb.append(Gui2Database.BUNDLE_KEY);
-            sb.append("]=[");
-            sb.append(arguments.getLong(Gui2Database.BUNDLE_KEY));
-            sb.append("]");
-            fragment.setArguments(arguments);
-        } else {
-            sb.append("requesting StockDetailFragment for [");
-            sb.append(Gui2Database.BUNDLE_KEY);
-            sb.append("]=[NULL KEY VALUE]");
-        }
-        Log.i(DEBUG_TAG, sb.toString());
-    }
-
-
-    /***************************************************************
-     * worker function:
-     * private boolean isAPhoneDevice()
-     ***************************************************************/
-    private boolean isAPhoneDevice() {
-        Log.i(DEBUG_TAG, "in isAPhoneDevice()");
-        return (findViewById(R.id.fragmentContainer) != null);
-    }
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
 
 }

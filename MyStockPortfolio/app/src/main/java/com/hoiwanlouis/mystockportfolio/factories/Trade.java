@@ -57,4 +57,9 @@ public class Trade extends Record {
     }
 
 
+    @Override
+    public int compareTo(Object another) {
+        // todo: add correct behavior once Trade record is fleshed out
+        return 0;
+    }
 }

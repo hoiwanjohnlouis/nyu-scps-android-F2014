@@ -24,7 +24,7 @@ import com.hoiwanlouis.mystockportfolio.fields.Quantity;
 import com.hoiwanlouis.mystockportfolio.fields.Symbol;
 
 
-public abstract class Record {
+public abstract class Record implements Comparable {
 
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
