@@ -17,8 +17,11 @@
  ***************************************************************************/
 package com.hoiwanlouis.mystockportfolio.fragments;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -43,12 +46,15 @@ import com.hoiwanlouis.mystockportfolio.fields.DateTimestamp;
 public class StockDetailFragment extends Fragment {
 
     public interface StockDetailFragmentListener {
-        // called when fragment is done
-        void onStockDetailComplete();
+        // called when a contact is deleted
+        void onDeleteStockComplete(Bundle arguments);
+
+        // called to pass Bundle of contact's info for editing
+        void onEditStockRequest(Bundle arguments);
     }
 
     private final String DEBUG_TAG = this.getClass().getSimpleName();
-    private StockDetailFragmentListener stockDetailFragmentListener;
+    private StockDetailFragmentListener listener;
     private long rowID = 0; // selected contact's rowID
 
     // define the readonly TextView for display, must match the detail layout
@@ -72,7 +78,7 @@ public class StockDetailFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     * @return A new instance of fragment AddStockFragment.
+     * @return A new instance of fragment AddEditStockFragment.
      */
     public static StockDetailFragment newInstance() {
         return new StockDetailFragment();
@@ -85,7 +91,7 @@ public class StockDetailFragment extends Fragment {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(context);
         // init callback to interface implementation
-        stockDetailFragmentListener = (StockDetailFragmentListener) context;
+        listener = (StockDetailFragmentListener) context;
     }
 
     // remove StockDetailFragmentListener when fragment detached
@@ -93,7 +99,7 @@ public class StockDetailFragment extends Fragment {
     public void onDetach() {
         Log.i(DEBUG_TAG, "in onDetach()");
         super.onDetach();
-        stockDetailFragmentListener = null;
+        listener = null;
     }
 
     // called when the StockDetailFragment resumes
@@ -123,6 +129,123 @@ public class StockDetailFragment extends Fragment {
         Log.i(DEBUG_TAG, "in onSaveInstanceState()");
         outState.putLong(Gui2Database.BUNDLE_KEY, rowID);
         super.onSaveInstanceState(outState);
+    }
+
+    // display this fragment's menu items
+    @Override
+    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
+        Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_stock_detail_menu, menu);
+    } // end method onCreateOptionsMenu()
+
+    // handle menu item selections
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        Log.i(DEBUG_TAG, "in onOptionsItemSelected()");
+        switch (item.getItemId())
+        {
+            case R.id.action_edit:
+                Toast.makeText(getActivity(),"Detail Edit Stock is not supported!", Toast.LENGTH_SHORT).show();
+                editStock();
+                return true;
+            case R.id.action_delete:
+                deleteStock();
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    } // end method onOptionsItemSelected
+
+    private void editStock() {
+        Log.i(DEBUG_TAG, "in editStock()");
+        // create Bundle containing contact data to edit
+        Bundle arguments = new Bundle();
+        arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
+
+        arguments.putLong(MainActivity.ROW_ID, rowID);
+        arguments.putCharSequence("name", nameTextView.getText());
+        arguments.putCharSequence("phone", phoneTextView.getText());
+        arguments.putCharSequence("email", emailTextView.getText());
+        arguments.putCharSequence("street", streetTextView.getText());
+        arguments.putCharSequence("city", cityTextView.getText());
+        arguments.putCharSequence("state", stateTextView.getText());
+        arguments.putCharSequence("zip", zipTextView.getText());
+        // pass Bundle to listener for processing
+        listener.onEditContactRequest(arguments);
+        // pass Bundle to listener for processing
+        listener.onEditContactRequest(arguments);
+
+        // listener.onEditContact(arguments);
+    } // end method deleteContact
+
+    private void deleteStock() {
+        Log.i(DEBUG_TAG, "in deleteDelete()");
+        // create Bundle containing contact data to edit
+        Bundle arguments = new Bundle();
+        arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
+        // use FragmentManager to display the confirmDelete DialogFragment
+        confirmDelete.show(getFragmentManager(), "confirm delete");
+    } // end method deleteContact
+
+    private DialogFragment confirmDelete =
+            new DialogFragment() {
+                // create an AlertDialog and return it
+                @Override
+                public Dialog onCreateDialog(Bundle bundle) {
+                    Log.i(DEBUG_TAG, "in onCreateDialog()");
+                    // create a new AlertDialog Builder
+                    AlertDialog.Builder builder =
+                            new AlertDialog.Builder(getActivity());
+
+                    builder.setTitle(R.string.fragment_delete_title);
+                    builder.setMessage(R.string.fragment_delete_message + symbolTextView.getText().toString());
+
+                    // provide an OK button that simply dismisses the dialog
+                    builder.setPositiveButton(R.string.fragment_delete_button_positive,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int button) {
+                                    final DatabaseConnector databaseConnector =
+                                            new DatabaseConnector(getActivity());
+
+                                    // AsyncTask deletes contact and notifies listener
+                                    AsyncTask<Long, Object, Object> deleteTask =
+                                            new AsyncTask<Long, Object, Object>() {
+                                                @Override
+                                                protected Object doInBackground(Long... params) {
+                                                    Log.i(DEBUG_TAG, "in doInBackground()");
+                                                    databaseConnector.deleteOneStock(params[0]);
+                                                    return null;
+                                                }
+
+                                                @Override
+                                                protected void onPostExecute(Object result) {
+                                                    Log.i(DEBUG_TAG, "in onPostExecute()");
+                                                    onDeleteStockCompleteCallback();
+                                                }
+                                            }; // end new AsyncTask
+
+                                    // execute the AsyncTask to delete contact at rowID
+                                    deleteTask.execute(new Long[] { rowID });
+                                } // end method onClick
+                            } // end anonymous inner class
+                    ); // end call to method setPositiveButton
+
+                    // do nothing if cancel action
+                    builder.setNegativeButton(R.string.fragment_delete_button_cancel, null);
+
+                    // return the AlertDialog
+                    return builder.create();
+                }
+            }; // end DialogFragment anonymous inner class
+
+    public void onDeleteStockCompleteCallback() {
+        Log.i(DEBUG_TAG, "in onAddStockCompleteCallback()");
+        Bundle arguments = new Bundle();
+        arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
+        listener.onDeleteStockComplete(arguments);
     }
 
     // called when StockDetailFragmentListener's view needs to be created
@@ -170,40 +293,6 @@ public class StockDetailFragment extends Fragment {
         modifyDateTimeTextView = (TextView) v.findViewById(R.id.modifyDateTimeTextView);
     }
 
-    // display this fragment's menu items
-    @Override
-    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
-        Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_stock_detail_menu, menu);
-    } // end method onCreateOptionsMenu()
-
-    // handle menu item selections
-    @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        Log.i(DEBUG_TAG, "in onOptionsItemSelected()");
-        Bundle arguments = new Bundle();
-        switch (item.getItemId())
-        {
-            case R.id.action_edit:
-                // create Bundle containing contact data to edit
-                arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
-                // pass Bundle to stockDetailFragmentListener for processing
-                //stockDetailFragmentListener.onEditContact(arguments);
-                Toast.makeText(getActivity(),"Detail Edit Stock is not supported!", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_delete:
-                // create Bundle containing contact data to edit
-                arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
-                Toast.makeText(getActivity(),"Detail Delete Stock is not supported at this time!", Toast.LENGTH_SHORT).show();
-                //deleteContact();
-                return true;
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    } // end method onOptionsItemSelected
-
     // *****************************************************
     // performs database query outside GUI thread
     // *****************************************************
@@ -228,7 +317,6 @@ public class StockDetailFragment extends Fragment {
             loadTextViewsFromCursor(result);
             result.close();
             databaseConnector.close();
-            onButtonPressed();
         } // end method onPostExecute
     }
 
@@ -263,14 +351,5 @@ public class StockDetailFragment extends Fragment {
         insertDateTimeTextView.setText(DateTimestamp.extractTimestampSegment(result.getString(insertDateTimeIndex)));
         modifyDateTimeTextView.setText(DateTimestamp.extractTimestampSegment(result.getString(modifyDateTimeIndex)));
     }
-
-    // callback to main to redisplay screen;
-    private void onButtonPressed() {
-        Log.i(DEBUG_TAG, "in onAddStockCompleteCallback()");
-        if (stockDetailFragmentListener != null) {
-            stockDetailFragmentListener.onStockDetailComplete();
-        }
-    }
-
 
 }

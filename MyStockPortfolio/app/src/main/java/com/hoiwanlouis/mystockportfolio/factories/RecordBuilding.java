@@ -16,24 +16,19 @@ package com.hoiwanlouis.mystockportfolio.factories;
     limitations under the License.
 */
 
-
 import android.util.Log;
 
 import com.hoiwanlouis.mystockportfolio.enums.RecordType;
-
 
 public abstract class RecordBuilding {
 
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
 
-
     //
     //
     //
     public abstract Record makeRecord(RecordType recordType);
-
-
 
     //
     // todo: orderRecord should receive an update record populated with trade data which will be passed to prepare
@@ -41,11 +36,9 @@ public abstract class RecordBuilding {
     public Record orderRecord(RecordType recordType) {
         Log.v(DEBUG_TAG, "in orderRecord");
 
-
         //
         Record record = makeRecord(recordType);
         record.prepare();
-
 
         // todo: add function to update SQLite DB
 

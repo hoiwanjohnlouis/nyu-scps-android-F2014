@@ -71,9 +71,9 @@
     <string name="fragment_menuitem_delete">Delete</string>
 
     <string name="fragment_delete_title">Are You Sure?</string>
-    <string name="fragment_delete_message">This will permanently delete the symbol: \"%s\</string>
+    <string name="fragment_delete_message">This will permanently delete the symbol: </string>
     <string name="fragment_delete_button_cancel">Cancel</string>
-    <string name="fragment_delete_button_delete">Delete</string>
+    <string name="fragment_delete_button_positive">Delete</string>
 
     <string name="error_saving_positive_button">OK</string>
     <string name="error_saving_message">You must enter a stock symbol</string>

@@ -29,10 +29,8 @@ public abstract class Record implements Comparable {
     // for logging purposes
     private final String DEBUG_TAG = this.getClass().getSimpleName();
 
-
     private RecordType recordType;
     private StringBuilder stringBuilder = new StringBuilder();
-
 
     protected Company company;                 // 1
     protected Symbol symbol;                   // 2
@@ -84,5 +82,10 @@ public abstract class Record implements Comparable {
 
     }
 
+    @Override
+    public int compareTo(Object another) {
+        // todo: add correct behavior once Trade record is fleshed out
+        return 0;
+    }
 
 }

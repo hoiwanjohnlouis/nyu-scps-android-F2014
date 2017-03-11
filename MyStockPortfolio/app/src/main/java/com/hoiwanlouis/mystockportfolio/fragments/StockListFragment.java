@@ -45,15 +45,15 @@ public class StockListFragment extends ListFragment {
 
     // callback methods implemented by caller/invoker
     public interface StockListFragmentListener {
-        void onAddStockToDatabaseRequest();
+        void onAddStockRequest();
 
-        void onDeleteStockFromDatabaseComplete(Bundle arguments);
+        void onDeleteStockComplete(Bundle arguments);
 
         void onDisplayStockDetailRequest(Bundle arguments);
     }
 
     private final String DEBUG_TAG = this.getClass().getSimpleName();
-    private StockListFragmentListener stockListFragmentListener;
+    private StockListFragmentListener listener;
     private ListView stockListView;
     private CursorAdapter stockCursorAdapter;
 
@@ -65,7 +65,7 @@ public class StockListFragment extends ListFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment AddStockFragment.
+     * @return A new instance of fragment AddEditStockFragment.
      */
     public static StockListFragment newInstance() {
         StockListFragment fragment = new StockListFragment();
@@ -79,7 +79,7 @@ public class StockListFragment extends ListFragment {
     public void onAttach(Context context) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(context);
-        stockListFragmentListener = (StockListFragmentListener) context;
+        listener = (StockListFragmentListener) context;
     } // end method onAttach
 
     // clean up StockListFragmentListener when Fragment is detached
@@ -87,7 +87,7 @@ public class StockListFragment extends ListFragment {
     public void onDetach() {
         Log.i(DEBUG_TAG, "in onDetach()");
         super.onDetach();
-        stockListFragmentListener = null;
+        listener = null;
     }
 
     @Override
@@ -154,12 +154,18 @@ public class StockListFragment extends ListFragment {
         switch (id) {
             case R.id.action_add:
                 // let the callback take care of this
-                onAddStockRequest();
+                onAddStockRequestCallback();
                 return true;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // callback to main to redisplay screen;
+    public void onAddStockRequestCallback() {
+        Log.i(DEBUG_TAG, "in onAddStockRequestCallback()");
+        listener.onAddStockRequest();
     }
 
     @Override
@@ -175,8 +181,7 @@ public class StockListFragment extends ListFragment {
         Log.v(DEBUG_TAG, "in onCreateView()");
         // inflate StockDetailFragment's layout and bind the data: must match the detail layout
         // View v = inflater.inflate(R.layout.fragment_stock_list, container, false);
-        View v = super.onCreateView(inflater, container, savedInstanceState);
-        return v;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     //
@@ -232,9 +237,17 @@ public class StockListFragment extends ListFragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Log.i(DEBUG_TAG, "in onItemClickListener()");
                     // let the callback take care of this
-                    onStockDetailRequest(id);
+                    onStockDetailRequestCallback(id);
                 }
             };
+
+    // callback to main to redisplay screen;
+    public void onStockDetailRequestCallback(long id) {
+        Log.i(DEBUG_TAG, "in deleteStock()");
+        final Bundle arguments = new Bundle();
+        arguments.putLong(Gui2Database.BUNDLE_KEY, id);
+        listener.onDisplayStockDetailRequest(arguments);
+    }
 
     // long click will allow edit symbol
     private AdapterView.OnItemLongClickListener onItemLongClickListener =
@@ -243,32 +256,24 @@ public class StockListFragment extends ListFragment {
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                     Log.i(DEBUG_TAG, "in onItemLongClickListener()");
                     // let the callback take care of this
-                    onDeleteStockRequest(parent, view, position, id);
+                    deleteStock(parent, view, position, id);
                     return false;
                 }
             };
 
-    // callback to main to redisplay screen;
-    public void onStockDetailRequest(long id) {
-        Log.i(DEBUG_TAG, "in onDeleteStockRequest()");
-        final Bundle arguments = new Bundle();
-        arguments.putLong(Gui2Database.BUNDLE_KEY, id);
-        // let the callback take care of this
-        stockListFragmentListener.onDisplayStockDetailRequest(arguments);
-    }
-
     //
-    public void onDeleteStockRequest(AdapterView<?> parent, View view, int position, long id) {
-        Log.i(DEBUG_TAG, "in onDeleteStockRequest()");
+    public void deleteStock(AdapterView<?> parent, View view, int position, long id) {
+        Log.i(DEBUG_TAG, "in deleteStock()");
         final long tickerId = id;
-        final TextView nameView = (TextView) view.findViewById(R.id.TextView_symbol);
+//        final TextView nameView = (TextView) view.findViewById(R.id.TextView_symbol);
+        final TextView nameView = (TextView) view.findViewById(android.R.id.text1);
         final String tickerSymbol = nameView.getText().toString();
 
         // Use an Alert dialog to confirm delete operation
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());  // is getActivity() usage correct?
         builder.setTitle(R.string.fragment_delete_title);
         builder.setMessage(R.string.fragment_delete_message);
-        builder.setPositiveButton(R.string.fragment_delete_button_delete,
+        builder.setPositiveButton(R.string.fragment_delete_button_positive,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         final DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
@@ -286,10 +291,7 @@ public class StockListFragment extends ListFragment {
                                     @Override
                                     protected void onPostExecute(Object result) {
                                         Log.i(DEBUG_TAG, "in onPostExecute()");
-                                        final Bundle arguments = new Bundle();
-                                        arguments.putLong(Gui2Database.BUNDLE_KEY, (long) result);
-                                        // let the callback take care of this
-                                        stockListFragmentListener.onDeleteStockFromDatabaseComplete(arguments);
+                                        onDeleteStockCompleteCallback((long) result);
                                     }
                                 }; // end new AsyncTask definition
 
@@ -304,10 +306,12 @@ public class StockListFragment extends ListFragment {
         builder.show();
     }
 
-    // callback to main to redisplay screen;
-    public void onAddStockRequest() {
-        Log.i(DEBUG_TAG, "in onAddStockRequest()");
-        stockListFragmentListener.onAddStockToDatabaseRequest();
+    private void onDeleteStockCompleteCallback(long id) {
+        Log.i(DEBUG_TAG, "in onDeleteStockCompleteCallback()");
+        final Bundle arguments = new Bundle();
+        arguments.putLong(Gui2Database.BUNDLE_KEY, id);
+        // let the callback take care of this
+        listener.onDeleteStockComplete(arguments);
     }
 
     public void updateStockListView() {

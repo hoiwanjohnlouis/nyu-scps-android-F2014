@@ -1,6 +1,5 @@
 package com.hoiwanlouis.mystockportfolio.fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -20,7 +19,7 @@ import com.hoiwanlouis.mystockportfolio.R;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
 import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
 
-public class AddStockFragment extends Fragment {
+public class AddEditStockFragment extends Fragment {
 
     public interface AddStockFragmentListener {
         void onAddStockComplete(Bundle arguments);
@@ -32,18 +31,18 @@ public class AddStockFragment extends Fragment {
     private EditText stockSymbol;
     private long databaseRowID;
 
-    public AddStockFragment() {
-        Log.i(DEBUG_TAG, "in AddStockFragment()");
+    public AddEditStockFragment() {
+        Log.i(DEBUG_TAG, "in AddEditStockFragment()");
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment AddStockFragment.
+     * @return A new instance of fragment AddEditStockFragment.
      */
-    public static AddStockFragment newInstance() {
-        AddStockFragment fragment = new AddStockFragment();
+    public static AddEditStockFragment newInstance() {
+        AddEditStockFragment fragment = new AddEditStockFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -148,14 +147,6 @@ public class AddStockFragment extends Fragment {
         } // end method onClick
     };
 
-    // callback to main to redisplay screen;
-    public void onAddStockCompleteCallback() {
-        Log.i(DEBUG_TAG, "in onAddStockCompleteCallback()");
-        Bundle arguments = new Bundle();
-        arguments.putLong(Gui2Database.BUNDLE_KEY, databaseRowID);
-        addStockFragmentListener.onAddStockComplete(arguments);
-    }
-
     private boolean editTextHasData(final EditText stock) {
         Log.i(DEBUG_TAG, "in editTextHasData()");
         return ((stock != null) && (stock.getText().toString().trim().length() != 0));
@@ -165,6 +156,14 @@ public class AddStockFragment extends Fragment {
         Log.i(DEBUG_TAG, "in saveStockSymbolToDatabase()");
         DatabaseConnector dbConnector = new DatabaseConnector(getActivity());
         databaseRowID = dbConnector.addOneStock(stockSymbol.getText().toString());
+    }
+
+    // callback to main to redisplay screen;
+    public void onAddStockCompleteCallback() {
+        Log.i(DEBUG_TAG, "in onAddStockCompleteCallback()");
+        Bundle arguments = new Bundle();
+        arguments.putLong(Gui2Database.BUNDLE_KEY, databaseRowID);
+        addStockFragmentListener.onAddStockComplete(arguments);
     }
 
 }
