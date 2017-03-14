@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:2.3.0'
     }
 }
 
@@ -16,10 +16,11 @@ repositories {
 
 
 dependencies {
-
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.android.support:support-v4:21.0.2"
     compile "com.android.support:gridlayout-v7:21.0.2"
     compile "com.android.support:cardview-v7:21.0.2"
+    testCompile 'junit:junit:4.12'
 
 }
 
@@ -33,10 +34,10 @@ List<String> dirs = [
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
-        minSdkVersion 8
+        minSdkVersion 21
         targetSdkVersion 21
     }
 
