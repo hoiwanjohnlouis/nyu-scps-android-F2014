@@ -1,4 +1,4 @@
-package com.hoiwanlouis.mystockportfolio.interfaces;
+package com.hoiwanlouis.mystockportfolio.factories;
 
 /*
     Copyright (c) 2015  HW Tech Services, Inc., LLC

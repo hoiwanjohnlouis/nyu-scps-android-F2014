@@ -14,7 +14,7 @@
         android:id="@+id/settings_fragment"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:name="com.hoiwanlouis.mystockportfolio.fragments.SettingsFragment"
+        android:name="com.hoiwanlouis.mystockportfolio.settings.SettingsFragment"
         />
 
     <!-- android bug fix -->

@@ -24,7 +24,6 @@ import com.hoiwanlouis.mystockportfolio.fields.Company;
 import com.hoiwanlouis.mystockportfolio.fields.Price;
 import com.hoiwanlouis.mystockportfolio.fields.Quantity;
 import com.hoiwanlouis.mystockportfolio.fields.Symbol;
-import com.hoiwanlouis.mystockportfolio.interfaces.RecordFactory;
 
 
 public class TradeFactoryImpl implements RecordFactory {

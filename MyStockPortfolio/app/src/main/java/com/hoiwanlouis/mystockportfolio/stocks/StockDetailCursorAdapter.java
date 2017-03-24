@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package com.hoiwanlouis.mystockportfolio.adapters;
+package com.hoiwanlouis.mystockportfolio.stocks;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -28,14 +28,14 @@ import android.widget.TextView;
 /***************************************************************************
  * Program Synopsis
  * <p>
- * Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
  * <p>
  * Change History
  * ------Who----- ---When--- ---------------------What----------------------
- * H. Melville    1851.01.31 Wooden whales, or whales cut in profile out of
+ * H. Melville    1851.01.31 Wooden whales, or whales cut in profile out of 
  *
  ***************************************************************************/
-public class AddStockCursorAdapter extends CursorAdapter {
+public class StockDetailCursorAdapter extends CursorAdapter {
     private Context context;
     private Cursor cursor;
     private int flags;
@@ -45,29 +45,48 @@ public class AddStockCursorAdapter extends CursorAdapter {
 
     // layout of display, field by field
     static class ViewHolder {
-        public TextView text;
+        public TextView symbolTextView;
+        public TextView openingPriceTextView;
+        public TextView previousClosingPriceTextView;
+        public TextView bidPriceTextView;
+        public TextView bidSizeTextView;
+        public TextView askPriceTextView;
+        public TextView askSizeTextView;
+        public TextView lastTradePriceTextView;
+        public TextView lastTradeQuantityTextView;
+        public TextView lastTradeDateTimeTextView;
+        public TextView insertDateTimeTextView;
+        public TextView modifyDateTimeTextView;
     }
 
-    public AddStockCursorAdapter(Context context, Cursor c, int flags) {
+
+    //
+    public StockDetailCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
         this.context = context;
         this.cursor = c;
         this.flags = flags;
     }
 
+
+    //
     @Override
     public View newView(final Context context, Cursor cursor, ViewGroup parent) {
         LayoutInflater inflater =  (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
 
+        //
         ViewHolder holder = new ViewHolder();
 
         return v;
     }
 
+
+    //
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
 
+        //
         ViewHolder holder = (ViewHolder) view.getTag();
 
     }

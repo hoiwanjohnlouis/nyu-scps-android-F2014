@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package com.hoiwanlouis.mystockportfolio.fragments;
+package com.hoiwanlouis.mystockportfolio.stocks;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -36,6 +36,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hoiwanlouis.mystockportfolio.MainActivity;
 import com.hoiwanlouis.mystockportfolio.R;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
@@ -173,11 +174,8 @@ public class StockDetailFragment extends Fragment {
         arguments.putCharSequence("state", stateTextView.getText());
         arguments.putCharSequence("zip", zipTextView.getText());
         // pass Bundle to listener for processing
-        listener.onEditContactRequest(arguments);
-        // pass Bundle to listener for processing
-        listener.onEditContactRequest(arguments);
+        listener.onEditStockRequest(arguments);
 
-        // listener.onEditContact(arguments);
     } // end method deleteContact
 
     private void deleteStock() {

@@ -19,7 +19,6 @@ package com.hoiwanlouis.mystockportfolio.factories;
 import android.util.Log;
 
 import com.hoiwanlouis.mystockportfolio.enums.RecordType;
-import com.hoiwanlouis.mystockportfolio.interfaces.RecordFactory;
 
 
 public class TradeBuilding extends RecordBuilding {

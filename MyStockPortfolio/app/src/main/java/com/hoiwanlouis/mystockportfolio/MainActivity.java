@@ -23,9 +23,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
-import com.hoiwanlouis.mystockportfolio.fragments.AddEditStockFragment;
-import com.hoiwanlouis.mystockportfolio.fragments.StockListFragment;
-import com.hoiwanlouis.mystockportfolio.fragments.StockDetailFragment;
+import com.hoiwanlouis.mystockportfolio.stocks.AddEditStockFragment;
+import com.hoiwanlouis.mystockportfolio.stocks.StockListFragment;
+import com.hoiwanlouis.mystockportfolio.stocks.StockDetailFragment;
 
 /***************************************************************************
  * Program Synopsis

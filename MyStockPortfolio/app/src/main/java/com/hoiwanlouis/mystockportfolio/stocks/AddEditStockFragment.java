@@ -1,4 +1,4 @@
-package com.hoiwanlouis.mystockportfolio.fragments;
+package com.hoiwanlouis.mystockportfolio.stocks;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
