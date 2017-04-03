@@ -8,7 +8,7 @@ android:weightSum="2">
 
 <fragment
     android:id="@+id/toolbar_fragment"
-    android:name="com.acar.j.michael.boggle.BoardFragment"
+    android:name="com.acar.j.michael.androidboggle.BoardFragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentLeft="true"
@@ -18,7 +18,7 @@ android:weightSum="2">
 
 <fragment
     android:id="@+id/text_fragment"
-    android:name="com.acar.j.michael.boggle.HighScoreFragment"
+    android:name="com.acar.j.michael.androidboggle.HighScoreFragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentLeft="true"
