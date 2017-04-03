@@ -1,4 +1,4 @@
-package com.acar.j.michael.boggle;
+package com.acar.j.michael.androidboggle;
 
 import android.app.ActionBar;
 import android.app.Activity;
