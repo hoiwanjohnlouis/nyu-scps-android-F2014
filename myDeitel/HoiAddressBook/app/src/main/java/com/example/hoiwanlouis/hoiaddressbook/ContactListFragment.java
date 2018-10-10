@@ -2,6 +2,7 @@ package com.example.hoiwanlouis.hoiaddressbook;
 
 import android.app.Activity;
 import android.app.ListFragment;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,9 +33,6 @@ public class ContactListFragment extends ListFragment {
 
     private ContactListFragmentListener listener;
 
-    // the ListActivity's ListView
-    private ListView contactListView;
-    // adapter for ListView
     private CursorAdapter contactAdapter;
 
 
@@ -46,6 +44,14 @@ public class ContactListFragment extends ListFragment {
 
     // set ContactListFragmentListener when Fragment is attached
     @Override
+    public void onAttach(Context context) {
+        Log.i(DEBUG_TAG, "in onAttach()");
+        super.onAttach(context);
+        listener = (ContactListFragmentListener) context;
+    } // end method onAttach()
+
+    @Override
+    @SuppressWarnings("deprecation")
     public void onAttach(Activity activity) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(activity);
@@ -76,15 +82,13 @@ public class ContactListFragment extends ListFragment {
         Log.i(DEBUG_TAG, "in onViewCreated()");
         super.onViewCreated(view, savedInstanceState);
 
-        // save fragment across configuration changes
         setRetainInstance(true);
-        // this fragment has menu items to display
         setHasOptionsMenu(true);
-        // set text to display when there are no contacts
+
         setEmptyText(getResources().getString(R.string.no_contacts));
 
         // get ListView reference and configure it (the ListView)
-        contactListView = getListView();
+        ListView contactListView = getListView();
         contactListView.setOnItemClickListener(viewContactListener);
         contactListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
@@ -98,18 +102,17 @@ public class ContactListFragment extends ListFragment {
                         null,
                         from, to,
                         0);
-        // set adapter that supplies data
         setListAdapter(contactAdapter);
     } // end method onViewCreated()
 
-    //
+    // for logging purposes, method can be remove once debugging is complete
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         Log.i(DEBUG_TAG, "in onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
     }
 
-    //
+    // for logging purposes, method can be remove once debugging is complete
     @Override
     public void onStart() {
         Log.i(DEBUG_TAG, "in onStart()");
@@ -124,7 +127,7 @@ public class ContactListFragment extends ListFragment {
         new GetContactsTask().execute((Object[]) null);
     } // end method onResume()
 
-    //
+    // for logging purposes, method can be remove once debugging is complete
     @Override
     public void onPause() {
         Log.i(DEBUG_TAG, "in onPause()");
@@ -138,6 +141,7 @@ public class ContactListFragment extends ListFragment {
 
         // get current database cursor
         Cursor cursor = contactAdapter.getCursor();
+
         // adapter now has no cursor (basically housekeeping and cleanup
         contactAdapter.changeCursor(null);
 
@@ -149,14 +153,14 @@ public class ContactListFragment extends ListFragment {
         super.onStop();
     } // end method onStop()
 
-    //
+    // for logging purposes, method can be remove once debugging is complete
     @Override
     public void onDestroyView() {
         Log.i(DEBUG_TAG, "in onDestroyView()");
         super.onDestroyView();
     }
 
-    //
+    // for logging purposes, method can be remove once debugging is complete
     @Override
     public void onDestroy() {
         Log.i(DEBUG_TAG, "in onDestroy()");
@@ -180,7 +184,7 @@ public class ContactListFragment extends ListFragment {
         inflater.inflate(R.menu.fragment_contact_list_menu, menu);
     } // end method onCreateOptionsMenu()
 
-    // handle choice from options menu
+    // handle choices from options menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i(DEBUG_TAG, "in onOptionsItemSelected()");

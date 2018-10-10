@@ -25,7 +25,7 @@ public class AddEditFragment extends Fragment {
     // callback method
     public interface AddEditFragmentListener {
         // called after edit completed so contact can be redisplayed
-        public void onAddEditContactComplete(long rowID);
+        void onAddEditContactComplete(long rowID);
     }
 
     private AddEditFragmentListener listener;
@@ -52,6 +52,14 @@ public class AddEditFragment extends Fragment {
 
     // set AddEditFragmentListener when Fragment attached
     @Override
+    public void onAttach(Context context) {
+        Log.i(DEBUG_TAG, "in onAttach()");
+        super.onAttach(context);
+        listener = (AddEditFragmentListener) context;
+    } // end method onAttach()
+
+    @Override
+    @SuppressWarnings("deprecation")
     public void onAttach(Activity activity) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(activity);
@@ -72,25 +80,22 @@ public class AddEditFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.i(DEBUG_TAG, "in onCreateView()");
         super.onCreateView(inflater, container, savedInstanceState);
-        // save fragment across configuration changes
         setRetainInstance(true);
-        // fragment has menu items to display
         setHasOptionsMenu(true);
 
-        // Inflate the GUI and get references to EditText(s)
+        // Inflate the GUI and bind references to EditText fields
         View view = inflater.inflate(R.layout.fragment_add_edit, container, false);
 
-        nameEditText = (EditText) view.findViewById(R.id.nameEditText);
-        phoneEditText = (EditText) view.findViewById(R.id.phoneEditText);
-        emailEditText = (EditText) view.findViewById(R.id.emailEditText);
-        streetEditText = (EditText) view.findViewById(R.id.streetEditText);
-        cityEditText = (EditText) view.findViewById(R.id.cityEditText);
-        stateEditText = (EditText) view.findViewById(R.id.stateEditText);
-        zipEditText = (EditText) view.findViewById(R.id.zipEditText);
+        nameEditText = (EditText)view.findViewById(R.id.nameEditText);
+        phoneEditText = (EditText)view.findViewById(R.id.phoneEditText);
+        emailEditText = (EditText)view.findViewById(R.id.emailEditText);
+        streetEditText = (EditText)view.findViewById(R.id.streetEditText);
+        cityEditText = (EditText)view.findViewById(R.id.cityEditText);
+        stateEditText = (EditText)view.findViewById(R.id.stateEditText);
+        zipEditText = (EditText)view.findViewById(R.id.zipEditText);
 
-        // can be null if creating new contact.
+        // load info from arguments if they exist.
         contactInfoBundle = getArguments();
-
         if (contactInfoBundle != null) {
             rowID = contactInfoBundle.getLong(MainActivity.ROW_ID);
             nameEditText.setText(contactInfoBundle.getString("name"));
@@ -102,8 +107,8 @@ public class AddEditFragment extends Fragment {
             zipEditText.setText(contactInfoBundle.getString("zip"));
         }
 
-        // set Save Contact Button's event listener
-        Button saveContactButton = (Button) view.findViewById(R.id.saveContactButton);
+        // bind Save Contact Button's to event listener
+        Button saveContactButton = (Button)view.findViewById(R.id.saveContactButton);
         saveContactButton.setOnClickListener(saveContactButtonClicked);
 
         return view;
@@ -182,7 +187,7 @@ public class AddEditFragment extends Fragment {
                                 builder.setPositiveButton(R.string.ok, null);
                                 return builder.create();
                             }
-                        };
+                        }.;
 
                 errorSaving.show(getFragmentManager(), "error saving contact");
             }

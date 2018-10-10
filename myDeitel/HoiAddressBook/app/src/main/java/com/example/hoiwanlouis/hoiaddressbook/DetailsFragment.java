@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -27,10 +28,10 @@ public class DetailsFragment extends Fragment {
     // callback methods implemented by MainActivity
     public interface DetailsFragmentListener {
         // called when a contact is deleted
-        public void onDeleteContactComplete();
+        void onDeleteContactComplete();
 
         // called to pass Bundle of contact's info for editing
-        public void onEditContactRequest(Bundle arguments);
+        void onEditContactRequest(Bundle arguments);
     } // end interface DetailsFragmentListener
 
 
@@ -48,6 +49,14 @@ public class DetailsFragment extends Fragment {
 
     // set DetailsFragmentListener when fragment attached
     @Override
+    public void onAttach(Context context) {
+        Log.i(DEBUG_TAG, "in onAttach()");
+        super.onAttach(context);
+        listener = (DetailsFragmentListener) context;
+    } // end method onAttach
+
+    @Override
+    @SuppressWarnings("deprecation")
     public void onAttach(Activity activity) {
         Log.i(DEBUG_TAG, "in onAttach()");
         super.onAttach(activity);
@@ -90,13 +99,13 @@ public class DetailsFragment extends Fragment {
         setHasOptionsMenu(true);
 
         // get the EditTexts
-        nameTextView = (TextView) view.findViewById(R.id.nameTextView);
-        phoneTextView = (TextView) view.findViewById(R.id.phoneTextView);
-        emailTextView = (TextView) view.findViewById(R.id.emailTextView);
-        streetTextView = (TextView) view.findViewById(R.id.streetTextView);
-        cityTextView = (TextView) view.findViewById(R.id.cityTextView);
-        stateTextView = (TextView) view.findViewById(R.id.stateTextView);
-        zipTextView = (TextView) view.findViewById(R.id.zipTextView);
+        nameTextView = (TextView)view.findViewById(R.id.nameTextView);
+        phoneTextView = (TextView)view.findViewById(R.id.phoneTextView);
+        emailTextView = (TextView)view.findViewById(R.id.emailTextView);
+        streetTextView = (TextView)view.findViewById(R.id.streetTextView);
+        cityTextView = (TextView)view.findViewById(R.id.cityTextView);
+        stateTextView = (TextView)view.findViewById(R.id.stateTextView);
+        zipTextView = (TextView)view.findViewById(R.id.zipTextView);
 
         return view;
     } // end method onCreateView
@@ -207,9 +216,7 @@ public class DetailsFragment extends Fragment {
             stateTextView.setText(result.getString(stateIndex));
             zipTextView.setText(result.getString(zipIndex));
 
-            // close the result cursor
             result.close();
-            // close database connection
             databaseConnector.close();
         } // end method onPostExecute
     } // end class LoadContactTask
@@ -254,7 +261,7 @@ public class DetailsFragment extends Fragment {
                                             }; // end new AsyncTask
 
                                     // execute the AsyncTask to delete contact at rowID
-                                    deleteTask.execute(new Long[] { rowID });
+                                    deleteTask.execute(rowID);
                                 } // end method onClick
                             } // end anonymous inner class
                     ); // end call to method setPositiveButton
