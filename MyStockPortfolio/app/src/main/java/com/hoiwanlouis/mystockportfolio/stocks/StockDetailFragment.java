@@ -36,22 +36,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hoiwanlouis.mystockportfolio.MainActivity;
 import com.hoiwanlouis.mystockportfolio.R;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
-import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
-
 import com.hoiwanlouis.mystockportfolio.fields.DateTimestamp;
+import com.hoiwanlouis.mystockportfolio.fields.Gui2Db;
 
 public class StockDetailFragment extends Fragment {
 
     public interface StockDetailFragmentListener {
         // called when a contact is deleted
-        void onDeleteStockComplete(Bundle arguments);
+        void onDeleteStockSymbolComplete(Bundle arguments);
 
         // called to pass Bundle of contact's info for editing
-        void onEditStockRequest(Bundle arguments);
+        void onEditStockSymbolRequest(Bundle arguments);
     }
 
     private final String DEBUG_TAG = this.getClass().getSimpleName();
@@ -86,7 +84,35 @@ public class StockDetailFragment extends Fragment {
     }
 
 
-    // set StockDetailFragmentListener when fragment attached
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
+        Log.i(DEBUG_TAG, "in onCreateView()");
+
+        // super.onCreateView(inflater, container, savedInstanceState);
+        setRetainInstance(true);        // save fragment across config changes
+        setHasOptionsMenu(true);        // this fragment has menu items to display
+
+        // if StockDetailFragment is being restored, get saved row ID
+        if (savedInstanceState != null) {
+            rowID = savedInstanceState.getLong(Gui2Db.BUNDLE_KEY);
+        }
+        else {
+            // else extract the contact's row ID from the arguments bundle
+            Bundle arguments = getArguments();
+            if (arguments != null) {
+                rowID = arguments.getLong(Gui2Db.BUNDLE_KEY);
+            }
+        }
+
+        // inflate StockDetailFragment's layout and bind the data: must match the detail layout
+        View v = inflater.inflate(R.layout.fragment_stock_detail, container, false);
+        bindTextViewsToLayout(v);
+
+        return v;
+    }
+
     @Override
     public void onAttach(Context context) {
         Log.i(DEBUG_TAG, "in onAttach()");
@@ -95,7 +121,6 @@ public class StockDetailFragment extends Fragment {
         listener = (StockDetailFragmentListener) context;
     }
 
-    // remove StockDetailFragmentListener when fragment detached
     @Override
     public void onDetach() {
         Log.i(DEBUG_TAG, "in onDetach()");
@@ -103,13 +128,12 @@ public class StockDetailFragment extends Fragment {
         listener = null;
     }
 
-    // called when the StockDetailFragment resumes
     @Override
     public void onResume() {
         Log.i(DEBUG_TAG, "in onResume()");
         super.onResume();
         new LoadOneStockDetailAsyncTask().execute(rowID);
-    } // end method onResume()
+    }
 
     @Override
     public void onStart() {
@@ -128,19 +152,17 @@ public class StockDetailFragment extends Fragment {
     @Override
     public void onSaveInstanceState(final Bundle outState) {
         Log.i(DEBUG_TAG, "in onSaveInstanceState()");
-        outState.putLong(Gui2Database.BUNDLE_KEY, rowID);
+        outState.putLong(Gui2Db.BUNDLE_KEY, rowID);
         super.onSaveInstanceState(outState);
     }
 
-    // display this fragment's menu items
     @Override
     public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         Log.i(DEBUG_TAG, "in onCreateOptionsMenu()");
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_stock_detail_menu, menu);
-    } // end method onCreateOptionsMenu()
+    }
 
-    // handle menu item selections
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         Log.i(DEBUG_TAG, "in onOptionsItemSelected()");
@@ -151,43 +173,52 @@ public class StockDetailFragment extends Fragment {
                 editStock();
                 return true;
             case R.id.action_delete:
-                deleteStock();
+                deleteStockSymbol();
                 return true;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
-    } // end method onOptionsItemSelected
+    }
 
+    /**
+     *
+     */
     private void editStock() {
         Log.i(DEBUG_TAG, "in editStock()");
-        // create Bundle containing contact data to edit
+
+        // create Bundle of data to edit
         Bundle arguments = new Bundle();
-        arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
+        arguments.putLong(Gui2Db.BUNDLE_KEY, rowID);
+        arguments.putLong(DatabaseColumns.Portfolio._ID, rowID);
+        arguments.putCharSequence(DatabaseColumns.Portfolio.SYMBOL, symbolTextView.getText());
+        arguments.putCharSequence(DatabaseColumns.Portfolio.OPENING_PRICE, openingPriceTextView.getText());
+        arguments.putCharSequence(DatabaseColumns.Portfolio.PREVIOUS_CLOSING_PRICE, previousClosingPriceTextView.getText());
+        arguments.putCharSequence(DatabaseColumns.Portfolio.BID_PRICE, bidPriceTextView.getText());
+        arguments.putCharSequence(DatabaseColumns.Portfolio.BID_SIZE, bidSizeTextView.getText());
+        arguments.putCharSequence(DatabaseColumns.Portfolio.ASK_PRICE, askPriceTextView.getText());
+        arguments.putCharSequence(DatabaseColumns.Portfolio.ASK_SIZE, askSizeTextView.getText());
+        arguments.putCharSequence(DatabaseColumns.Portfolio.LAST_TRADE_PRICE, lastTradePriceTextView.getText());
+        arguments.putCharSequence(DatabaseColumns.Portfolio.LAST_TRADE_QUANTITY, lastTradeQuantityTextView.getText());
+        arguments.putCharSequence(DatabaseColumns.Portfolio.LAST_TRADE_DATETIME, lastTradeDateTimeTextView.getText());
+        arguments.putCharSequence(DatabaseColumns.Portfolio.INSERT_DATETIME, insertDateTimeTextView.getText());
+        arguments.putCharSequence(DatabaseColumns.Portfolio.MODIFY_DATETIME, modifyDateTimeTextView.getText());
 
-        arguments.putLong(MainActivity.ROW_ID, rowID);
-        arguments.putCharSequence("name", nameTextView.getText());
-        arguments.putCharSequence("phone", phoneTextView.getText());
-        arguments.putCharSequence("email", emailTextView.getText());
-        arguments.putCharSequence("street", streetTextView.getText());
-        arguments.putCharSequence("city", cityTextView.getText());
-        arguments.putCharSequence("state", stateTextView.getText());
-        arguments.putCharSequence("zip", zipTextView.getText());
-        // pass Bundle to listener for processing
-        listener.onEditStockRequest(arguments);
+        // return Bundle to listener for processing
+        listener.onEditStockSymbolRequest(arguments);
 
-    } // end method deleteContact
+    } // end method
 
-    private void deleteStock() {
-        Log.i(DEBUG_TAG, "in deleteDelete()");
-        // create Bundle containing contact data to edit
+    private void deleteStockSymbol() {
+        Log.i(DEBUG_TAG, "in deleteStockSymbol()");
+        // create Bundle of data to edit
         Bundle arguments = new Bundle();
-        arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
-        // use FragmentManager to display the confirmDelete DialogFragment
-        confirmDelete.show(getFragmentManager(), "confirm delete");
-    } // end method deleteContact
+        arguments.putLong(Gui2Db.BUNDLE_KEY, rowID);
+        // use FragmentManager to display the Dialog
+        confirmDeleteStockSymbol.show(getFragmentManager(), "confirm deleteStockSymbol");
+    } // end method
 
-    private DialogFragment confirmDelete =
+    private DialogFragment confirmDeleteStockSymbol =
             new DialogFragment() {
                 // create an AlertDialog and return it
                 @Override
@@ -221,7 +252,9 @@ public class StockDetailFragment extends Fragment {
                                                 @Override
                                                 protected void onPostExecute(Object result) {
                                                     Log.i(DEBUG_TAG, "in onPostExecute()");
-                                                    onDeleteStockCompleteCallback();
+                                                    Bundle arguments = new Bundle();
+                                                    arguments.putLong(Gui2Db.BUNDLE_KEY, (long) result);
+                                                    listener.onDeleteStockSymbolComplete(arguments);
                                                 }
                                             }; // end new AsyncTask
 
@@ -239,42 +272,9 @@ public class StockDetailFragment extends Fragment {
                 }
             }; // end DialogFragment anonymous inner class
 
-    public void onDeleteStockCompleteCallback() {
-        Log.i(DEBUG_TAG, "in onAddStockCompleteCallback()");
-        Bundle arguments = new Bundle();
-        arguments.putLong(Gui2Database.BUNDLE_KEY, rowID);
-        listener.onDeleteStockComplete(arguments);
-    }
-
-    // called when StockDetailFragmentListener's view needs to be created
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
-        Log.i(DEBUG_TAG, "in onCreateView()");
-        // super.onCreateView(inflater, container, savedInstanceState);
-        setRetainInstance(true);        // save fragment across config changes
-        setHasOptionsMenu(true);        // this fragment has menu items to display
-
-        // if StockDetailFragment is being restored, get saved row ID
-        if (savedInstanceState != null) {
-            rowID = savedInstanceState.getLong(Gui2Database.BUNDLE_KEY);
-        }
-        else {
-            // else extract the contact's row ID from the arguments bundle
-            Bundle arguments = getArguments();
-            if (arguments != null) {
-                rowID = arguments.getLong(Gui2Database.BUNDLE_KEY);
-            }
-        }
-
-        // inflate StockDetailFragment's layout and bind the data: must match the detail layout
-        View v = inflater.inflate(R.layout.fragment_stock_detail, container, false);
-        bindTextViewsToLayout(v);
-
-        return v;
-    }
-
+    /**
+     *
+     */
     private void bindTextViewsToLayout(View v) {
         Log.i(DEBUG_TAG, "in bindTextViewsToLayout()");
         symbolTextView = (TextView) v.findViewById(R.id.symbolTextView);
@@ -291,9 +291,9 @@ public class StockDetailFragment extends Fragment {
         modifyDateTimeTextView = (TextView) v.findViewById(R.id.modifyDateTimeTextView);
     }
 
-    // *****************************************************
-    // performs database query outside GUI thread
-    // *****************************************************
+    /**
+     * performs database query outside GUI thread
+     */
     private class LoadOneStockDetailAsyncTask extends AsyncTask<Long, Object, Cursor>
     {
         DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
@@ -318,7 +318,9 @@ public class StockDetailFragment extends Fragment {
         } // end method onPostExecute
     }
 
-    //
+    /**
+     *
+     */
     private void loadTextViewsFromCursor(Cursor result) {
         Log.i(DEBUG_TAG, "in loadTextViewsFromCursor()");
         // fetch the column indices for each data item to shorten code lines

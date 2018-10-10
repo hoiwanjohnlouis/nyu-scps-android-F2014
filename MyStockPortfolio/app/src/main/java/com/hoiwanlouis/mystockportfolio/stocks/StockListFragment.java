@@ -39,15 +39,15 @@ import android.widget.TextView;
 
 import com.hoiwanlouis.mystockportfolio.R;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
-import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
+import com.hoiwanlouis.mystockportfolio.fields.Gui2Db;
 
 public class StockListFragment extends ListFragment {
 
     // callback methods implemented by caller/invoker
     public interface StockListFragmentListener {
-        void onAddStockRequest();
+        void onAddStockSymbolRequest();
 
-        void onDeleteStockComplete(Bundle arguments);
+        void onDeleteStockSymbolComplete(Bundle arguments);
 
         void onDisplayStockDetailRequest(Bundle arguments);
     }
@@ -165,7 +165,7 @@ public class StockListFragment extends ListFragment {
     // callback to main to redisplay screen;
     public void onAddStockRequestCallback() {
         Log.i(DEBUG_TAG, "in onAddStockRequestCallback()");
-        listener.onAddStockRequest();
+        listener.onAddStockSymbolRequest();
     }
 
     @Override
@@ -213,8 +213,8 @@ public class StockListFragment extends ListFragment {
          */
         String[] from;
         int[] to;
-        from = Gui2Database.fromDBColumns;
-        to = Gui2Database.toRIds;
+        from = Gui2Db.fromDBColumns;
+        to = Gui2Db.toRIds;
 //        from = new String[] {DatabaseColumns.Portfolio.SYMBOL};
         to = new int[]{android.R.id.text1};
         stockCursorAdapter =
@@ -230,98 +230,87 @@ public class StockListFragment extends ListFragment {
         setListAdapter(stockCursorAdapter);
     }
 
-    // respond to user touching an item/symbol in the ListView
+    /**
+     * respond to user touching an item/symbol in the ListView
+     */
     private AdapterView.OnItemClickListener onItemClickListener =
             new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Log.i(DEBUG_TAG, "in onItemClickListener()");
                     // let the callback take care of this
-                    onStockDetailRequestCallback(id);
+                    final Bundle arguments = new Bundle();
+                    arguments.putLong(Gui2Db.BUNDLE_KEY, id);
+                    listener.onDisplayStockDetailRequest(arguments);
                 }
             };
 
-    // callback to main to redisplay screen;
-    public void onStockDetailRequestCallback(long id) {
-        Log.i(DEBUG_TAG, "in deleteStock()");
-        final Bundle arguments = new Bundle();
-        arguments.putLong(Gui2Database.BUNDLE_KEY, id);
-        listener.onDisplayStockDetailRequest(arguments);
-    }
-
-    // long click will allow edit symbol
+    /**
+     * long click will allow edit symbol
+     */
     private AdapterView.OnItemLongClickListener onItemLongClickListener =
             new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    Log.i(DEBUG_TAG, "in onItemLongClickListener()");
-                    // let the callback take care of this
-                    deleteStock(parent, view, position, id);
-                    return false;
+                    Log.i(DEBUG_TAG, "in onItemLongClick()");
+                    final long tickerId = id;
+//        final TextView nameView = (TextView) view.findViewById(R.id.TextView_symbol);
+                    final TextView nameView = (TextView) view.findViewById(android.R.id.text1);
+                    final String tickerSymbol = nameView.getText().toString();
+
+                    // Use an Alert dialog to confirm delete operation
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(R.string.fragment_delete_title);
+                    builder.setMessage(R.string.fragment_delete_message);
+                    builder.setPositiveButton(R.string.fragment_delete_button_positive,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    final DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
+
+                                    // create an AsyncTask to delete a contact and notify listener
+                                    AsyncTask<Long, Object, Object> deleteTask =
+                                            new AsyncTask<Long, Object, Object>() {
+                                                @Override
+                                                protected Object doInBackground(Long... params) {
+                                                    Log.i(DEBUG_TAG, "in doInBackground()");
+                                                    databaseConnector.deleteOneStock(params[0]);
+                                                    return null;
+                                                }
+
+                                                @Override
+                                                protected void onPostExecute(Object result) {
+                                                    Log.i(DEBUG_TAG, "in onPostExecute()");
+                                                    final Bundle arguments = new Bundle();
+                                                    arguments.putLong(Gui2Db.BUNDLE_KEY, (long) result);
+                                                    listener.onDeleteStockSymbolComplete(arguments);
+
+                                                }
+                                            }; // end new AsyncTask definition
+
+                                    // execute the AsyncTask to delete the stock
+                                    deleteTask.execute(tickerId);
+                                    Log.i(DEBUG_TAG, "tickerSymbol[" + tickerSymbol + "] deleted.");
+
+                                } // end method DialogInterface.OnClickListener.onClick
+                            });
+                    builder.setNegativeButton(R.string.fragment_delete_button_cancel, null); // do nothing if cancel
+                    builder.create();
+                    builder.show();
+                    return false;  // todo: should be true?
                 }
             };
 
-    //
-    public void deleteStock(AdapterView<?> parent, View view, int position, long id) {
-        Log.i(DEBUG_TAG, "in deleteStock()");
-        final long tickerId = id;
-//        final TextView nameView = (TextView) view.findViewById(R.id.TextView_symbol);
-        final TextView nameView = (TextView) view.findViewById(android.R.id.text1);
-        final String tickerSymbol = nameView.getText().toString();
-
-        // Use an Alert dialog to confirm delete operation
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());  // is getActivity() usage correct?
-        builder.setTitle(R.string.fragment_delete_title);
-        builder.setMessage(R.string.fragment_delete_message);
-        builder.setPositiveButton(R.string.fragment_delete_button_positive,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        final DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
-
-                        // create an AsyncTask to delete a contact and notify listener
-                        AsyncTask<Long, Object, Object> deleteTask =
-                                new AsyncTask<Long, Object, Object>() {
-                                    @Override
-                                    protected Object doInBackground(Long... params) {
-                                        Log.i(DEBUG_TAG, "in doInBackground()");
-                                        databaseConnector.deleteOneStock(params[0]);
-                                        return null;
-                                    }
-
-                                    @Override
-                                    protected void onPostExecute(Object result) {
-                                        Log.i(DEBUG_TAG, "in onPostExecute()");
-                                        onDeleteStockCompleteCallback((long) result);
-                                    }
-                                }; // end new AsyncTask definition
-
-                        // execute the AsyncTask to delete the stock
-                        deleteTask.execute(tickerId);
-                        Log.i(DEBUG_TAG, "tickerSymbol[" + tickerSymbol + "] deleted.");
-
-                    } // end method DialogInterface.OnClickListener.onClick
-                });
-        builder.setNegativeButton(R.string.fragment_delete_button_cancel, null); // do nothing if cancel
-        builder.create();
-        builder.show();
-    }
-
-    private void onDeleteStockCompleteCallback(long id) {
-        Log.i(DEBUG_TAG, "in onDeleteStockCompleteCallback()");
-        final Bundle arguments = new Bundle();
-        arguments.putLong(Gui2Database.BUNDLE_KEY, id);
-        // let the callback take care of this
-        listener.onDeleteStockComplete(arguments);
-    }
-
+    /**
+     * Refresh the stock symbol list.
+     */
     public void updateStockListView() {
         Log.i(DEBUG_TAG, "in updateStockListView()");
         new GetAllStocksAsyncTask().execute((Object[]) null);
     }
 
-    // *****************************************************
-    // perform database query outside the GUI thread
-    // *****************************************************
+    /**
+     * perform database query outside the GUI thread
+     */
     private class GetAllStocksAsyncTask extends AsyncTask<Object, Object, Cursor> {
 
         DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());

@@ -23,12 +23,11 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
+import com.hoiwanlouis.mystockportfolio.fields.Gui2Db;
 
 public class DatabaseConnector {
 
     private final String DEBUG_TAG = this.getClass().getSimpleName();
-
     // for interacting with the database
     protected SQLiteDatabase sqLiteDatabase;
 
@@ -158,7 +157,7 @@ public class DatabaseConnector {
 
         return sqLiteDatabase.query(
                 DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME,
-                Gui2Database.asColumnsToReturn,
+                Gui2Db.asColumnsToReturn,
                 null, null, null, null,
                 DatabaseColumns.Portfolio.DEFAULT_SORT_ORDER);
     }
@@ -172,7 +171,7 @@ public class DatabaseConnector {
 
         return sqLiteDatabase.query(
                 DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME,
-                Gui2Database.asColumnsToReturn,
+                Gui2Db.asColumnsToReturn,
                 "_id=" + id, null, null, null,
                 null);
     }
@@ -191,7 +190,7 @@ public class DatabaseConnector {
         tmpSelection.append(searchSymbol);
         return sqLiteDatabase.query(
                 DatabaseColumns.Portfolio.PORTFOLIO_TABLE_NAME,
-                Gui2Database.asColumnsToReturn,
+                Gui2Db.asColumnsToReturn,
                 tmpSelection.toString(), null, null, null,
                 null);
     }

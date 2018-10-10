@@ -22,7 +22,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
+import com.hoiwanlouis.mystockportfolio.fields.Gui2Db;
 import com.hoiwanlouis.mystockportfolio.stocks.AddEditStockFragment;
 import com.hoiwanlouis.mystockportfolio.stocks.StockListFragment;
 import com.hoiwanlouis.mystockportfolio.stocks.StockDetailFragment;
@@ -114,11 +114,11 @@ public class MainActivity extends Activity
     /***************************************************************
      * Start of StockDetailFragmentListener interfaces implementations
      * <p>
-     * 1. public void onDeleteStockComplete(); reuse code from StockListFragmentLister
+     * 1. public void onDeleteStockSymbolComplete(); reuse code from StockListFragmentLister
      ***************************************************************/
     // display the AddEditFragment to edit an existing contact
     @Override
-    public void onEditStockRequest(Bundle arguments) {
+    public void onEditStockSymbolRequest(Bundle arguments) {
         Log.i(DEBUG_TAG, "in onEditContactRequest()");
         if (isAPhoneDevice()) {
             showAddEditFragment(R.id.fragmentContainer, arguments);
@@ -137,13 +137,13 @@ public class MainActivity extends Activity
     /***************************************************************
      * Start of StockListFragmentListener interfaces implementations
      * <p>
-     * 1.  public void onAddStockRequest();
-     * 2.  public void onDeleteStockComplete(final Bundle arguments)
+     * 1.  public void onAddStockSymbolRequest();
+     * 2.  public void onDeleteStockSymbolComplete(final Bundle arguments)
      * 3.  public void onDisplayStockDetailRequest(final Bundle arguments)
      ***************************************************************/
     @Override
-    public void onAddStockRequest() {
-        Log.i(DEBUG_TAG, "in onAddStockRequest()");
+    public void onAddStockSymbolRequest() {
+        Log.i(DEBUG_TAG, "in onAddStockSymbolRequest()");
         // Adding a stock always sends an empty bundle
         if (isAPhoneDevice()) {
             showAddEditFragment(R.id.fragmentContainer, null);
@@ -154,8 +154,8 @@ public class MainActivity extends Activity
 
     // StockDetailListener also uses this method
     @Override
-    public void onDeleteStockComplete(final Bundle arguments) {
-        Log.i(DEBUG_TAG, "in onDeleteStockComplete()");
+    public void onDeleteStockSymbolComplete(final Bundle arguments) {
+        Log.i(DEBUG_TAG, "in onDeleteStockSymbolComplete()");
         getFragmentManager().popBackStack(); // removes top of back stack
         if (isATabletDevice()) {
             stockListFragment.updateStockListView();
@@ -212,7 +212,9 @@ public class MainActivity extends Activity
         addBundleToAddFragment(fragment, arguments);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(viewID, fragment);
-        transaction.addToBackStack("showAddEditFragment(final int viewID{" + viewID + "}, final Bundle arguments{" + arguments + "})");
+        transaction.addToBackStack("showAddEditFragment(final int viewID{"
+                + viewID + "}, final Bundle arguments{"
+                + arguments + "})");
         transaction.commit();   // causes fragment to display
     }
 
@@ -226,15 +228,15 @@ public class MainActivity extends Activity
         final StringBuilder logMessage = new StringBuilder();
         if (arguments != null) {
             logMessage.append("requesting AddEditStockFragment for [");
-            logMessage.append(Gui2Database.BUNDLE_KEY);
+            logMessage.append(Gui2Db.BUNDLE_KEY);
             logMessage.append("]=[");
-            logMessage.append(arguments.getLong(Gui2Database.BUNDLE_KEY));
+            logMessage.append(arguments.getLong(Gui2Db.BUNDLE_KEY));
             logMessage.append("]");
             // editing existing symbol?
             fragment.setArguments(arguments);
         } else {
             logMessage.append("requesting AddEditStockFragment for [");
-            logMessage.append(Gui2Database.BUNDLE_KEY);
+            logMessage.append(Gui2Db.BUNDLE_KEY);
             logMessage.append("]=[NULL KEY VALUE]");
         }
         Log.i(DEBUG_TAG, logMessage.toString());
@@ -252,7 +254,9 @@ public class MainActivity extends Activity
         addBundleToStockDetailFragment(fragment, arguments);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(viewID, fragment);
-        transaction.addToBackStack("showDetailFragment(final int viewID{" + viewID + "}, final Bundle arguments{" + arguments + "})");
+        transaction.addToBackStack("showDetailFragment(final int viewID{"
+                + viewID + "}, final Bundle arguments{"
+                + arguments + "})");
         transaction.commit();   // display fragment
     }
 
@@ -267,14 +271,14 @@ public class MainActivity extends Activity
         StringBuilder logMessage = new StringBuilder();
         if (arguments != null) {
             logMessage.append("requesting StockDetailFragment for [");
-            logMessage.append(Gui2Database.BUNDLE_KEY);
+            logMessage.append(Gui2Db.BUNDLE_KEY);
             logMessage.append("]=[");
-            logMessage.append(arguments.getLong(Gui2Database.BUNDLE_KEY));
+            logMessage.append(arguments.getLong(Gui2Db.BUNDLE_KEY));
             logMessage.append("]");
             fragment.setArguments(arguments);
         } else {
             logMessage.append("requesting StockDetailFragment for [");
-            logMessage.append(Gui2Database.BUNDLE_KEY);
+            logMessage.append(Gui2Db.BUNDLE_KEY);
             logMessage.append("]=[NULL KEY VALUE]");
         }
         Log.i(DEBUG_TAG, logMessage.toString());

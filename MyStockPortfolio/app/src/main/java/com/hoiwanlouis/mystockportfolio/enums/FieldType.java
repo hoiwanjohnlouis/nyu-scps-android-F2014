@@ -15,6 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+
 package com.hoiwanlouis.mystockportfolio.enums;
 
 /***************************************************************************
@@ -46,7 +47,7 @@ public enum FieldType {
 
     private final String fieldTypeValue;
 
-    private FieldType(final String fieldTypeValue) {
+    FieldType(final String fieldTypeValue) {
         this.fieldTypeValue = fieldTypeValue;
     }
 
@@ -57,7 +58,8 @@ public enum FieldType {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb;
+        sb = new StringBuilder();
         sb.append(this.name());
         sb.append(":[");
         sb.append(getFieldTypeValue());

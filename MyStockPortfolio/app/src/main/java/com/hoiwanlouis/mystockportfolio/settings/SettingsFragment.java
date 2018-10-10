@@ -21,8 +21,6 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
-import com.hoiwanlouis.mystockportfolio.R;
-
 /**
  * Created by hoiwanlouis on 10/28/14.
  */

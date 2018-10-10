@@ -17,7 +17,6 @@
  ***************************************************************************/
 package com.hoiwanlouis.mystockportfolio.fields;
 
-import com.hoiwanlouis.mystockportfolio.R;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns;
 
 /***************************************************************************
@@ -32,11 +31,11 @@ import com.hoiwanlouis.mystockportfolio.database.DatabaseColumns;
  * with in the forecastles of American whalers. 
  *
  ***************************************************************************/
-public final class Gui2Database {
+public final class Gui2Db {
 
     // todo: should make wrapper methods to map the fields instead of hard coding. need to think about it.
 
-    private Gui2Database() {}
+    private Gui2Db() {}
 
     // DefaultValues: remove if not be needed. also remove related entries from res/values/strings.xml
     public static final class DefaultValues {

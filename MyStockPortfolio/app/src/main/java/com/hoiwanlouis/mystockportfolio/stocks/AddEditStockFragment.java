@@ -17,7 +17,7 @@ import android.widget.EditText;
 
 import com.hoiwanlouis.mystockportfolio.R;
 import com.hoiwanlouis.mystockportfolio.database.DatabaseConnector;
-import com.hoiwanlouis.mystockportfolio.fields.Gui2Database;
+import com.hoiwanlouis.mystockportfolio.fields.Gui2Db;
 
 public class AddEditStockFragment extends Fragment {
 
@@ -60,7 +60,6 @@ public class AddEditStockFragment extends Fragment {
         }
     }
 
-    //
     @Override
     public void onDetach() {
         Log.i(DEBUG_TAG, "in onDetach()");
@@ -68,7 +67,6 @@ public class AddEditStockFragment extends Fragment {
         addStockFragmentListener = null;
     }
 
-    // when fragment resumes, reload contacts
     @Override
     public void onResume() {
         Log.i(DEBUG_TAG, "in onResume()");
@@ -81,7 +79,6 @@ public class AddEditStockFragment extends Fragment {
         super.onStart();
     }
 
-    // clean up
     @Override
     public void onStop() {
         Log.i(DEBUG_TAG, "in onStop()");
@@ -162,7 +159,7 @@ public class AddEditStockFragment extends Fragment {
     public void onAddStockCompleteCallback() {
         Log.i(DEBUG_TAG, "in onAddStockCompleteCallback()");
         Bundle arguments = new Bundle();
-        arguments.putLong(Gui2Database.BUNDLE_KEY, databaseRowID);
+        arguments.putLong(Gui2Db.BUNDLE_KEY, databaseRowID);
         addStockFragmentListener.onAddStockComplete(arguments);
     }
 
