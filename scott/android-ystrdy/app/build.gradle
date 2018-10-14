@@ -1,10 +1,11 @@
 buildscript {
     repositories {
         mavenCentral()
+        google()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.android.tools.build:gradle:3.2.0'
         classpath 'org.robolectric:robolectric-gradle-plugin:0.13.+'
     }
 }
@@ -20,13 +21,12 @@ android {
         exclude 'META-INF/NOTICE'
     }
 
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 27
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
-        applicationId "com.tobros.hatebyte.ystrdy"
-        minSdkVersion 25
-        targetSdkVersion 25
+        minSdkVersion 27
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
     }
@@ -43,11 +43,10 @@ dependencies {
     compile 'com.survivingwithandroid:weatherlib:1.5.3'
     compile 'com.survivingwithandroid:weatherlib_volleyclient:1.5.2'
 
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('junit:junit:4.11') {
-        exclude module: 'hamcrest-core'
-    }
-    androidTestCompile('org.robolectric:robolectric:2.4') {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+
+    testImplementation('org.robolectric:robolectric:2.4') {
         exclude module: 'classworlds'
         exclude module: 'commons-logging'
         exclude module: 'httpclient'
@@ -64,9 +63,9 @@ dependencies {
         exclude module: 'wagon-http-lightweight'
         exclude module: 'wagon-provider-api'
     }
-    androidTestCompile 'org.easytesting:fest-assert:1.4'
-    androidTestCompile 'com.squareup:fest-android:1.0.+'
-    androidTestCompile 'org.mockito:mockito-all:1.9.5'
+    testImplementation 'org.easytesting:fest-assert:1.4'
+    testImplementation 'com.squareup:fest-android:1.0.+'
+    testImplementation 'org.mockito:mockito-all:1.9.5'
 }
 
 robolectric {
