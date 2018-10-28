@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'findbugs'
 
 android {
     packagingOptions {
@@ -8,13 +9,11 @@ android {
         exclude 'META-INF/NOTICE'
     }
 
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 28
 
     defaultConfig {
-        applicationId "com.hackerati.nyu.fadeanimationexample"
-        minSdkVersion 25
-        targetSdkVersion 25
+        minSdkVersion 28
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -27,8 +26,13 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    testCompile 'junit:junit:4.12'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
