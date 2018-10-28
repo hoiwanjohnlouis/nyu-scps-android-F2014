@@ -1,14 +1,3 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
-        classpath 'org.robolectric:robolectric-gradle-plugin:0.13.+'
-    }
-}
-
 apply plugin: 'com.android.application'
 apply plugin: 'robolectric'
 
@@ -20,14 +9,11 @@ android {
         exclude 'META-INF/NOTICE'
     }
 
-
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 28
 
     defaultConfig {
-        applicationId "com.hackerati.nyu.unittestexample"
-        minSdkVersion 15
-        targetSdkVersion 18
+        minSdkVersion 28
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -40,11 +26,16 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('junit:junit:4.11') {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:design:28.0.0'
+
+    testImplementation 'junit:junit:4.12' {
         exclude module: 'hamcrest-core'
     }
-    androidTestCompile('org.robolectric:robolectric:2.4') {
+
+    testImplementation('org.robolectric:robolectric:2.4') {
         exclude module: 'classworlds'
         exclude module: 'commons-logging'
         exclude module: 'httpclient'
@@ -62,9 +53,9 @@ dependencies {
         exclude module: 'wagon-provider-api'
     }
 
-    androidTestCompile 'org.easytesting:fest-assert:1.4'
-    androidTestCompile 'com.squareup:fest-android:1.0.+'
-    androidTestCompile 'org.mockito:mockito-all:1.9.5'
+    testImplementation 'org.easytesting:fest-assert:1.4'
+    testImplementation 'com.squareup:fest-android:1.0.+'
+    testImplementation 'org.mockito:mockito-all:1.9.5'
 
 }
 
